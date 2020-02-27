@@ -7,7 +7,7 @@ Magic
 ## Architecture
 Some rough diagram 
 
-![diagram.png]()
+![alt text](diagram.png)
 
 ## Can I steal this?
 No :) 
