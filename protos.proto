@@ -1,0 +1,230 @@
+syntax = "proto3";
+
+package protos;
+option go_package = "github.com/ducc/kwɒnt/protos";
+
+import "google/protobuf/timestamp.proto";
+
+message Candlestick {
+    google.protobuf.Timestamp timestamp = 1;
+    int64 current = 2;
+    int64 low = 3;
+    int64 high = 4;
+    int64 open = 5;
+    int64 close = 6;
+}
+
+message PriceType {
+    enum Name {
+        UNKNOWN = 0;
+        OPEN = 1;
+        CLOSE = 2;
+    }
+
+    Name name = 1;
+}
+
+message OpenType {
+    enum Name {
+        UNKNOWN = 0;
+        NORMAL = 1;
+        REVERSE = 2;
+    }
+
+    Name name = 1;
+}
+
+message Rule {
+    message Indicator {
+        message SimpleMovingAverage {
+            enum Condition {
+                UNKNOWN = 0;
+                ABOVE_SIGNAL_LINE = 1;
+                BELOW_SIGNAL_LINE = 2;
+            }
+
+            Condition condition = 1;
+            int64 period = 2;
+        }
+
+        message RelativeStrengthIndex {
+            enum Condition {
+                UNKNOWN = 0;
+                ABOVE_OVER_BOUGHT_LINE = 1;
+                BELOW_OVER_BOUGHT_LINE = 2;
+                ABOVE_UNDER_SOLD_LINE = 3;
+                BELOW_UNDER_SOLD_LINE = 4;
+            }
+
+            Condition condition = 1;
+            int64 period = 2;
+            int64 over_bought = 3;
+            int64 over_sold = 4;
+        }
+
+        oneof condition {
+            SimpleMovingAverage simple_moving_average = 1;
+            RelativeStrengthIndex relative_strength_index = 2;
+        }
+    }
+
+    Indicator indicator = 1;
+    PriceType.Name price_type = 2;
+    OpenType.Name open_type = 3;
+    int64 period_nanoseconds = 4;
+}
+
+message Status {
+    enum Name {
+        UNKNOWN = 0;
+        ENABLED = 1;
+        PAUSED = 2;
+    }
+
+    Name name = 1;
+}
+
+message Direction {
+    enum Name {
+        UNKNOWN = 0;
+        BUY = 1;
+        SELL = 2;
+    }
+
+    Name name = 1;
+}
+
+message Position {
+    Direction.Name direction = 1;
+    int64 open_price = 2;
+    int64 close_price = 3;
+    google.protobuf.Timestamp open_time = 4;
+    google.protobuf.Timestamp close_time = 5;
+    string id = 6;
+}
+
+message Symbol {
+    enum Name {
+        UNKNOWN = 0;
+        EUR_USD = 1;
+        USD_GBP = 2;
+    }
+
+    Name name = 1;
+}
+
+message Strategy {
+    string name = 1;
+    repeated Rule entry_rules = 2;
+    repeated Rule exit_rules = 3;
+    int64 trade_size = 4;
+    int64 take_profit = 5;
+    int64 stop_loss = 6;
+    Status.Name status = 7;
+    string id = 8;
+    Symbol.Name symbol = 9;
+    repeated Position positions = 10;
+    google.protobuf.Timestamp last_evaluated = 11;
+}
+
+service DataService {
+    rpc CreateStrategy(CreateStrategyRequest) returns (CreateStrategyResponse);
+    rpc UpdateStrategy(UpdateStrategyRequest) returns (UpdateStrategyResponse);
+    rpc DeleteStrategy(DeleteStrategyRequest) returns (DeleteStrategyResponse);
+    rpc ListStrategies(ListStrategiesRequest) returns (ListStrategiesResponse);
+}
+
+message CreateStrategyRequest {
+    Strategy strategy = 1;
+}
+message CreateStrategyResponse {
+    string id = 1;
+}
+
+message UpdateStrategyRequest {
+    Strategy strategy = 1;
+}
+message UpdateStrategyResponse {
+}
+
+message DeleteStrategyRequest {
+    string id = 1;
+}
+message DeleteStrategyResponse {
+}
+
+message ListStrategiesRequest {
+    // todo some stuff
+}
+message ListStrategiesResponse {
+    repeated Strategy strategies = 1;
+}
+
+service StrategyEvaluator {
+    rpc Evaluate(EvaulateStrategyRequest) returns (EvaluateStrategyResponse);
+}
+
+message EvaulateStrategyRequest {
+    Strategy strategy = 1;
+    repeated Candlestick candlesticks = 2;
+}
+message EvaluateStrategyResponse {
+    message Action {
+        message OpenPosition {
+            Direction.Name direction = 1;
+            int64 price = 2;
+        }
+
+        message ClosePosition {
+            int64 price = 1;
+        }
+
+        oneof action {
+            OpenPosition open_position = 1;
+            ClosePosition close_position = 2;
+        }
+    }
+
+    Action action = 1;
+}
+
+service SymbolService {
+    rpc GetPriceHistory(GetPriceHistoryRequest) returns (GetPriceHistoryResponse);
+}
+
+message GetPriceHistoryRequest {
+    Symbol.Name symbol = 1;
+}
+message GetPriceHistoryResponse {
+    repeated Candlestick candlesticks = 1;
+}
+
+service BrokerService {
+    rpc OpenPosition(OpenPositionRequest) returns (OpenPositionResponse);
+    rpc ClosePosition(ClosePositionRequest) returns (ClosePositionResponse);
+}
+
+message OpenPositionRequest {
+    Direction.Name direction = 1;
+    int64 price = 2;
+}
+message OpenPositionResponse {
+    string id = 1;
+    google.protobuf.Timestamp execution_time = 2;
+    int64 execution_price = 3;
+}
+
+message ClosePositionRequest {
+    string id = 1;
+    int64 price = 2;
+}
+message ClosePositionResponse {
+    google.protobuf.Timestamp execution_time = 1;
+    int64 execution_price = 2;
+}
+
+
+
+
+
+
