@@ -3,6 +3,7 @@ package xtb
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"github.com/gorilla/websocket"
 	"github.com/sirupsen/logrus"
 	"strings"
@@ -34,15 +35,62 @@ func NewAPIClient(ctx context.Context, endpoint, username, password string) (*ap
 	}, nil
 }
 
+func (c *apiClient) GetState() connectionState {
+	c.Lock()
+	defer c.Unlock()
+
+	return c.state
+}
+
+func (c *apiClient) GetStreamSessionID() string {
+	c.Lock()
+	defer c.Unlock()
+
+	return c.streamSessionID
+}
+
+func (c *apiClient) SetStreamSessionID(id string) {
+	c.Lock()
+	defer c.Unlock()
+
+	c.streamSessionID = id
+}
+
+func (c *apiClient) writeJSON(v interface{}) error {
+	w, err := c.conn.NextWriter(websocket.TextMessage)
+	if err != nil {
+		return err
+	}
+	// err1 := json.NewEncoder(w).Encode(v)
+	data, err1 := json.Marshal(v)
+	logrus.WithField("endpoint", c.endpoint).Debugf("sending %s", string(data))
+	_, err2 := w.Write(data)
+	err3 := w.Close()
+	if err1 != nil {
+		return err1
+	}
+	if err2 != nil {
+		return err2
+	}
+	return err3
+}
+
 func (c *apiClient) Connect(ctx context.Context) error {
-	logrus.Debug("connecting")
+	c.Lock()
+	defer c.Unlock()
+
+	logrus.WithField("endpoint", c.endpoint).Debug("connecting")
 	conn, res, err := websocket.DefaultDialer.DialContext(ctx, c.endpoint, nil)
 	if err != nil {
 		return err
 	}
 
-	logrus.Debug(*res)
+	logrus.WithField("endpoint", c.endpoint).Debug(*res)
 	c.conn = conn
+
+	if c.endpoint == "wss://ws.xapi.pro/demoStream" {
+		c.state = Ready
+	}
 	return nil
 }
 
@@ -62,7 +110,7 @@ func (c *apiClient) Login() error {
 	c.Lock()
 	defer c.Unlock()
 
-	logrus.Debug("logging in")
+	logrus.WithField("endpoint", c.endpoint).Debug("logging in")
 	msg := &loginMessage{
 		Command: "login",
 		Arguments: &LoginMessageArguments{
@@ -74,7 +122,7 @@ func (c *apiClient) Login() error {
 
 	c.state = AwaitingStreamSessionID
 
-	if err := c.conn.WriteJSON(msg); err != nil {
+	if err := c.writeJSON(msg); err != nil {
 		return err
 	}
 
@@ -84,11 +132,11 @@ func (c *apiClient) Login() error {
 func (c *apiClient) ReadMessages() error {
 	defer func() {
 		if err := c.conn.Close(); err != nil {
-			logrus.WithError(err).Error("closing websocket connection")
+			logrus.WithField("endpoint", c.endpoint).WithError(err).Error("closing websocket connection")
 		}
 	}()
 
-	logrus.Debug("reading messages")
+	logrus.WithField("endpoint", c.endpoint).Debug("reading messages")
 	for {
 		_, data, err := c.conn.ReadMessage()
 		if err != nil {
@@ -96,7 +144,7 @@ func (c *apiClient) ReadMessages() error {
 		}
 
 		message := string(data)
-		logrus.Debug(message)
+		logrus.WithField("endpoint", c.endpoint).Debug(message)
 
 		if err := c.HandleMessage(data); err != nil {
 			return err
@@ -113,6 +161,7 @@ func (c *apiClient) HandleMessage(data []byte) error {
 		if strings.Contains(string(data), "streamSessionId") {
 			var loginResponse LoginResponse
 			if err := json.Unmarshal(data, &loginResponse); err != nil {
+				logrus.WithField("endpoint", c.endpoint).Error(err)
 				return err
 			}
 			c.streamSessionID = loginResponse.StreamSessionID
@@ -123,20 +172,24 @@ func (c *apiClient) HandleMessage(data []byte) error {
 	return nil
 }
 
-type PingMessage struct {
+type SocketPingMessage struct {
+	Command         string `json:"command"`
+}
+
+type StreamPingMessage struct {
 	Command         string `json:"command"`
 	StreamSessionID string `json:"streamSessionId"`
 }
 
-func (c *apiClient) PingLoop() error {
-	for range time.NewTicker(time.Second * 10).C {
+func (c *apiClient) SocketPingLoop() error {
+	for range time.NewTicker(time.Second * 3).C {
 		c.Lock()
 		if c.state != Ready {
 			c.Unlock()
 			continue
 		}
 
-		if err := c.Ping(); err != nil {
+		if err := c.SocketPing(); err != nil {
 			c.Unlock()
 			return err
 		}
@@ -146,14 +199,41 @@ func (c *apiClient) PingLoop() error {
 	return nil
 }
 
-func (c *apiClient) Ping() error {
-	logrus.Debug("pinging")
+func (c *apiClient) SocketPing() error {
+	logrus.WithField("endpoint", c.endpoint).Debug("socket pinging")
 
-	return c.conn.WriteJSON(&PingMessage{
+	return c.writeJSON(&SocketPingMessage{
+		Command:         "ping",
+	})
+}
+
+func (c *apiClient) StreamPingLoop() error {
+	for range time.NewTicker(time.Second * 3).C {
+		c.Lock()
+		if c.state != Ready {
+			c.Unlock()
+			continue
+		}
+
+		if err := c.StreamPing(); err != nil {
+			c.Unlock()
+			return err
+		}
+		c.Unlock()
+	}
+
+	return nil
+}
+
+func (c *apiClient) StreamPing() error {
+	logrus.WithField("endpoint", c.endpoint).Debug("stream pinging")
+
+	return c.writeJSON(&StreamPingMessage{
 		Command:         "ping",
 		StreamSessionID: c.streamSessionID,
 	})
 }
+
 
 type LoginResponse struct {
 	Status          bool   `json:"status"`
@@ -161,25 +241,52 @@ type LoginResponse struct {
 }
 
 type getTickPricesMessage struct {
-	Command   string                 `json:"command"`
-	Arguments getTickPricesArguments `json:"arguments"`
+	Command string `json:"command"`
+	StreamSessionID string `json:"streamSessionId"`
+	Symbol string `json:"symbol"`
+	MinArrivalTime int `json:"minArrivalTime"`
+	MaxLevel int `json:"maxLevel,omitempty"`
 }
 
-type getTickPricesArguments struct {
-	Level     int64    `json:"level"`
-	Symbols   []string `json:"symbols"`
-	Timestamp int64    `json:"timestamp"`
-}
 
-func (c *apiClient) GetTickPrices() error {
-	logrus.Debug("getting tick prices")
+func (c *apiClient) StreamGetTickPrices(symbol string) error {
+	c.Lock()
+	defer c.Unlock()
 
-	return c.conn.WriteJSON(&getTickPricesMessage{
+	logrus.WithField("endpoint", c.endpoint).Debug("stream getting tick prices")
+
+	if c.state != Ready {
+		return errors.New("not ready")
+	}
+
+	return c.writeJSON(&getTickPricesMessage{
 		Command: "getTickPrices",
-		Arguments: getTickPricesArguments{
-			Level:     0,
-			Symbols:   []string{"EURUSD"},
-			Timestamp: 1583012235550,
-		},
+		StreamSessionID: c.streamSessionID,
+		Symbol: symbol,
+		MinArrivalTime: 200,
+		MaxLevel: 0,
+	})
+}
+
+
+type GetNewsMessage struct {
+Command string `json:"command"`
+StreamSessionID string `json:"streamSessionId"`
+
+}
+
+func (c *apiClient) StreamGetNews() error {
+	c.Lock()
+	defer c.Unlock()
+
+	logrus.WithField("endpoint", c.endpoint).Debug("stream getting news")
+
+	if c.state != Ready {
+		return errors.New("not ready")
+	}
+
+	return c.writeJSON(&GetNewsMessage{
+		Command: "getNews",
+		StreamSessionID: c.streamSessionID,
 	})
 }

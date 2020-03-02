@@ -21,21 +21,44 @@ func main() {
 	logrus.SetLevel(logrus.DebugLevel)
 
 	ctx := context.Background()
-	client, err := xtb.NewAPIClient(ctx, "wss://ws.xapi.pro/demo", username, password)
+	socketClient, err := xtb.NewAPIClient(ctx, "wss://ws.xapi.pro/demo", username, password)
 	if err != nil {
 		panic(err)
 	}
 
-	Must(client.Connect(ctx))
+	Must(socketClient.Connect(ctx))
 	go func() {
-		Must(client.ReadMessages())
+		Must(socketClient.ReadMessages())
 	}()
-	Must(client.Login())
+	Must(socketClient.Login())
 	go func() {
-		Must(client.PingLoop())
+		Must(socketClient.SocketPingLoop())
 	}()
-	time.Sleep(time.Second * 10)
-	Must(client.GetTickPrices())
+	// Must(client.GetTickPrices("EURUSD"))
+
+	go func() {
+		for range time.NewTicker(time.Millisecond).C {
+			if socketClient.GetState() == xtb.Ready {
+				break
+			}
+		}
+
+		streamClient, err := xtb.NewAPIClient(ctx, "wss://ws.xapi.pro/demoStream", username, password)
+		if err != nil {
+			panic(err)
+		}
+
+		streamClient.SetStreamSessionID(socketClient.GetStreamSessionID())
+		Must(streamClient.Connect(ctx))
+		go func() {
+			Must(streamClient.ReadMessages())
+		}()
+		go func() {
+			Must(streamClient.StreamPingLoop())
+		}()
+		time.Sleep(time.Second * 10)
+		Must(streamClient.StreamGetTickPrices("EURUSD"))
+	}()
 
 	<-make(chan struct{})
 }
