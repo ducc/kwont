@@ -11,17 +11,15 @@ import (
 
 type runner struct {
 	ds       protos.DataServiceClient
-	ss       protos.SymbolServiceClient
 	se       protos.StrategyEvaluatorClient
 	broker   protos.BrokerServiceClient
 	consumer *nsq.Consumer
 	topic    string
 }
 
-func Run(ctx context.Context, ds protos.DataServiceClient, ss protos.SymbolServiceClient, se protos.StrategyEvaluatorClient, broker protos.BrokerServiceClient, consumer *nsq.Consumer, topic string) {
+func Run(ctx context.Context, ds protos.DataServiceClient, se protos.StrategyEvaluatorClient, broker protos.BrokerServiceClient, consumer *nsq.Consumer, topic string) {
 	r := &runner{
 		ds:       ds,
-		ss:       ss,
 		se:       se,
 		broker:   broker,
 		consumer: consumer,
@@ -37,15 +35,16 @@ func (r *runner) HandleMessage(msg *nsq.Message) error {
 	var strategy *protos.Strategy
 	if err := proto.Unmarshal(msg.Body, strategy); err != nil {
 		logrus.WithError(err).Error("unmarshalling message to strategy")
+		msg.Finish()
 		return nil
 	}
 
-	r.getPriceHistory(ctx, strategy)
+	r.getPriceHistory(ctx, strategy, msg.Finish)
 	return nil
 }
 
-func (r *runner) getPriceHistory(ctx context.Context, strategy *protos.Strategy) {
-	history, err := r.ss.GetPriceHistory(ctx, &protos.GetPriceHistoryRequest{
+func (r *runner) getPriceHistory(ctx context.Context, strategy *protos.Strategy, ack func()) {
+	history, err := r.ds.GetPriceHistory(ctx, &protos.GetPriceHistoryRequest{
 		Symbol: strategy.Symbol,
 	})
 	if err != nil {
@@ -54,13 +53,14 @@ func (r *runner) getPriceHistory(ctx context.Context, strategy *protos.Strategy)
 	}
 
 	if len(history.Candlesticks) == 0 {
+		ack()
 		return
 	}
 
-	r.evaluateStrategy(ctx, strategy, history.Candlesticks)
+	r.evaluateStrategy(ctx, strategy, history.Candlesticks, ack)
 }
 
-func (r *runner) evaluateStrategy(ctx context.Context, strategy *protos.Strategy, history []*protos.Candlestick) {
+func (r *runner) evaluateStrategy(ctx context.Context, strategy *protos.Strategy, history []*protos.Candlestick, ack func()) {
 	res, err := r.se.Evaluate(ctx, &protos.EvaulateStrategyRequest{
 		Strategy:     strategy,
 		Candlesticks: history,
@@ -71,70 +71,80 @@ func (r *runner) evaluateStrategy(ctx context.Context, strategy *protos.Strategy
 	}
 
 	if openPosition := res.Action.GetOpenPosition(); openPosition != nil {
-		res, err := r.broker.OpenPosition(ctx, &protos.OpenPositionRequest{
-			Direction: openPosition.Direction,
-			Price:     openPosition.Price,
-		})
-		if err != nil {
-			logrus.WithError(err).Error("opening position")
-			return
-		}
-
-		strategy.Positions = append(strategy.Positions, &protos.Position{
-			Direction: openPosition.Direction,
-			OpenPrice: res.ExecutionPrice,
-			OpenTime:  res.ExecutionTime,
-			Id:        res.Id,
-		})
-
-		if _, err := r.ds.UpdateStrategy(ctx, &protos.UpdateStrategyRequest{
-			Strategy: strategy,
-		}); err != nil {
-			logrus.WithError(err).Error("updating strategy")
-			return
-		}
-
-		// todo acking
+		r.openPosition(ctx, strategy, openPosition, ack)
+		return
 	}
 
 	if closePosition := res.Action.GetClosePosition(); closePosition != nil {
-		index, openPosition, err := findOpenPosition(strategy)
-		if err != nil {
-			logrus.WithError(err).Error("finding open position")
-			return
-		}
-
-		if openPosition == nil {
-			logrus.Error("strategy does not have an open position")
-			return
-		}
-
-		res, err := r.broker.ClosePosition(ctx, &protos.ClosePositionRequest{
-			Id:    openPosition.Id,
-			Price: closePosition.Price,
-		})
-		if err != nil {
-			logrus.WithError(err).Error("opening position")
-			return
-		}
-
-		pos := strategy.Positions[index]
-		pos.CloseTime = res.ExecutionTime
-		pos.ClosePrice = res.ExecutionPrice
-
-		if _, err := r.ds.UpdateStrategy(ctx, &protos.UpdateStrategyRequest{
-			Strategy: strategy,
-		}); err != nil {
-			logrus.WithError(err).Error("updating strategy")
-			return
-		}
-
-		// todo acking
+		r.closePosition(ctx, strategy, closePosition, ack)
+		return
 	}
 }
 
+func (r *runner) openPosition(ctx context.Context, strategy *protos.Strategy, openPosition *protos.EvaluateStrategyResponse_Action_OpenPosition, ack func()) {
+	res, err := r.broker.OpenPosition(ctx, &protos.OpenPositionRequest{
+		Direction: openPosition.Direction,
+		Price:     openPosition.Price,
+	})
+	if err != nil {
+		logrus.WithError(err).Error("opening position")
+		return
+	}
+
+	strategy.Positions = append(strategy.Positions, &protos.Position{
+		Direction: openPosition.Direction,
+		OpenPrice: res.ExecutionPrice,
+		OpenTime:  res.ExecutionTime,
+		Id:        res.Id,
+	})
+
+	if _, err := r.ds.UpdateStrategy(ctx, &protos.UpdateStrategyRequest{
+		Strategy: strategy,
+	}); err != nil {
+		logrus.WithError(err).Error("updating strategy")
+		return
+	}
+
+	ack()
+}
+
+func (r *runner) closePosition(ctx context.Context, strategy *protos.Strategy, closePosition *protos.EvaluateStrategyResponse_Action_ClosePosition, ack func()) {
+	index, openPosition, err := findOpenPosition(strategy)
+	if err != nil {
+		logrus.WithError(err).Error("finding open position")
+		return
+	}
+
+	if openPosition == nil {
+		logrus.Error("strategy does not have an open position")
+		ack()
+		return
+	}
+
+	res, err := r.broker.ClosePosition(ctx, &protos.ClosePositionRequest{
+		Id:    openPosition.Id,
+		Price: closePosition.Price,
+	})
+	if err != nil {
+		logrus.WithError(err).Error("opening position")
+		return
+	}
+
+	pos := strategy.Positions[index]
+	pos.CloseTime = res.ExecutionTime
+	pos.ClosePrice = res.ExecutionPrice
+
+	if _, err := r.ds.UpdateStrategy(ctx, &protos.UpdateStrategyRequest{
+		Strategy: strategy,
+	}); err != nil {
+		logrus.WithError(err).Error("updating strategy")
+		return
+	}
+
+	ack()
+}
+
 func findOpenPosition(strategy *protos.Strategy) (int, *protos.Position, error) {
-	// todo a sorting algo is probably better here
 	for i, position := range strategy.Positions {
 		closeTime, err := ptypes.Timestamp(position.CloseTime)
 		if err != nil {

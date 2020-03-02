@@ -5,6 +5,15 @@ option go_package = "github.com/ducc/kwɒnt/protos";
 
 import "google/protobuf/timestamp.proto";
 
+message Broker {
+    enum Name {
+        UNKNOWN = 0;
+        SIMULATION = 1;
+    }
+
+    Name name = 1;
+}
+
 message Candlestick {
     google.protobuf.Timestamp timestamp = 1;
     int64 current = 2;
@@ -111,18 +120,23 @@ message Symbol {
     }
 
     Name name = 1;
+    Broker broker = 2;
+}
+
+message RuleSet {
+    repeated Rule rules = 1;
 }
 
 message Strategy {
     string name = 1;
-    repeated Rule entry_rules = 2;
-    repeated Rule exit_rules = 3;
+    RuleSet entry_rules = 2;
+    RuleSet exit_rules = 3;
     int64 trade_size = 4;
     int64 take_profit = 5;
     int64 stop_loss = 6;
     Status.Name status = 7;
     string id = 8;
-    Symbol.Name symbol = 9;
+    Symbol symbol = 9;
     repeated Position positions = 10;
     google.protobuf.Timestamp last_evaluated = 11;
 }
@@ -132,6 +146,9 @@ service DataService {
     rpc UpdateStrategy(UpdateStrategyRequest) returns (UpdateStrategyResponse);
     rpc DeleteStrategy(DeleteStrategyRequest) returns (DeleteStrategyResponse);
     rpc ListStrategies(ListStrategiesRequest) returns (ListStrategiesResponse);
+
+    rpc GetPriceHistory(GetPriceHistoryRequest) returns (GetPriceHistoryResponse);
+    rpc AddPriceHistory(AddPriceHistoryRequest) returns (AddPriceHistoryResponse);
 }
 
 message CreateStrategyRequest {
@@ -188,20 +205,28 @@ message EvaluateStrategyResponse {
     Action action = 1;
 }
 
-service SymbolService {
-    rpc GetPriceHistory(GetPriceHistoryRequest) returns (GetPriceHistoryResponse);
-}
-
 message GetPriceHistoryRequest {
-    Symbol.Name symbol = 1;
+    Symbol symbol = 1;
 }
 message GetPriceHistoryResponse {
     repeated Candlestick candlesticks = 1;
 }
 
+message PriceChange {
+    Symbol symbol = 1;
+    google.protobuf.Timestamp timestamp = 2;
+    int64 price = 3;
+}
+
+message AddPriceHistoryRequest {
+    PriceChange price_change = 1;
+}
+message AddPriceHistoryResponse {}
+
 service BrokerService {
     rpc OpenPosition(OpenPositionRequest) returns (OpenPositionResponse);
     rpc ClosePosition(ClosePositionRequest) returns (ClosePositionResponse);
+    rpc GetPriceHistory(GetPriceHistoryRequest) returns (GetPriceHistoryResponse);
 }
 
 message OpenPositionRequest {

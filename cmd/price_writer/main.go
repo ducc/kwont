@@ -4,7 +4,7 @@ import (
 	"context"
 	"flag"
 	"github.com/ducc/kwɒnt/dataservice"
-	"github.com/ducc/kwɒnt/runner"
+	"github.com/ducc/kwɒnt/price_writer"
 	"github.com/nsqio/go-nsq"
 	"github.com/sirupsen/logrus"
 )
@@ -50,5 +50,5 @@ func main() {
 		logrus.WithError(err).Fatal("connecting to nsq")
 	}
 
-	runner.Run(ctx, ds, nil, nil, consumer, topic)
+	price_writer.Run(ctx, ds, consumer, topic)
 }

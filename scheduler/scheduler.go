@@ -66,7 +66,7 @@ func (r *scheduler) processStrategy(ctx context.Context, strategy *protos.Strate
 		return
 	}
 
-	// todo send strategy to evaluator pubsub queue :)
+	r.sendStrategyForProcessing(ctx, strategy)
 }
 
 func (r *scheduler) sendStrategyForProcessing(ctx context.Context, strategy *protos.Strategy) {
@@ -103,7 +103,7 @@ func findShortestRulePeriod(strategy *protos.Strategy) (time.Duration, error) {
 		return 0, err
 	}
 
-	var rulesSet []*protos.Rule
+	var rulesSet *protos.RuleSet
 	if hasOpenPosition {
 		rulesSet = strategy.ExitRules
 	} else {
@@ -111,7 +111,7 @@ func findShortestRulePeriod(strategy *protos.Strategy) (time.Duration, error) {
 	}
 
 	var shortest int64
-	for _, rule := range rulesSet {
+	for _, rule := range rulesSet.Rules {
 		if shortest == 0 || rule.PeriodNanoseconds < shortest {
 			shortest = rule.PeriodNanoseconds
 		}
