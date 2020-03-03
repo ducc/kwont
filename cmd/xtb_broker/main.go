@@ -3,7 +3,8 @@ package main
 import (
 	"context"
 	"flag"
-	"github.com/ducc/kwɒnt/brokers/xtb"
+	"github.com/ducc/kwɒnt/brokers/xtb/connections/streaming"
+	"github.com/ducc/kwɒnt/brokers/xtb/connections/transactional"
 	"github.com/sirupsen/logrus"
 	"time"
 )
@@ -21,7 +22,31 @@ func main() {
 	logrus.SetLevel(logrus.DebugLevel)
 
 	ctx := context.Background()
-	socketClient, err := xtb.NewAPIClient(ctx, "wss://ws.xapi.pro/demo", username, password)
+
+	txClient, err := transactional.New(ctx)
+	if err != nil {
+		panic(err)
+	}
+
+	go txClient.ProcessMessages()
+	go txClient.PingLoop()
+	Must(txClient.SendLogin(ctx, username, password))
+
+	streamSessionID, err := txClient.WaitForStreamSessionID(ctx, time.Minute)
+	if err != nil {
+		panic(err)
+	}
+
+	streamClient, err := streaming.New(ctx, streamSessionID)
+	if err != nil {
+		panic(err)
+	}
+
+	Must(streamClient.SendGetNews(ctx))
+	Must(streamClient.SendGetTickPrices(ctx, "EURUSD"))
+	Must(streamClient.SendGetTickPrices(ctx, "GBPUSD"))
+
+	/*socketClient, err := xtb.NewAPIClient(ctx, "wss://ws.xapi.pro/demo", username, password)
 	if err != nil {
 		panic(err)
 	}
@@ -58,7 +83,7 @@ func main() {
 		}()
 		time.Sleep(time.Second * 10)
 		Must(streamClient.StreamGetTickPrices("EURUSD"))
-	}()
+	}()*/
 
 	<-make(chan struct{})
 }

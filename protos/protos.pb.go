@@ -28,18 +28,21 @@ const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 type Broker_Name int32
 
 const (
-	Broker_UNKNOWN    Broker_Name = 0
-	Broker_SIMULATION Broker_Name = 1
+	Broker_UNKNOWN  Broker_Name = 0
+	Broker_XTB_DEMO Broker_Name = 1
+	Broker_XTB_REAL Broker_Name = 2
 )
 
 var Broker_Name_name = map[int32]string{
 	0: "UNKNOWN",
-	1: "SIMULATION",
+	1: "XTB_DEMO",
+	2: "XTB_REAL",
 }
 
 var Broker_Name_value = map[string]int32{
-	"UNKNOWN":    0,
-	"SIMULATION": 1,
+	"UNKNOWN":  0,
+	"XTB_DEMO": 1,
+	"XTB_REAL": 2,
 }
 
 func (x Broker_Name) String() string {
@@ -47,7 +50,7 @@ func (x Broker_Name) String() string {
 }
 
 func (Broker_Name) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_5da3cbeb884d181c, []int{0, 0}
+	return fileDescriptor_5da3cbeb884d181c, []int{1, 0}
 }
 
 type PriceType_Name int32
@@ -75,7 +78,7 @@ func (x PriceType_Name) String() string {
 }
 
 func (PriceType_Name) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_5da3cbeb884d181c, []int{2, 0}
+	return fileDescriptor_5da3cbeb884d181c, []int{3, 0}
 }
 
 type OpenType_Name int32
@@ -103,7 +106,7 @@ func (x OpenType_Name) String() string {
 }
 
 func (OpenType_Name) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_5da3cbeb884d181c, []int{3, 0}
+	return fileDescriptor_5da3cbeb884d181c, []int{4, 0}
 }
 
 type Rule_Indicator_SimpleMovingAverage_Condition int32
@@ -131,7 +134,7 @@ func (x Rule_Indicator_SimpleMovingAverage_Condition) String() string {
 }
 
 func (Rule_Indicator_SimpleMovingAverage_Condition) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_5da3cbeb884d181c, []int{4, 0, 0, 0}
+	return fileDescriptor_5da3cbeb884d181c, []int{5, 0, 0, 0}
 }
 
 type Rule_Indicator_RelativeStrengthIndex_Condition int32
@@ -165,7 +168,7 @@ func (x Rule_Indicator_RelativeStrengthIndex_Condition) String() string {
 }
 
 func (Rule_Indicator_RelativeStrengthIndex_Condition) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_5da3cbeb884d181c, []int{4, 0, 1, 0}
+	return fileDescriptor_5da3cbeb884d181c, []int{5, 0, 1, 0}
 }
 
 type Status_Name int32
@@ -193,7 +196,7 @@ func (x Status_Name) String() string {
 }
 
 func (Status_Name) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_5da3cbeb884d181c, []int{5, 0}
+	return fileDescriptor_5da3cbeb884d181c, []int{6, 0}
 }
 
 type Direction_Name int32
@@ -221,7 +224,7 @@ func (x Direction_Name) String() string {
 }
 
 func (Direction_Name) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_5da3cbeb884d181c, []int{6, 0}
+	return fileDescriptor_5da3cbeb884d181c, []int{7, 0}
 }
 
 type Symbol_Name int32
@@ -249,7 +252,62 @@ func (x Symbol_Name) String() string {
 }
 
 func (Symbol_Name) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_5da3cbeb884d181c, []int{8, 0}
+	return fileDescriptor_5da3cbeb884d181c, []int{9, 0}
+}
+
+type SessionInfo struct {
+	SessionId            string      `protobuf:"bytes,1,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
+	Broker               Broker_Name `protobuf:"varint,2,opt,name=broker,proto3,enum=protos.Broker_Name" json:"broker,omitempty"`
+	ServiceAddress       string      `protobuf:"bytes,3,opt,name=service_address,json=serviceAddress,proto3" json:"service_address,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}    `json:"-"`
+	XXX_unrecognized     []byte      `json:"-"`
+	XXX_sizecache        int32       `json:"-"`
+}
+
+func (m *SessionInfo) Reset()         { *m = SessionInfo{} }
+func (m *SessionInfo) String() string { return proto.CompactTextString(m) }
+func (*SessionInfo) ProtoMessage()    {}
+func (*SessionInfo) Descriptor() ([]byte, []int) {
+	return fileDescriptor_5da3cbeb884d181c, []int{0}
+}
+
+func (m *SessionInfo) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_SessionInfo.Unmarshal(m, b)
+}
+func (m *SessionInfo) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_SessionInfo.Marshal(b, m, deterministic)
+}
+func (m *SessionInfo) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SessionInfo.Merge(m, src)
+}
+func (m *SessionInfo) XXX_Size() int {
+	return xxx_messageInfo_SessionInfo.Size(m)
+}
+func (m *SessionInfo) XXX_DiscardUnknown() {
+	xxx_messageInfo_SessionInfo.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SessionInfo proto.InternalMessageInfo
+
+func (m *SessionInfo) GetSessionId() string {
+	if m != nil {
+		return m.SessionId
+	}
+	return ""
+}
+
+func (m *SessionInfo) GetBroker() Broker_Name {
+	if m != nil {
+		return m.Broker
+	}
+	return Broker_UNKNOWN
+}
+
+func (m *SessionInfo) GetServiceAddress() string {
+	if m != nil {
+		return m.ServiceAddress
+	}
+	return ""
 }
 
 type Broker struct {
@@ -263,7 +321,7 @@ func (m *Broker) Reset()         { *m = Broker{} }
 func (m *Broker) String() string { return proto.CompactTextString(m) }
 func (*Broker) ProtoMessage()    {}
 func (*Broker) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5da3cbeb884d181c, []int{0}
+	return fileDescriptor_5da3cbeb884d181c, []int{1}
 }
 
 func (m *Broker) XXX_Unmarshal(b []byte) error {
@@ -293,11 +351,15 @@ func (m *Broker) GetName() Broker_Name {
 
 type Candlestick struct {
 	Timestamp            *timestamp.Timestamp `protobuf:"bytes,1,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
-	Current              int64                `protobuf:"varint,2,opt,name=current,proto3" json:"current,omitempty"`
-	Low                  int64                `protobuf:"varint,3,opt,name=low,proto3" json:"low,omitempty"`
-	High                 int64                `protobuf:"varint,4,opt,name=high,proto3" json:"high,omitempty"`
-	Open                 int64                `protobuf:"varint,5,opt,name=open,proto3" json:"open,omitempty"`
-	Close                int64                `protobuf:"varint,6,opt,name=close,proto3" json:"close,omitempty"`
+	Symbol               *Symbol              `protobuf:"bytes,2,opt,name=symbol,proto3" json:"symbol,omitempty"`
+	Current              int64                `protobuf:"varint,3,opt,name=current,proto3" json:"current,omitempty"`
+	Low                  int64                `protobuf:"varint,4,opt,name=low,proto3" json:"low,omitempty"`
+	High                 int64                `protobuf:"varint,5,opt,name=high,proto3" json:"high,omitempty"`
+	Open                 int64                `protobuf:"varint,6,opt,name=open,proto3" json:"open,omitempty"`
+	Close                int64                `protobuf:"varint,7,opt,name=close,proto3" json:"close,omitempty"`
+	Spread               int64                `protobuf:"varint,8,opt,name=spread,proto3" json:"spread,omitempty"`
+	BuyVolume            int64                `protobuf:"varint,9,opt,name=buy_volume,json=buyVolume,proto3" json:"buy_volume,omitempty"`
+	SellVolume           int64                `protobuf:"varint,10,opt,name=sell_volume,json=sellVolume,proto3" json:"sell_volume,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}             `json:"-"`
 	XXX_unrecognized     []byte               `json:"-"`
 	XXX_sizecache        int32                `json:"-"`
@@ -307,7 +369,7 @@ func (m *Candlestick) Reset()         { *m = Candlestick{} }
 func (m *Candlestick) String() string { return proto.CompactTextString(m) }
 func (*Candlestick) ProtoMessage()    {}
 func (*Candlestick) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5da3cbeb884d181c, []int{1}
+	return fileDescriptor_5da3cbeb884d181c, []int{2}
 }
 
 func (m *Candlestick) XXX_Unmarshal(b []byte) error {
@@ -331,6 +393,13 @@ var xxx_messageInfo_Candlestick proto.InternalMessageInfo
 func (m *Candlestick) GetTimestamp() *timestamp.Timestamp {
 	if m != nil {
 		return m.Timestamp
+	}
+	return nil
+}
+
+func (m *Candlestick) GetSymbol() *Symbol {
+	if m != nil {
+		return m.Symbol
 	}
 	return nil
 }
@@ -370,6 +439,27 @@ func (m *Candlestick) GetClose() int64 {
 	return 0
 }
 
+func (m *Candlestick) GetSpread() int64 {
+	if m != nil {
+		return m.Spread
+	}
+	return 0
+}
+
+func (m *Candlestick) GetBuyVolume() int64 {
+	if m != nil {
+		return m.BuyVolume
+	}
+	return 0
+}
+
+func (m *Candlestick) GetSellVolume() int64 {
+	if m != nil {
+		return m.SellVolume
+	}
+	return 0
+}
+
 type PriceType struct {
 	Name                 PriceType_Name `protobuf:"varint,1,opt,name=name,proto3,enum=protos.PriceType_Name" json:"name,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
@@ -381,7 +471,7 @@ func (m *PriceType) Reset()         { *m = PriceType{} }
 func (m *PriceType) String() string { return proto.CompactTextString(m) }
 func (*PriceType) ProtoMessage()    {}
 func (*PriceType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5da3cbeb884d181c, []int{2}
+	return fileDescriptor_5da3cbeb884d181c, []int{3}
 }
 
 func (m *PriceType) XXX_Unmarshal(b []byte) error {
@@ -420,7 +510,7 @@ func (m *OpenType) Reset()         { *m = OpenType{} }
 func (m *OpenType) String() string { return proto.CompactTextString(m) }
 func (*OpenType) ProtoMessage()    {}
 func (*OpenType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5da3cbeb884d181c, []int{3}
+	return fileDescriptor_5da3cbeb884d181c, []int{4}
 }
 
 func (m *OpenType) XXX_Unmarshal(b []byte) error {
@@ -462,7 +552,7 @@ func (m *Rule) Reset()         { *m = Rule{} }
 func (m *Rule) String() string { return proto.CompactTextString(m) }
 func (*Rule) ProtoMessage()    {}
 func (*Rule) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5da3cbeb884d181c, []int{4}
+	return fileDescriptor_5da3cbeb884d181c, []int{5}
 }
 
 func (m *Rule) XXX_Unmarshal(b []byte) error {
@@ -525,7 +615,7 @@ func (m *Rule_Indicator) Reset()         { *m = Rule_Indicator{} }
 func (m *Rule_Indicator) String() string { return proto.CompactTextString(m) }
 func (*Rule_Indicator) ProtoMessage()    {}
 func (*Rule_Indicator) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5da3cbeb884d181c, []int{4, 0}
+	return fileDescriptor_5da3cbeb884d181c, []int{5, 0}
 }
 
 func (m *Rule_Indicator) XXX_Unmarshal(b []byte) error {
@@ -603,7 +693,7 @@ func (m *Rule_Indicator_SimpleMovingAverage) Reset()         { *m = Rule_Indicat
 func (m *Rule_Indicator_SimpleMovingAverage) String() string { return proto.CompactTextString(m) }
 func (*Rule_Indicator_SimpleMovingAverage) ProtoMessage()    {}
 func (*Rule_Indicator_SimpleMovingAverage) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5da3cbeb884d181c, []int{4, 0, 0}
+	return fileDescriptor_5da3cbeb884d181c, []int{5, 0, 0}
 }
 
 func (m *Rule_Indicator_SimpleMovingAverage) XXX_Unmarshal(b []byte) error {
@@ -652,7 +742,7 @@ func (m *Rule_Indicator_RelativeStrengthIndex) Reset()         { *m = Rule_Indic
 func (m *Rule_Indicator_RelativeStrengthIndex) String() string { return proto.CompactTextString(m) }
 func (*Rule_Indicator_RelativeStrengthIndex) ProtoMessage()    {}
 func (*Rule_Indicator_RelativeStrengthIndex) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5da3cbeb884d181c, []int{4, 0, 1}
+	return fileDescriptor_5da3cbeb884d181c, []int{5, 0, 1}
 }
 
 func (m *Rule_Indicator_RelativeStrengthIndex) XXX_Unmarshal(b []byte) error {
@@ -712,7 +802,7 @@ func (m *Status) Reset()         { *m = Status{} }
 func (m *Status) String() string { return proto.CompactTextString(m) }
 func (*Status) ProtoMessage()    {}
 func (*Status) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5da3cbeb884d181c, []int{5}
+	return fileDescriptor_5da3cbeb884d181c, []int{6}
 }
 
 func (m *Status) XXX_Unmarshal(b []byte) error {
@@ -751,7 +841,7 @@ func (m *Direction) Reset()         { *m = Direction{} }
 func (m *Direction) String() string { return proto.CompactTextString(m) }
 func (*Direction) ProtoMessage()    {}
 func (*Direction) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5da3cbeb884d181c, []int{6}
+	return fileDescriptor_5da3cbeb884d181c, []int{7}
 }
 
 func (m *Direction) XXX_Unmarshal(b []byte) error {
@@ -795,7 +885,7 @@ func (m *Position) Reset()         { *m = Position{} }
 func (m *Position) String() string { return proto.CompactTextString(m) }
 func (*Position) ProtoMessage()    {}
 func (*Position) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5da3cbeb884d181c, []int{7}
+	return fileDescriptor_5da3cbeb884d181c, []int{8}
 }
 
 func (m *Position) XXX_Unmarshal(b []byte) error {
@@ -860,7 +950,7 @@ func (m *Position) GetId() string {
 
 type Symbol struct {
 	Name                 Symbol_Name `protobuf:"varint,1,opt,name=name,proto3,enum=protos.Symbol_Name" json:"name,omitempty"`
-	Broker               *Broker     `protobuf:"bytes,2,opt,name=broker,proto3" json:"broker,omitempty"`
+	Broker               Broker_Name `protobuf:"varint,2,opt,name=broker,proto3,enum=protos.Broker_Name" json:"broker,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}    `json:"-"`
 	XXX_unrecognized     []byte      `json:"-"`
 	XXX_sizecache        int32       `json:"-"`
@@ -870,7 +960,7 @@ func (m *Symbol) Reset()         { *m = Symbol{} }
 func (m *Symbol) String() string { return proto.CompactTextString(m) }
 func (*Symbol) ProtoMessage()    {}
 func (*Symbol) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5da3cbeb884d181c, []int{8}
+	return fileDescriptor_5da3cbeb884d181c, []int{9}
 }
 
 func (m *Symbol) XXX_Unmarshal(b []byte) error {
@@ -898,11 +988,11 @@ func (m *Symbol) GetName() Symbol_Name {
 	return Symbol_UNKNOWN
 }
 
-func (m *Symbol) GetBroker() *Broker {
+func (m *Symbol) GetBroker() Broker_Name {
 	if m != nil {
 		return m.Broker
 	}
-	return nil
+	return Broker_UNKNOWN
 }
 
 type RuleSet struct {
@@ -916,7 +1006,7 @@ func (m *RuleSet) Reset()         { *m = RuleSet{} }
 func (m *RuleSet) String() string { return proto.CompactTextString(m) }
 func (*RuleSet) ProtoMessage()    {}
 func (*RuleSet) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5da3cbeb884d181c, []int{9}
+	return fileDescriptor_5da3cbeb884d181c, []int{10}
 }
 
 func (m *RuleSet) XXX_Unmarshal(b []byte) error {
@@ -965,7 +1055,7 @@ func (m *Strategy) Reset()         { *m = Strategy{} }
 func (m *Strategy) String() string { return proto.CompactTextString(m) }
 func (*Strategy) ProtoMessage()    {}
 func (*Strategy) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5da3cbeb884d181c, []int{10}
+	return fileDescriptor_5da3cbeb884d181c, []int{11}
 }
 
 func (m *Strategy) XXX_Unmarshal(b []byte) error {
@@ -1074,7 +1164,7 @@ func (m *CreateStrategyRequest) Reset()         { *m = CreateStrategyRequest{} }
 func (m *CreateStrategyRequest) String() string { return proto.CompactTextString(m) }
 func (*CreateStrategyRequest) ProtoMessage()    {}
 func (*CreateStrategyRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5da3cbeb884d181c, []int{11}
+	return fileDescriptor_5da3cbeb884d181c, []int{12}
 }
 
 func (m *CreateStrategyRequest) XXX_Unmarshal(b []byte) error {
@@ -1113,7 +1203,7 @@ func (m *CreateStrategyResponse) Reset()         { *m = CreateStrategyResponse{}
 func (m *CreateStrategyResponse) String() string { return proto.CompactTextString(m) }
 func (*CreateStrategyResponse) ProtoMessage()    {}
 func (*CreateStrategyResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5da3cbeb884d181c, []int{12}
+	return fileDescriptor_5da3cbeb884d181c, []int{13}
 }
 
 func (m *CreateStrategyResponse) XXX_Unmarshal(b []byte) error {
@@ -1152,7 +1242,7 @@ func (m *UpdateStrategyRequest) Reset()         { *m = UpdateStrategyRequest{} }
 func (m *UpdateStrategyRequest) String() string { return proto.CompactTextString(m) }
 func (*UpdateStrategyRequest) ProtoMessage()    {}
 func (*UpdateStrategyRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5da3cbeb884d181c, []int{13}
+	return fileDescriptor_5da3cbeb884d181c, []int{14}
 }
 
 func (m *UpdateStrategyRequest) XXX_Unmarshal(b []byte) error {
@@ -1190,7 +1280,7 @@ func (m *UpdateStrategyResponse) Reset()         { *m = UpdateStrategyResponse{}
 func (m *UpdateStrategyResponse) String() string { return proto.CompactTextString(m) }
 func (*UpdateStrategyResponse) ProtoMessage()    {}
 func (*UpdateStrategyResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5da3cbeb884d181c, []int{14}
+	return fileDescriptor_5da3cbeb884d181c, []int{15}
 }
 
 func (m *UpdateStrategyResponse) XXX_Unmarshal(b []byte) error {
@@ -1222,7 +1312,7 @@ func (m *DeleteStrategyRequest) Reset()         { *m = DeleteStrategyRequest{} }
 func (m *DeleteStrategyRequest) String() string { return proto.CompactTextString(m) }
 func (*DeleteStrategyRequest) ProtoMessage()    {}
 func (*DeleteStrategyRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5da3cbeb884d181c, []int{15}
+	return fileDescriptor_5da3cbeb884d181c, []int{16}
 }
 
 func (m *DeleteStrategyRequest) XXX_Unmarshal(b []byte) error {
@@ -1260,7 +1350,7 @@ func (m *DeleteStrategyResponse) Reset()         { *m = DeleteStrategyResponse{}
 func (m *DeleteStrategyResponse) String() string { return proto.CompactTextString(m) }
 func (*DeleteStrategyResponse) ProtoMessage()    {}
 func (*DeleteStrategyResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5da3cbeb884d181c, []int{16}
+	return fileDescriptor_5da3cbeb884d181c, []int{17}
 }
 
 func (m *DeleteStrategyResponse) XXX_Unmarshal(b []byte) error {
@@ -1291,7 +1381,7 @@ func (m *ListStrategiesRequest) Reset()         { *m = ListStrategiesRequest{} }
 func (m *ListStrategiesRequest) String() string { return proto.CompactTextString(m) }
 func (*ListStrategiesRequest) ProtoMessage()    {}
 func (*ListStrategiesRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5da3cbeb884d181c, []int{17}
+	return fileDescriptor_5da3cbeb884d181c, []int{18}
 }
 
 func (m *ListStrategiesRequest) XXX_Unmarshal(b []byte) error {
@@ -1323,7 +1413,7 @@ func (m *ListStrategiesResponse) Reset()         { *m = ListStrategiesResponse{}
 func (m *ListStrategiesResponse) String() string { return proto.CompactTextString(m) }
 func (*ListStrategiesResponse) ProtoMessage()    {}
 func (*ListStrategiesResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5da3cbeb884d181c, []int{18}
+	return fileDescriptor_5da3cbeb884d181c, []int{19}
 }
 
 func (m *ListStrategiesResponse) XXX_Unmarshal(b []byte) error {
@@ -1363,7 +1453,7 @@ func (m *EvaulateStrategyRequest) Reset()         { *m = EvaulateStrategyRequest
 func (m *EvaulateStrategyRequest) String() string { return proto.CompactTextString(m) }
 func (*EvaulateStrategyRequest) ProtoMessage()    {}
 func (*EvaulateStrategyRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5da3cbeb884d181c, []int{19}
+	return fileDescriptor_5da3cbeb884d181c, []int{20}
 }
 
 func (m *EvaulateStrategyRequest) XXX_Unmarshal(b []byte) error {
@@ -1409,7 +1499,7 @@ func (m *EvaluateStrategyResponse) Reset()         { *m = EvaluateStrategyRespon
 func (m *EvaluateStrategyResponse) String() string { return proto.CompactTextString(m) }
 func (*EvaluateStrategyResponse) ProtoMessage()    {}
 func (*EvaluateStrategyResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5da3cbeb884d181c, []int{20}
+	return fileDescriptor_5da3cbeb884d181c, []int{21}
 }
 
 func (m *EvaluateStrategyResponse) XXX_Unmarshal(b []byte) error {
@@ -1451,7 +1541,7 @@ func (m *EvaluateStrategyResponse_Action) Reset()         { *m = EvaluateStrateg
 func (m *EvaluateStrategyResponse_Action) String() string { return proto.CompactTextString(m) }
 func (*EvaluateStrategyResponse_Action) ProtoMessage()    {}
 func (*EvaluateStrategyResponse_Action) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5da3cbeb884d181c, []int{20, 0}
+	return fileDescriptor_5da3cbeb884d181c, []int{21, 0}
 }
 
 func (m *EvaluateStrategyResponse_Action) XXX_Unmarshal(b []byte) error {
@@ -1533,7 +1623,7 @@ func (m *EvaluateStrategyResponse_Action_OpenPosition) String() string {
 }
 func (*EvaluateStrategyResponse_Action_OpenPosition) ProtoMessage() {}
 func (*EvaluateStrategyResponse_Action_OpenPosition) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5da3cbeb884d181c, []int{20, 0, 0}
+	return fileDescriptor_5da3cbeb884d181c, []int{21, 0, 0}
 }
 
 func (m *EvaluateStrategyResponse_Action_OpenPosition) XXX_Unmarshal(b []byte) error {
@@ -1583,7 +1673,7 @@ func (m *EvaluateStrategyResponse_Action_ClosePosition) String() string {
 }
 func (*EvaluateStrategyResponse_Action_ClosePosition) ProtoMessage() {}
 func (*EvaluateStrategyResponse_Action_ClosePosition) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5da3cbeb884d181c, []int{20, 0, 1}
+	return fileDescriptor_5da3cbeb884d181c, []int{21, 0, 1}
 }
 
 func (m *EvaluateStrategyResponse_Action_ClosePosition) XXX_Unmarshal(b []byte) error {
@@ -1622,7 +1712,7 @@ func (m *GetPriceHistoryRequest) Reset()         { *m = GetPriceHistoryRequest{}
 func (m *GetPriceHistoryRequest) String() string { return proto.CompactTextString(m) }
 func (*GetPriceHistoryRequest) ProtoMessage()    {}
 func (*GetPriceHistoryRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5da3cbeb884d181c, []int{21}
+	return fileDescriptor_5da3cbeb884d181c, []int{22}
 }
 
 func (m *GetPriceHistoryRequest) XXX_Unmarshal(b []byte) error {
@@ -1661,7 +1751,7 @@ func (m *GetPriceHistoryResponse) Reset()         { *m = GetPriceHistoryResponse
 func (m *GetPriceHistoryResponse) String() string { return proto.CompactTextString(m) }
 func (*GetPriceHistoryResponse) ProtoMessage()    {}
 func (*GetPriceHistoryResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5da3cbeb884d181c, []int{22}
+	return fileDescriptor_5da3cbeb884d181c, []int{23}
 }
 
 func (m *GetPriceHistoryResponse) XXX_Unmarshal(b []byte) error {
@@ -1689,134 +1779,237 @@ func (m *GetPriceHistoryResponse) GetCandlesticks() []*Candlestick {
 	return nil
 }
 
-type PriceChange struct {
-	Symbol               *Symbol              `protobuf:"bytes,1,opt,name=symbol,proto3" json:"symbol,omitempty"`
-	Timestamp            *timestamp.Timestamp `protobuf:"bytes,2,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
-	Price                int64                `protobuf:"varint,3,opt,name=price,proto3" json:"price,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}             `json:"-"`
-	XXX_unrecognized     []byte               `json:"-"`
-	XXX_sizecache        int32                `json:"-"`
-}
-
-func (m *PriceChange) Reset()         { *m = PriceChange{} }
-func (m *PriceChange) String() string { return proto.CompactTextString(m) }
-func (*PriceChange) ProtoMessage()    {}
-func (*PriceChange) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5da3cbeb884d181c, []int{23}
-}
-
-func (m *PriceChange) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_PriceChange.Unmarshal(m, b)
-}
-func (m *PriceChange) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_PriceChange.Marshal(b, m, deterministic)
-}
-func (m *PriceChange) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PriceChange.Merge(m, src)
-}
-func (m *PriceChange) XXX_Size() int {
-	return xxx_messageInfo_PriceChange.Size(m)
-}
-func (m *PriceChange) XXX_DiscardUnknown() {
-	xxx_messageInfo_PriceChange.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_PriceChange proto.InternalMessageInfo
-
-func (m *PriceChange) GetSymbol() *Symbol {
-	if m != nil {
-		return m.Symbol
-	}
-	return nil
-}
-
-func (m *PriceChange) GetTimestamp() *timestamp.Timestamp {
-	if m != nil {
-		return m.Timestamp
-	}
-	return nil
-}
-
-func (m *PriceChange) GetPrice() int64 {
-	if m != nil {
-		return m.Price
-	}
-	return 0
-}
-
-type AddPriceHistoryRequest struct {
-	PriceChange          *PriceChange `protobuf:"bytes,1,opt,name=price_change,json=priceChange,proto3" json:"price_change,omitempty"`
+type AddCandlestickRequest struct {
+	Candlestick          *Candlestick `protobuf:"bytes,1,opt,name=candlestick,proto3" json:"candlestick,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}     `json:"-"`
 	XXX_unrecognized     []byte       `json:"-"`
 	XXX_sizecache        int32        `json:"-"`
 }
 
-func (m *AddPriceHistoryRequest) Reset()         { *m = AddPriceHistoryRequest{} }
-func (m *AddPriceHistoryRequest) String() string { return proto.CompactTextString(m) }
-func (*AddPriceHistoryRequest) ProtoMessage()    {}
-func (*AddPriceHistoryRequest) Descriptor() ([]byte, []int) {
+func (m *AddCandlestickRequest) Reset()         { *m = AddCandlestickRequest{} }
+func (m *AddCandlestickRequest) String() string { return proto.CompactTextString(m) }
+func (*AddCandlestickRequest) ProtoMessage()    {}
+func (*AddCandlestickRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_5da3cbeb884d181c, []int{24}
 }
 
-func (m *AddPriceHistoryRequest) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_AddPriceHistoryRequest.Unmarshal(m, b)
+func (m *AddCandlestickRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_AddCandlestickRequest.Unmarshal(m, b)
 }
-func (m *AddPriceHistoryRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_AddPriceHistoryRequest.Marshal(b, m, deterministic)
+func (m *AddCandlestickRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_AddCandlestickRequest.Marshal(b, m, deterministic)
 }
-func (m *AddPriceHistoryRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AddPriceHistoryRequest.Merge(m, src)
+func (m *AddCandlestickRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AddCandlestickRequest.Merge(m, src)
 }
-func (m *AddPriceHistoryRequest) XXX_Size() int {
-	return xxx_messageInfo_AddPriceHistoryRequest.Size(m)
+func (m *AddCandlestickRequest) XXX_Size() int {
+	return xxx_messageInfo_AddCandlestickRequest.Size(m)
 }
-func (m *AddPriceHistoryRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_AddPriceHistoryRequest.DiscardUnknown(m)
+func (m *AddCandlestickRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_AddCandlestickRequest.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_AddPriceHistoryRequest proto.InternalMessageInfo
+var xxx_messageInfo_AddCandlestickRequest proto.InternalMessageInfo
 
-func (m *AddPriceHistoryRequest) GetPriceChange() *PriceChange {
+func (m *AddCandlestickRequest) GetCandlestick() *Candlestick {
 	if m != nil {
-		return m.PriceChange
+		return m.Candlestick
 	}
 	return nil
 }
 
-type AddPriceHistoryResponse struct {
+type AddCandlestickResponse struct {
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *AddPriceHistoryResponse) Reset()         { *m = AddPriceHistoryResponse{} }
-func (m *AddPriceHistoryResponse) String() string { return proto.CompactTextString(m) }
-func (*AddPriceHistoryResponse) ProtoMessage()    {}
-func (*AddPriceHistoryResponse) Descriptor() ([]byte, []int) {
+func (m *AddCandlestickResponse) Reset()         { *m = AddCandlestickResponse{} }
+func (m *AddCandlestickResponse) String() string { return proto.CompactTextString(m) }
+func (*AddCandlestickResponse) ProtoMessage()    {}
+func (*AddCandlestickResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_5da3cbeb884d181c, []int{25}
 }
 
-func (m *AddPriceHistoryResponse) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_AddPriceHistoryResponse.Unmarshal(m, b)
+func (m *AddCandlestickResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_AddCandlestickResponse.Unmarshal(m, b)
 }
-func (m *AddPriceHistoryResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_AddPriceHistoryResponse.Marshal(b, m, deterministic)
+func (m *AddCandlestickResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_AddCandlestickResponse.Marshal(b, m, deterministic)
 }
-func (m *AddPriceHistoryResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AddPriceHistoryResponse.Merge(m, src)
+func (m *AddCandlestickResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AddCandlestickResponse.Merge(m, src)
 }
-func (m *AddPriceHistoryResponse) XXX_Size() int {
-	return xxx_messageInfo_AddPriceHistoryResponse.Size(m)
+func (m *AddCandlestickResponse) XXX_Size() int {
+	return xxx_messageInfo_AddCandlestickResponse.Size(m)
 }
-func (m *AddPriceHistoryResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_AddPriceHistoryResponse.DiscardUnknown(m)
+func (m *AddCandlestickResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_AddCandlestickResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_AddPriceHistoryResponse proto.InternalMessageInfo
+var xxx_messageInfo_AddCandlestickResponse proto.InternalMessageInfo
+
+type GetCurrentSessionsRequest struct {
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *GetCurrentSessionsRequest) Reset()         { *m = GetCurrentSessionsRequest{} }
+func (m *GetCurrentSessionsRequest) String() string { return proto.CompactTextString(m) }
+func (*GetCurrentSessionsRequest) ProtoMessage()    {}
+func (*GetCurrentSessionsRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_5da3cbeb884d181c, []int{26}
+}
+
+func (m *GetCurrentSessionsRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GetCurrentSessionsRequest.Unmarshal(m, b)
+}
+func (m *GetCurrentSessionsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GetCurrentSessionsRequest.Marshal(b, m, deterministic)
+}
+func (m *GetCurrentSessionsRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetCurrentSessionsRequest.Merge(m, src)
+}
+func (m *GetCurrentSessionsRequest) XXX_Size() int {
+	return xxx_messageInfo_GetCurrentSessionsRequest.Size(m)
+}
+func (m *GetCurrentSessionsRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetCurrentSessionsRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetCurrentSessionsRequest proto.InternalMessageInfo
+
+type GetCurrentSessionsResponse struct {
+	SessionId            []string `protobuf:"bytes,1,rep,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *GetCurrentSessionsResponse) Reset()         { *m = GetCurrentSessionsResponse{} }
+func (m *GetCurrentSessionsResponse) String() string { return proto.CompactTextString(m) }
+func (*GetCurrentSessionsResponse) ProtoMessage()    {}
+func (*GetCurrentSessionsResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_5da3cbeb884d181c, []int{27}
+}
+
+func (m *GetCurrentSessionsResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GetCurrentSessionsResponse.Unmarshal(m, b)
+}
+func (m *GetCurrentSessionsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GetCurrentSessionsResponse.Marshal(b, m, deterministic)
+}
+func (m *GetCurrentSessionsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetCurrentSessionsResponse.Merge(m, src)
+}
+func (m *GetCurrentSessionsResponse) XXX_Size() int {
+	return xxx_messageInfo_GetCurrentSessionsResponse.Size(m)
+}
+func (m *GetCurrentSessionsResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetCurrentSessionsResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetCurrentSessionsResponse proto.InternalMessageInfo
+
+func (m *GetCurrentSessionsResponse) GetSessionId() []string {
+	if m != nil {
+		return m.SessionId
+	}
+	return nil
+}
+
+type OpenSessionRequest struct {
+	Username             string   `protobuf:"bytes,1,opt,name=username,proto3" json:"username,omitempty"`
+	Password             string   `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *OpenSessionRequest) Reset()         { *m = OpenSessionRequest{} }
+func (m *OpenSessionRequest) String() string { return proto.CompactTextString(m) }
+func (*OpenSessionRequest) ProtoMessage()    {}
+func (*OpenSessionRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_5da3cbeb884d181c, []int{28}
+}
+
+func (m *OpenSessionRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_OpenSessionRequest.Unmarshal(m, b)
+}
+func (m *OpenSessionRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_OpenSessionRequest.Marshal(b, m, deterministic)
+}
+func (m *OpenSessionRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_OpenSessionRequest.Merge(m, src)
+}
+func (m *OpenSessionRequest) XXX_Size() int {
+	return xxx_messageInfo_OpenSessionRequest.Size(m)
+}
+func (m *OpenSessionRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_OpenSessionRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_OpenSessionRequest proto.InternalMessageInfo
+
+func (m *OpenSessionRequest) GetUsername() string {
+	if m != nil {
+		return m.Username
+	}
+	return ""
+}
+
+func (m *OpenSessionRequest) GetPassword() string {
+	if m != nil {
+		return m.Password
+	}
+	return ""
+}
+
+type OpenSessionResponse struct {
+	SessionId            string   `protobuf:"bytes,1,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *OpenSessionResponse) Reset()         { *m = OpenSessionResponse{} }
+func (m *OpenSessionResponse) String() string { return proto.CompactTextString(m) }
+func (*OpenSessionResponse) ProtoMessage()    {}
+func (*OpenSessionResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_5da3cbeb884d181c, []int{29}
+}
+
+func (m *OpenSessionResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_OpenSessionResponse.Unmarshal(m, b)
+}
+func (m *OpenSessionResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_OpenSessionResponse.Marshal(b, m, deterministic)
+}
+func (m *OpenSessionResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_OpenSessionResponse.Merge(m, src)
+}
+func (m *OpenSessionResponse) XXX_Size() int {
+	return xxx_messageInfo_OpenSessionResponse.Size(m)
+}
+func (m *OpenSessionResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_OpenSessionResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_OpenSessionResponse proto.InternalMessageInfo
+
+func (m *OpenSessionResponse) GetSessionId() string {
+	if m != nil {
+		return m.SessionId
+	}
+	return ""
+}
 
 type OpenPositionRequest struct {
-	Direction            Direction_Name `protobuf:"varint,1,opt,name=direction,proto3,enum=protos.Direction_Name" json:"direction,omitempty"`
-	Price                int64          `protobuf:"varint,2,opt,name=price,proto3" json:"price,omitempty"`
+	SessionId            string         `protobuf:"bytes,1,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
+	Direction            Direction_Name `protobuf:"varint,2,opt,name=direction,proto3,enum=protos.Direction_Name" json:"direction,omitempty"`
+	Price                int64          `protobuf:"varint,3,opt,name=price,proto3" json:"price,omitempty"`
+	Symbol               *Symbol        `protobuf:"bytes,4,opt,name=symbol,proto3" json:"symbol,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
 	XXX_unrecognized     []byte         `json:"-"`
 	XXX_sizecache        int32          `json:"-"`
@@ -1826,7 +2019,7 @@ func (m *OpenPositionRequest) Reset()         { *m = OpenPositionRequest{} }
 func (m *OpenPositionRequest) String() string { return proto.CompactTextString(m) }
 func (*OpenPositionRequest) ProtoMessage()    {}
 func (*OpenPositionRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5da3cbeb884d181c, []int{26}
+	return fileDescriptor_5da3cbeb884d181c, []int{30}
 }
 
 func (m *OpenPositionRequest) XXX_Unmarshal(b []byte) error {
@@ -1847,6 +2040,13 @@ func (m *OpenPositionRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_OpenPositionRequest proto.InternalMessageInfo
 
+func (m *OpenPositionRequest) GetSessionId() string {
+	if m != nil {
+		return m.SessionId
+	}
+	return ""
+}
+
 func (m *OpenPositionRequest) GetDirection() Direction_Name {
 	if m != nil {
 		return m.Direction
@@ -1859,6 +2059,13 @@ func (m *OpenPositionRequest) GetPrice() int64 {
 		return m.Price
 	}
 	return 0
+}
+
+func (m *OpenPositionRequest) GetSymbol() *Symbol {
+	if m != nil {
+		return m.Symbol
+	}
+	return nil
 }
 
 type OpenPositionResponse struct {
@@ -1874,7 +2081,7 @@ func (m *OpenPositionResponse) Reset()         { *m = OpenPositionResponse{} }
 func (m *OpenPositionResponse) String() string { return proto.CompactTextString(m) }
 func (*OpenPositionResponse) ProtoMessage()    {}
 func (*OpenPositionResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5da3cbeb884d181c, []int{27}
+	return fileDescriptor_5da3cbeb884d181c, []int{31}
 }
 
 func (m *OpenPositionResponse) XXX_Unmarshal(b []byte) error {
@@ -1917,18 +2124,20 @@ func (m *OpenPositionResponse) GetExecutionPrice() int64 {
 }
 
 type ClosePositionRequest struct {
-	Id                   string   `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Price                int64    `protobuf:"varint,2,opt,name=price,proto3" json:"price,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
+	SessionId            string      `protobuf:"bytes,1,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
+	Broker               Broker_Name `protobuf:"varint,2,opt,name=broker,proto3,enum=protos.Broker_Name" json:"broker,omitempty"`
+	Id                   string      `protobuf:"bytes,3,opt,name=id,proto3" json:"id,omitempty"`
+	Price                int64       `protobuf:"varint,4,opt,name=price,proto3" json:"price,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}    `json:"-"`
+	XXX_unrecognized     []byte      `json:"-"`
+	XXX_sizecache        int32       `json:"-"`
 }
 
 func (m *ClosePositionRequest) Reset()         { *m = ClosePositionRequest{} }
 func (m *ClosePositionRequest) String() string { return proto.CompactTextString(m) }
 func (*ClosePositionRequest) ProtoMessage()    {}
 func (*ClosePositionRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5da3cbeb884d181c, []int{28}
+	return fileDescriptor_5da3cbeb884d181c, []int{32}
 }
 
 func (m *ClosePositionRequest) XXX_Unmarshal(b []byte) error {
@@ -1948,6 +2157,20 @@ func (m *ClosePositionRequest) XXX_DiscardUnknown() {
 }
 
 var xxx_messageInfo_ClosePositionRequest proto.InternalMessageInfo
+
+func (m *ClosePositionRequest) GetSessionId() string {
+	if m != nil {
+		return m.SessionId
+	}
+	return ""
+}
+
+func (m *ClosePositionRequest) GetBroker() Broker_Name {
+	if m != nil {
+		return m.Broker
+	}
+	return Broker_UNKNOWN
+}
 
 func (m *ClosePositionRequest) GetId() string {
 	if m != nil {
@@ -1975,7 +2198,7 @@ func (m *ClosePositionResponse) Reset()         { *m = ClosePositionResponse{} }
 func (m *ClosePositionResponse) String() string { return proto.CompactTextString(m) }
 func (*ClosePositionResponse) ProtoMessage()    {}
 func (*ClosePositionResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5da3cbeb884d181c, []int{29}
+	return fileDescriptor_5da3cbeb884d181c, []int{33}
 }
 
 func (m *ClosePositionResponse) XXX_Unmarshal(b []byte) error {
@@ -2010,6 +2233,92 @@ func (m *ClosePositionResponse) GetExecutionPrice() int64 {
 	return 0
 }
 
+type GetBrokerPriceHistoryRequest struct {
+	SessionId            string   `protobuf:"bytes,1,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
+	Symbol               *Symbol  `protobuf:"bytes,2,opt,name=symbol,proto3" json:"symbol,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *GetBrokerPriceHistoryRequest) Reset()         { *m = GetBrokerPriceHistoryRequest{} }
+func (m *GetBrokerPriceHistoryRequest) String() string { return proto.CompactTextString(m) }
+func (*GetBrokerPriceHistoryRequest) ProtoMessage()    {}
+func (*GetBrokerPriceHistoryRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_5da3cbeb884d181c, []int{34}
+}
+
+func (m *GetBrokerPriceHistoryRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GetBrokerPriceHistoryRequest.Unmarshal(m, b)
+}
+func (m *GetBrokerPriceHistoryRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GetBrokerPriceHistoryRequest.Marshal(b, m, deterministic)
+}
+func (m *GetBrokerPriceHistoryRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetBrokerPriceHistoryRequest.Merge(m, src)
+}
+func (m *GetBrokerPriceHistoryRequest) XXX_Size() int {
+	return xxx_messageInfo_GetBrokerPriceHistoryRequest.Size(m)
+}
+func (m *GetBrokerPriceHistoryRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetBrokerPriceHistoryRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetBrokerPriceHistoryRequest proto.InternalMessageInfo
+
+func (m *GetBrokerPriceHistoryRequest) GetSessionId() string {
+	if m != nil {
+		return m.SessionId
+	}
+	return ""
+}
+
+func (m *GetBrokerPriceHistoryRequest) GetSymbol() *Symbol {
+	if m != nil {
+		return m.Symbol
+	}
+	return nil
+}
+
+type GetBrokerPriceHistoryResponse struct {
+	Candlesticks         []*Candlestick `protobuf:"bytes,1,rep,name=candlesticks,proto3" json:"candlesticks,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
+	XXX_unrecognized     []byte         `json:"-"`
+	XXX_sizecache        int32          `json:"-"`
+}
+
+func (m *GetBrokerPriceHistoryResponse) Reset()         { *m = GetBrokerPriceHistoryResponse{} }
+func (m *GetBrokerPriceHistoryResponse) String() string { return proto.CompactTextString(m) }
+func (*GetBrokerPriceHistoryResponse) ProtoMessage()    {}
+func (*GetBrokerPriceHistoryResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_5da3cbeb884d181c, []int{35}
+}
+
+func (m *GetBrokerPriceHistoryResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GetBrokerPriceHistoryResponse.Unmarshal(m, b)
+}
+func (m *GetBrokerPriceHistoryResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GetBrokerPriceHistoryResponse.Marshal(b, m, deterministic)
+}
+func (m *GetBrokerPriceHistoryResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetBrokerPriceHistoryResponse.Merge(m, src)
+}
+func (m *GetBrokerPriceHistoryResponse) XXX_Size() int {
+	return xxx_messageInfo_GetBrokerPriceHistoryResponse.Size(m)
+}
+func (m *GetBrokerPriceHistoryResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetBrokerPriceHistoryResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetBrokerPriceHistoryResponse proto.InternalMessageInfo
+
+func (m *GetBrokerPriceHistoryResponse) GetCandlesticks() []*Candlestick {
+	if m != nil {
+		return m.Candlesticks
+	}
+	return nil
+}
+
 func init() {
 	proto.RegisterEnum("protos.Broker_Name", Broker_Name_name, Broker_Name_value)
 	proto.RegisterEnum("protos.PriceType_Name", PriceType_Name_name, PriceType_Name_value)
@@ -2019,6 +2328,7 @@ func init() {
 	proto.RegisterEnum("protos.Status_Name", Status_Name_name, Status_Name_value)
 	proto.RegisterEnum("protos.Direction_Name", Direction_Name_name, Direction_Name_value)
 	proto.RegisterEnum("protos.Symbol_Name", Symbol_Name_name, Symbol_Name_value)
+	proto.RegisterType((*SessionInfo)(nil), "protos.SessionInfo")
 	proto.RegisterType((*Broker)(nil), "protos.Broker")
 	proto.RegisterType((*Candlestick)(nil), "protos.Candlestick")
 	proto.RegisterType((*PriceType)(nil), "protos.PriceType")
@@ -2048,128 +2358,148 @@ func init() {
 	proto.RegisterType((*EvaluateStrategyResponse_Action_ClosePosition)(nil), "protos.EvaluateStrategyResponse.Action.ClosePosition")
 	proto.RegisterType((*GetPriceHistoryRequest)(nil), "protos.GetPriceHistoryRequest")
 	proto.RegisterType((*GetPriceHistoryResponse)(nil), "protos.GetPriceHistoryResponse")
-	proto.RegisterType((*PriceChange)(nil), "protos.PriceChange")
-	proto.RegisterType((*AddPriceHistoryRequest)(nil), "protos.AddPriceHistoryRequest")
-	proto.RegisterType((*AddPriceHistoryResponse)(nil), "protos.AddPriceHistoryResponse")
+	proto.RegisterType((*AddCandlestickRequest)(nil), "protos.AddCandlestickRequest")
+	proto.RegisterType((*AddCandlestickResponse)(nil), "protos.AddCandlestickResponse")
+	proto.RegisterType((*GetCurrentSessionsRequest)(nil), "protos.GetCurrentSessionsRequest")
+	proto.RegisterType((*GetCurrentSessionsResponse)(nil), "protos.GetCurrentSessionsResponse")
+	proto.RegisterType((*OpenSessionRequest)(nil), "protos.OpenSessionRequest")
+	proto.RegisterType((*OpenSessionResponse)(nil), "protos.OpenSessionResponse")
 	proto.RegisterType((*OpenPositionRequest)(nil), "protos.OpenPositionRequest")
 	proto.RegisterType((*OpenPositionResponse)(nil), "protos.OpenPositionResponse")
 	proto.RegisterType((*ClosePositionRequest)(nil), "protos.ClosePositionRequest")
 	proto.RegisterType((*ClosePositionResponse)(nil), "protos.ClosePositionResponse")
+	proto.RegisterType((*GetBrokerPriceHistoryRequest)(nil), "protos.GetBrokerPriceHistoryRequest")
+	proto.RegisterType((*GetBrokerPriceHistoryResponse)(nil), "protos.GetBrokerPriceHistoryResponse")
 }
 
 func init() { proto.RegisterFile("protos.proto", fileDescriptor_5da3cbeb884d181c) }
 
 var fileDescriptor_5da3cbeb884d181c = []byte{
-	// 1730 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x58, 0x5b, 0x6f, 0x1b, 0x59,
-	0x1d, 0xef, 0xd8, 0x89, 0xe3, 0xf9, 0x3b, 0x49, 0xdd, 0x93, 0xda, 0xf1, 0x7a, 0x09, 0xa9, 0x06,
-	0xb1, 0x0d, 0x4b, 0xeb, 0xae, 0x4c, 0x77, 0x17, 0x24, 0x24, 0xb0, 0xe3, 0xa1, 0x09, 0xb8, 0x76,
-	0x34, 0x13, 0x77, 0xc5, 0x22, 0x31, 0x4c, 0x3c, 0xa7, 0xce, 0xa8, 0xe3, 0x19, 0x33, 0xe7, 0x38,
-	0xdb, 0xec, 0x13, 0x12, 0x17, 0xf1, 0xbc, 0x9f, 0x04, 0x1e, 0xf8, 0x10, 0x2b, 0xf1, 0xc4, 0x03,
-	0xdf, 0x05, 0x09, 0x24, 0x74, 0x2e, 0x73, 0xb3, 0x67, 0x9a, 0x94, 0x2d, 0x4f, 0xc9, 0xf9, 0x5f,
-	0xcf, 0xff, 0xfa, 0x3b, 0x63, 0xd8, 0x5e, 0x84, 0x01, 0x0d, 0x48, 0x87, 0xff, 0x41, 0x15, 0x71,
-	0x6a, 0x1f, 0xce, 0x82, 0x60, 0xe6, 0xe1, 0x27, 0xfc, 0x78, 0xb1, 0x7c, 0xf9, 0x84, 0xba, 0x73,
-	0x4c, 0xa8, 0x3d, 0x5f, 0x08, 0x41, 0xed, 0x05, 0x54, 0xfa, 0x61, 0xf0, 0x0a, 0x87, 0xe8, 0x21,
-	0x6c, 0xf8, 0xf6, 0x1c, 0xb7, 0x94, 0x07, 0xca, 0xd1, 0x6e, 0x77, 0xaf, 0x23, 0xed, 0x09, 0x6e,
-	0x67, 0x64, 0xcf, 0xb1, 0xc1, 0x05, 0xb4, 0xef, 0xc0, 0x06, 0x3b, 0xa1, 0x1a, 0x6c, 0x4d, 0x46,
-	0xbf, 0x18, 0x8d, 0x3f, 0x1b, 0xd5, 0xef, 0xa0, 0x5d, 0x00, 0xf3, 0xf4, 0xf9, 0x64, 0xd8, 0x3b,
-	0x3f, 0x1d, 0x8f, 0xea, 0x8a, 0xf6, 0x57, 0x05, 0x6a, 0xc7, 0xb6, 0xef, 0x78, 0x98, 0x50, 0x77,
-	0xfa, 0x0a, 0xfd, 0x10, 0xd4, 0xd8, 0x35, 0x77, 0x51, 0xeb, 0xb6, 0x3b, 0xe2, 0x72, 0x9d, 0xe8,
-	0x72, 0x9d, 0xf3, 0x48, 0xc2, 0x48, 0x84, 0x51, 0x0b, 0xb6, 0xa6, 0xcb, 0x30, 0xc4, 0x3e, 0x6d,
-	0x95, 0x1e, 0x28, 0x47, 0x65, 0x23, 0x3a, 0xa2, 0x3a, 0x94, 0xbd, 0xe0, 0x8b, 0x56, 0x99, 0x53,
-	0xd9, 0xbf, 0x08, 0xc1, 0xc6, 0xa5, 0x3b, 0xbb, 0x6c, 0x6d, 0x70, 0x12, 0xff, 0x9f, 0xd1, 0x82,
-	0x05, 0xf6, 0x5b, 0x9b, 0x82, 0xc6, 0xfe, 0x47, 0xf7, 0x61, 0x73, 0xea, 0x05, 0x04, 0xb7, 0x2a,
-	0x9c, 0x28, 0x0e, 0x9a, 0x0d, 0xea, 0x59, 0xe8, 0x4e, 0xf1, 0xf9, 0xf5, 0x02, 0xa3, 0x0f, 0x33,
-	0xe9, 0x68, 0x46, 0xe9, 0x88, 0x05, 0xd2, 0x19, 0x39, 0xca, 0xcb, 0x48, 0x15, 0x36, 0xc6, 0x67,
-	0xfa, 0xa8, 0xae, 0x20, 0x15, 0x36, 0x8f, 0x87, 0x63, 0x53, 0xaf, 0x97, 0xb4, 0x29, 0x54, 0xc7,
-	0x0b, 0xec, 0x73, 0x0f, 0xdf, 0xcb, 0x78, 0x68, 0x44, 0x1e, 0x22, 0x7e, 0xda, 0xc1, 0xa3, 0x3c,
-	0x07, 0x00, 0x95, 0xd1, 0xd8, 0x78, 0xde, 0x1b, 0xd6, 0x15, 0xc6, 0x30, 0xf4, 0x17, 0xba, 0xc1,
-	0x9d, 0xfc, 0x73, 0x0b, 0x36, 0x8c, 0xa5, 0x87, 0xd1, 0x53, 0x50, 0x5d, 0xdf, 0x71, 0xa7, 0x36,
-	0x0d, 0x42, 0x99, 0xf4, 0x38, 0x10, 0x26, 0xd0, 0x39, 0x8d, 0xb8, 0x46, 0x22, 0x88, 0x3e, 0x06,
-	0x58, 0xb0, 0x28, 0x2d, 0x7a, 0xbd, 0xc0, 0x3c, 0xe7, 0xc5, 0xf1, 0xab, 0x8b, 0x38, 0x61, 0x5d,
-	0x50, 0x59, 0x6e, 0x85, 0x56, 0xf9, 0x4d, 0x31, 0x55, 0x83, 0x28, 0x05, 0x8f, 0x01, 0x2d, 0x70,
-	0xe8, 0x06, 0x8e, 0xe5, 0xdb, 0x7e, 0x40, 0xf0, 0x34, 0xf0, 0x1d, 0x22, 0xab, 0x77, 0x4f, 0x70,
-	0x46, 0x09, 0xa3, 0xfd, 0x9f, 0x4d, 0x50, 0xe3, 0x2b, 0xa3, 0xdf, 0x40, 0x83, 0xb8, 0xf3, 0x85,
-	0x87, 0xad, 0x79, 0x70, 0xe5, 0xfa, 0x33, 0xcb, 0xbe, 0xc2, 0xa1, 0x3d, 0xc3, 0x32, 0xd2, 0x0f,
-	0xf3, 0x23, 0xed, 0x98, 0x5c, 0xe7, 0x39, 0x57, 0xe9, 0x09, 0x8d, 0x93, 0x3b, 0xc6, 0x1e, 0x59,
-	0x27, 0xa3, 0x97, 0xb0, 0x1f, 0x62, 0xcf, 0xa6, 0xee, 0x15, 0xb6, 0x08, 0x0d, 0xb1, 0x3f, 0xa3,
-	0x97, 0x96, 0xeb, 0x3b, 0xf8, 0x35, 0x4f, 0x4b, 0xad, 0xfb, 0xa8, 0xc0, 0x87, 0x21, 0xb5, 0x4c,
-	0xa9, 0x74, 0xca, 0x74, 0x4e, 0xee, 0x18, 0x8d, 0x30, 0x8f, 0xd1, 0xfe, 0x5a, 0x81, 0xbd, 0x9c,
-	0x6b, 0x21, 0x03, 0x54, 0x16, 0xb8, 0x4b, 0xdd, 0xc0, 0x97, 0x6d, 0xf2, 0xf4, 0xf6, 0x51, 0x75,
-	0x8e, 0x23, 0x5d, 0x23, 0x31, 0x83, 0x9a, 0x50, 0x11, 0x89, 0x95, 0xd3, 0x24, 0x4f, 0xda, 0xcf,
-	0x40, 0x8d, 0xe5, 0xb3, 0x7d, 0xd6, 0x80, 0x7b, 0xbd, 0xfe, 0xf8, 0x85, 0x6e, 0x99, 0xa7, 0xcf,
-	0x46, 0xbd, 0xa1, 0x35, 0x3c, 0x1d, 0xe9, 0x75, 0x85, 0x91, 0xfb, 0xfa, 0x70, 0xfc, 0x59, 0x86,
-	0x5c, 0x6a, 0xff, 0xbd, 0x04, 0x8d, 0xdc, 0xf0, 0xd1, 0xf9, 0x7a, 0x34, 0x9f, 0xbc, 0x4d, 0xfe,
-	0xde, 0x2a, 0x1e, 0x74, 0x08, 0xb5, 0xe0, 0x0a, 0x87, 0xd6, 0x45, 0xb0, 0x9c, 0x5d, 0x52, 0xb9,
-	0x24, 0x80, 0x91, 0xfa, 0x9c, 0x82, 0xde, 0x07, 0x95, 0x0b, 0x90, 0xc0, 0x73, 0x64, 0xcb, 0x55,
-	0x19, 0xc1, 0x0c, 0x3c, 0x47, 0xfb, 0x93, 0x52, 0x98, 0x8e, 0x36, 0x34, 0x45, 0x3a, 0xc6, 0x2f,
-	0x74, 0xc3, 0xea, 0x8f, 0x27, 0xcf, 0x4e, 0xce, 0xa3, 0x9c, 0xb4, 0xa1, 0x29, 0x72, 0xb2, 0xc6,
-	0x2b, 0xa1, 0xf7, 0xa0, 0x21, 0xf4, 0x26, 0xa3, 0x81, 0x6e, 0x58, 0xe6, 0x78, 0x38, 0x10, 0xac,
-	0x32, 0x63, 0x09, 0xb5, 0x55, 0xd6, 0x46, 0xbf, 0x96, 0x4a, 0x9a, 0x66, 0x41, 0xc5, 0xa4, 0x36,
-	0x5d, 0x92, 0xa2, 0x65, 0x2d, 0xb8, 0x37, 0x6e, 0x8e, 0x1a, 0x6c, 0xe9, 0xa3, 0x5e, 0x7f, 0xa8,
-	0x0f, 0xea, 0x0a, 0x5b, 0x23, 0x67, 0xbd, 0x89, 0xa9, 0x0f, 0xea, 0x25, 0xcd, 0x02, 0x75, 0xe0,
-	0x86, 0x78, 0xca, 0xa3, 0x2e, 0xd8, 0x80, 0xb1, 0x40, 0xda, 0xcd, 0x07, 0x79, 0x6e, 0xb6, 0xa0,
-	0xdc, 0x9f, 0xfc, 0xb2, 0xae, 0xb0, 0x55, 0x68, 0xea, 0xc3, 0x61, 0xbd, 0xa4, 0xfd, 0xa1, 0x04,
-	0xd5, 0xb3, 0x80, 0x88, 0xb4, 0x3e, 0x05, 0xd5, 0x89, 0x8c, 0xdd, 0xe0, 0x25, 0x11, 0x44, 0x07,
-	0x00, 0x7c, 0xcf, 0xf0, 0xcd, 0x23, 0x8b, 0xce, 0x37, 0x0f, 0x5f, 0x4d, 0xac, 0xee, 0x7c, 0x9b,
-	0x4b, 0xbe, 0xac, 0x3b, 0x27, 0x09, 0x81, 0x4f, 0xa3, 0x3d, 0xe5, 0xce, 0x31, 0xaf, 0xfb, 0x9b,
-	0x91, 0x48, 0x2c, 0x2b, 0x77, 0x8e, 0xd1, 0x8f, 0x40, 0x98, 0x11, 0x9a, 0x9b, 0x37, 0x63, 0x18,
-	0x97, 0xe6, 0xaa, 0xbb, 0x50, 0x72, 0x1d, 0x0e, 0x36, 0xaa, 0x51, 0x72, 0x1d, 0xed, 0xcf, 0x0a,
-	0x54, 0xcc, 0xeb, 0xf9, 0x45, 0xe0, 0x15, 0x56, 0x92, 0x73, 0x53, 0x29, 0x46, 0x1f, 0x40, 0xe5,
-	0x82, 0x63, 0xb1, 0xdc, 0x3d, 0xbb, 0x59, 0x84, 0x36, 0x24, 0x57, 0x7b, 0x5c, 0x54, 0xf1, 0x89,
-	0x61, 0x4d, 0xcc, 0x81, 0x00, 0x8b, 0x89, 0x39, 0xb0, 0x9e, 0xf5, 0xcf, 0xea, 0x25, 0xed, 0x31,
-	0x6c, 0xb1, 0xe1, 0x33, 0x31, 0x45, 0x1a, 0x6c, 0x86, 0x4b, 0x0f, 0x93, 0x96, 0xf2, 0xa0, 0x7c,
-	0x54, 0xeb, 0x6e, 0xa7, 0x87, 0xd3, 0x10, 0x2c, 0xed, 0x6f, 0x65, 0xa8, 0x9a, 0x34, 0xb4, 0x29,
-	0x9e, 0x5d, 0x33, 0x68, 0x8d, 0xef, 0xae, 0xca, 0x6b, 0x7e, 0x04, 0x35, 0xec, 0xd3, 0xf0, 0xda,
-	0x12, 0xa6, 0xc4, 0x5d, 0xef, 0xa6, 0x4d, 0x99, 0x98, 0x1a, 0xc0, 0x65, 0xd8, 0x89, 0xa0, 0x0e,
-	0x00, 0x7e, 0xed, 0x52, 0xa9, 0x50, 0xce, 0x57, 0x50, 0x99, 0x88, 0x90, 0x3f, 0x00, 0xa0, 0xa1,
-	0xed, 0x60, 0x8b, 0xb8, 0x5f, 0x62, 0x39, 0xb9, 0x2a, 0xa7, 0x98, 0xee, 0x97, 0xbc, 0x01, 0xa8,
-	0xfd, 0x8a, 0xd5, 0x3f, 0x78, 0xe9, 0x52, 0x09, 0xfb, 0xc0, 0x48, 0x67, 0x9c, 0xc2, 0x06, 0x9f,
-	0xd0, 0x60, 0x61, 0x79, 0x01, 0x21, 0xf2, 0x01, 0x50, 0x65, 0x84, 0x61, 0x40, 0x08, 0xfa, 0x3e,
-	0x54, 0x08, 0x1f, 0xa2, 0xd6, 0x56, 0xf1, 0x68, 0x49, 0x11, 0x59, 0xd6, 0x6a, 0x54, 0x56, 0x56,
-	0x22, 0xc2, 0xeb, 0xd6, 0x52, 0xb3, 0x25, 0x12, 0xd5, 0x34, 0x24, 0x17, 0x75, 0x40, 0x5d, 0xc8,
-	0x21, 0x20, 0x2d, 0xe0, 0xc9, 0xae, 0xc7, 0x00, 0x2b, 0x19, 0x46, 0x22, 0x82, 0x7a, 0xb0, 0xeb,
-	0xd9, 0x84, 0x5a, 0xf8, 0xca, 0xf6, 0x96, 0x36, 0xc5, 0x4e, 0xab, 0x76, 0x63, 0xf7, 0xed, 0x30,
-	0x0d, 0x3d, 0x52, 0xd0, 0x74, 0x68, 0x1c, 0x87, 0xd8, 0xa6, 0x38, 0x2a, 0x9e, 0x81, 0x7f, 0xbb,
-	0xc4, 0x84, 0xa2, 0x47, 0x50, 0x25, 0x92, 0x24, 0x81, 0xb3, 0x9e, 0x84, 0x2c, 0x45, 0x63, 0x09,
-	0xed, 0x08, 0x9a, 0xab, 0x66, 0xc8, 0x22, 0xf0, 0x49, 0xd4, 0xe2, 0x4a, 0xdc, 0xe2, 0x3a, 0x34,
-	0x26, 0x0b, 0xe7, 0x1b, 0x3b, 0x6c, 0x41, 0x73, 0xd5, 0x8c, 0x70, 0xa8, 0x3d, 0x84, 0xc6, 0x00,
-	0x7b, 0x78, 0xdd, 0xc1, 0xea, 0x4d, 0x5a, 0xd0, 0x5c, 0x15, 0x94, 0x26, 0xf6, 0xa1, 0x31, 0x74,
-	0x09, 0x95, 0x74, 0x17, 0x13, 0x69, 0x42, 0xfb, 0x39, 0x34, 0x57, 0x19, 0x32, 0xcc, 0x8f, 0x00,
-	0x48, 0x4c, 0x95, 0x83, 0xb2, 0x7e, 0xff, 0x94, 0x8c, 0xf6, 0x3b, 0x05, 0xf6, 0xf5, 0x2b, 0x7b,
-	0xe9, 0x7d, 0xd3, 0x5c, 0xa0, 0x4f, 0x61, 0x7b, 0x9a, 0x3c, 0xa9, 0xd9, 0x6c, 0x31, 0xef, 0x71,
-	0x87, 0xa6, 0x9e, 0xdb, 0x46, 0x46, 0x50, 0xfb, 0x4b, 0x19, 0x5a, 0x51, 0x2b, 0xac, 0x15, 0xee,
-	0x27, 0x50, 0xb1, 0x93, 0x15, 0x5c, 0xeb, 0x3e, 0x8c, 0xec, 0x15, 0x69, 0x74, 0x7a, 0x5c, 0xdc,
-	0x90, 0x6a, 0xed, 0x7f, 0x94, 0xa0, 0x22, 0x48, 0xe8, 0x57, 0xb0, 0x23, 0x76, 0xb3, 0x6c, 0x5d,
-	0x69, 0xf2, 0xe9, 0x2d, 0x4d, 0xf2, 0x77, 0x62, 0x34, 0x00, 0x27, 0x77, 0x8c, 0xed, 0x20, 0x75,
-	0x46, 0xbf, 0x86, 0x5d, 0xb9, 0xd9, 0x23, 0xeb, 0x62, 0xb9, 0x7c, 0x7c, 0x5b, 0xeb, 0xc7, 0x1c,
-	0x04, 0x12, 0xf3, 0x3b, 0xd3, 0x34, 0xa1, 0xfd, 0x39, 0x6c, 0xa7, 0xfd, 0xff, 0x8f, 0xf0, 0x74,
-	0x1f, 0x36, 0xd3, 0xc8, 0x24, 0x0e, 0xed, 0xef, 0xc2, 0x4e, 0xc6, 0x7b, 0x22, 0xa6, 0xa4, 0xc4,
-	0xfa, 0xd5, 0xa8, 0x16, 0xda, 0x4f, 0xa1, 0xf9, 0x0c, 0x53, 0x8e, 0x58, 0x27, 0x2e, 0xa1, 0x41,
-	0x18, 0xf7, 0x4c, 0xb2, 0x64, 0x94, 0x37, 0x2d, 0x19, 0xcd, 0x80, 0xfd, 0x35, 0x0b, 0xb2, 0xe4,
-	0xab, 0x8d, 0xa4, 0xdc, 0xb6, 0x91, 0xfe, 0xa8, 0x40, 0x8d, 0x5b, 0x3c, 0xbe, 0xb4, 0xfd, 0x19,
-	0xbe, 0xed, 0x5d, 0xb2, 0x5f, 0x7f, 0xa5, 0xb7, 0xf9, 0xfa, 0x8b, 0xf3, 0x54, 0x4e, 0xe5, 0x49,
-	0x3b, 0x83, 0x66, 0xcf, 0x71, 0xf2, 0xb2, 0xf3, 0x09, 0xfb, 0x10, 0x66, 0x1f, 0x2f, 0x53, 0x7e,
-	0x43, 0x79, 0xaf, 0xbd, 0xcc, 0xe7, 0x8b, 0xb8, 0xbc, 0x51, 0x5b, 0x24, 0x07, 0xed, 0x3d, 0xd8,
-	0x5f, 0xb3, 0x28, 0xb7, 0x84, 0x0d, 0x7b, 0xe9, 0xbe, 0x88, 0x3c, 0xbd, 0xc3, 0xf6, 0xd0, 0xbe,
-	0x52, 0xe0, 0x7e, 0xd6, 0x47, 0xfe, 0x56, 0x65, 0x48, 0x80, 0x5f, 0xe3, 0xe9, 0x92, 0x09, 0x89,
-	0x77, 0xc8, 0xcd, 0xd9, 0xdc, 0x89, 0x35, 0xf8, 0x5b, 0xe4, 0x21, 0xdc, 0x4d, 0x4c, 0xa4, 0x73,
-	0x9b, 0x58, 0xe6, 0x69, 0xd0, 0x7e, 0x0c, 0xf7, 0x33, 0x3d, 0x5b, 0xb0, 0x5f, 0x0b, 0x42, 0xfa,
-	0xbd, 0x02, 0x8d, 0x15, 0x75, 0x19, 0xd3, 0x7a, 0x0c, 0xca, 0x3b, 0x88, 0xa1, 0x94, 0x17, 0x43,
-	0xf7, 0x5f, 0x65, 0xa8, 0x0d, 0x6c, 0x6a, 0x9b, 0x38, 0xbc, 0x62, 0x8f, 0xbf, 0x31, 0xec, 0x66,
-	0xf1, 0x0b, 0x1d, 0xc4, 0x5d, 0x9f, 0x07, 0x8f, 0xed, 0x6f, 0x17, 0xb1, 0x65, 0x30, 0x63, 0xd8,
-	0xcd, 0xe2, 0x53, 0x62, 0x30, 0x17, 0xfe, 0x12, 0x83, 0xf9, 0xb0, 0xc6, 0x0c, 0x66, 0xd1, 0x2a,
-	0x31, 0x98, 0x0b, 0x77, 0x89, 0xc1, 0x7c, 0x90, 0x63, 0x06, 0xb3, 0x58, 0x96, 0x18, 0xcc, 0x05,
-	0xbf, 0xc4, 0x60, 0x01, 0x04, 0x1a, 0x70, 0x77, 0x65, 0xb1, 0xa0, 0x58, 0x25, 0x7f, 0x67, 0xb5,
-	0x0f, 0x0b, 0xf9, 0x89, 0xcd, 0x95, 0xf1, 0x4b, 0x6c, 0xe6, 0x4f, 0x7a, 0x62, 0xb3, 0x60, 0x6e,
-	0xbb, 0x17, 0x70, 0x2f, 0x4a, 0x86, 0x44, 0x86, 0x20, 0x44, 0xcf, 0xa1, 0x1a, 0xc1, 0x04, 0x3a,
-	0x4c, 0x01, 0x47, 0x1e, 0x3c, 0xb7, 0x1f, 0xdc, 0x84, 0x2c, 0xdd, 0x7f, 0x2b, 0xb0, 0x23, 0xde,
-	0xdf, 0x51, 0x87, 0x9d, 0xae, 0xa0, 0xc8, 0xfb, 0xe9, 0xdf, 0x40, 0x56, 0x46, 0xa9, 0xfd, 0xad,
-	0x7c, 0xa6, 0x4c, 0xca, 0x70, 0x15, 0x34, 0x62, 0xf1, 0xbc, 0xb9, 0x6c, 0x1f, 0x14, 0x70, 0xff,
-	0x7f, 0x65, 0xeb, 0x1f, 0x7e, 0x7e, 0x30, 0x73, 0xe9, 0xe5, 0xf2, 0xa2, 0x33, 0x0d, 0xe6, 0x4f,
-	0x9c, 0xe5, 0x74, 0xfa, 0xe4, 0xd5, 0x17, 0x5f, 0x7f, 0xe5, 0x53, 0xf1, 0x83, 0x23, 0xb9, 0x10,
-	0xbf, 0x43, 0xfe, 0xe0, 0xbf, 0x01, 0x00, 0x00, 0xff, 0xff, 0x68, 0xeb, 0x12, 0xac, 0x9e, 0x14,
-	0x00, 0x00,
+	// 1976 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x58, 0xdd, 0x73, 0xdb, 0x58,
+	0x15, 0xaf, 0xec, 0xc4, 0xb1, 0x8e, 0x93, 0xd4, 0xbd, 0xad, 0x53, 0xaf, 0xba, 0x21, 0x45, 0xc3,
+	0x6e, 0xc3, 0xd2, 0x3a, 0x3b, 0x26, 0x65, 0x61, 0x78, 0x00, 0x3b, 0xd6, 0x26, 0x01, 0xd7, 0xce,
+	0x48, 0x71, 0x77, 0xd9, 0x9d, 0x41, 0xc8, 0xd6, 0xad, 0xa3, 0xa9, 0x2c, 0x19, 0x5d, 0x39, 0x6d,
+	0xf6, 0x89, 0x01, 0x86, 0xe1, 0x85, 0x97, 0xfd, 0x2b, 0x78, 0x84, 0x61, 0xf8, 0x23, 0x76, 0x86,
+	0x27, 0x1e, 0xf8, 0x53, 0x78, 0x63, 0x86, 0xb9, 0x1f, 0xfa, 0xb2, 0xe5, 0x38, 0xa1, 0x3c, 0x25,
+	0xf7, 0x7c, 0xfc, 0xce, 0x3d, 0x1f, 0xf7, 0x9c, 0x63, 0xc1, 0xe6, 0x34, 0xf0, 0x43, 0x9f, 0x34,
+	0xd8, 0x1f, 0x54, 0xe2, 0x27, 0x65, 0x6f, 0xec, 0xfb, 0x63, 0x17, 0x1f, 0xb0, 0xe3, 0x70, 0xf6,
+	0xea, 0x20, 0x74, 0x26, 0x98, 0x84, 0xd6, 0x64, 0xca, 0x05, 0xd5, 0xdf, 0x4a, 0x50, 0x31, 0x30,
+	0x21, 0x8e, 0xef, 0x9d, 0x7a, 0xaf, 0x7c, 0xb4, 0x0b, 0x40, 0xf8, 0xd1, 0x74, 0xec, 0xba, 0xf4,
+	0x58, 0xda, 0x97, 0x75, 0x59, 0x50, 0x4e, 0x6d, 0xf4, 0x3d, 0x28, 0x0d, 0x03, 0xff, 0x35, 0x0e,
+	0xea, 0x85, 0xc7, 0xd2, 0xfe, 0x76, 0xf3, 0x7e, 0x43, 0x98, 0x6d, 0x33, 0x6a, 0xa3, 0x67, 0x4d,
+	0xb0, 0x2e, 0x44, 0xd0, 0x13, 0xb8, 0x4b, 0x70, 0x70, 0xe9, 0x8c, 0xb0, 0x69, 0xd9, 0x76, 0x80,
+	0x09, 0xa9, 0x17, 0x19, 0xe0, 0xb6, 0x20, 0xb7, 0x38, 0x55, 0x1d, 0x42, 0xa9, 0x1d, 0xa9, 0xac,
+	0x79, 0xd6, 0x04, 0x33, 0xc3, 0x4b, 0xd0, 0x99, 0x80, 0x7a, 0x00, 0x6b, 0xf4, 0x84, 0x2a, 0xb0,
+	0x31, 0xe8, 0xfd, 0xbc, 0xd7, 0xff, 0xac, 0x57, 0xbd, 0x83, 0x36, 0xa1, 0xfc, 0xf9, 0x79, 0xdb,
+	0xec, 0x68, 0x2f, 0xfa, 0x55, 0x29, 0x3a, 0xe9, 0x5a, 0xab, 0x5b, 0x2d, 0xa8, 0x7f, 0x2d, 0x40,
+	0xe5, 0xc8, 0xf2, 0x6c, 0x17, 0x93, 0xd0, 0x19, 0xbd, 0x46, 0x3f, 0x04, 0x39, 0x8e, 0x05, 0x33,
+	0x57, 0x69, 0x2a, 0x0d, 0x1e, 0xad, 0x46, 0x14, 0xad, 0xc6, 0x79, 0x24, 0xa1, 0x27, 0xc2, 0xe8,
+	0x43, 0x28, 0x91, 0xab, 0xc9, 0xd0, 0x77, 0x59, 0x0c, 0x2a, 0xcd, 0xed, 0xe8, 0x96, 0x06, 0xa3,
+	0xea, 0x82, 0x8b, 0xea, 0xb0, 0x31, 0x9a, 0x05, 0x01, 0xf6, 0x42, 0xe6, 0x76, 0x51, 0x8f, 0x8e,
+	0xa8, 0x0a, 0x45, 0xd7, 0x7f, 0x53, 0x5f, 0x63, 0x54, 0xfa, 0x2f, 0x42, 0xb0, 0x76, 0xe1, 0x8c,
+	0x2f, 0xea, 0xeb, 0x8c, 0xc4, 0xfe, 0xa7, 0x34, 0x7f, 0x8a, 0xbd, 0x7a, 0x89, 0xd3, 0xe8, 0xff,
+	0xe8, 0x01, 0xac, 0x8f, 0x5c, 0x9f, 0xe0, 0xfa, 0x06, 0x23, 0xf2, 0x03, 0xda, 0x81, 0x12, 0x99,
+	0x06, 0xd8, 0xb2, 0xeb, 0x65, 0x46, 0x16, 0x27, 0x9a, 0xcc, 0xe1, 0xec, 0xca, 0xbc, 0xf4, 0xdd,
+	0xd9, 0x04, 0xd7, 0x65, 0xc6, 0x93, 0x87, 0xb3, 0xab, 0x97, 0x8c, 0x80, 0xf6, 0xa0, 0x42, 0xb0,
+	0xeb, 0x46, 0x7c, 0x60, 0x7c, 0xa0, 0x24, 0x2e, 0xa0, 0x5a, 0x20, 0x9f, 0x05, 0xce, 0x08, 0x9f,
+	0x5f, 0x4d, 0x31, 0xfa, 0x28, 0x93, 0x9a, 0x9d, 0xc8, 0xe9, 0x58, 0x20, 0x9d, 0x9d, 0xfd, 0xbc,
+	0xec, 0x94, 0x61, 0xad, 0x7f, 0xa6, 0xf5, 0xaa, 0x12, 0x92, 0x61, 0xfd, 0xa8, 0xdb, 0x37, 0xb4,
+	0x6a, 0x41, 0x1d, 0x41, 0xb9, 0x3f, 0xc5, 0x1e, 0xb3, 0xf0, 0xdd, 0x8c, 0x85, 0x5a, 0x64, 0x21,
+	0xe2, 0xa7, 0x0d, 0x3c, 0xcd, 0x33, 0x00, 0x50, 0xea, 0xf5, 0xf5, 0x17, 0xad, 0x6e, 0x55, 0xa2,
+	0x0c, 0x5d, 0x7b, 0xa9, 0xe9, 0xcc, 0xc8, 0xbf, 0x36, 0x60, 0x4d, 0x9f, 0xb9, 0x18, 0x1d, 0x82,
+	0xec, 0x78, 0xb6, 0x33, 0xb2, 0x42, 0x3f, 0x10, 0x49, 0x8f, 0x1d, 0xa1, 0x02, 0x8d, 0xd3, 0x88,
+	0xab, 0x27, 0x82, 0xe8, 0x39, 0xc0, 0x94, 0x7a, 0x69, 0x86, 0x57, 0x53, 0x2c, 0x0a, 0x7f, 0x99,
+	0xff, 0xf2, 0x34, 0x0e, 0x58, 0x13, 0x64, 0x9a, 0x33, 0xae, 0x55, 0xbc, 0xce, 0xa7, 0xb2, 0x1f,
+	0x85, 0xe0, 0x19, 0xa0, 0x29, 0x0e, 0x1c, 0xdf, 0x36, 0x3d, 0xcb, 0xf3, 0x09, 0x1e, 0xf9, 0x9e,
+	0x4d, 0x44, 0xa1, 0xdc, 0xe3, 0x9c, 0x5e, 0xc2, 0x50, 0xfe, 0xb3, 0x0e, 0x72, 0x7c, 0x65, 0xf4,
+	0x2b, 0xa8, 0x11, 0x67, 0x32, 0x75, 0xb1, 0x39, 0xf1, 0x2f, 0x1d, 0x6f, 0x6c, 0x5a, 0x97, 0x38,
+	0xb0, 0xc6, 0x58, 0x78, 0xfa, 0x51, 0xbe, 0xa7, 0x0d, 0x83, 0xe9, 0xbc, 0x60, 0x2a, 0x2d, 0xae,
+	0x71, 0x72, 0x47, 0xbf, 0x4f, 0x16, 0xc9, 0xe8, 0x15, 0x3c, 0x0c, 0xb0, 0x6b, 0x85, 0xce, 0x25,
+	0x36, 0x49, 0x18, 0x60, 0x6f, 0x1c, 0x5e, 0x98, 0x8e, 0x67, 0xe3, 0xb7, 0xe2, 0x2d, 0x3c, 0x5d,
+	0x62, 0x43, 0x17, 0x5a, 0x86, 0x50, 0x3a, 0xa5, 0x3a, 0x27, 0x77, 0xf4, 0x5a, 0x90, 0xc7, 0x50,
+	0xbe, 0x91, 0xe0, 0x7e, 0xce, 0xb5, 0x90, 0x0e, 0x32, 0x75, 0xdc, 0x09, 0x1d, 0xdf, 0x13, 0x65,
+	0x72, 0x78, 0x73, 0xaf, 0x1a, 0x47, 0x91, 0xae, 0x9e, 0xc0, 0xd0, 0xc7, 0xc3, 0x03, 0xcb, 0x5c,
+	0x28, 0xea, 0xe2, 0xa4, 0x7e, 0x0a, 0x72, 0x2c, 0x9f, 0xad, 0xb3, 0x1a, 0xdc, 0x6b, 0xb5, 0xfb,
+	0x2f, 0x35, 0xd3, 0x38, 0x3d, 0xee, 0xb5, 0xba, 0x66, 0xf7, 0xb4, 0xa7, 0x55, 0x25, 0x4a, 0x6e,
+	0x6b, 0xdd, 0xfe, 0x67, 0x19, 0x72, 0x41, 0xf9, 0x47, 0x01, 0x6a, 0xb9, 0xee, 0xa3, 0xf3, 0x45,
+	0x6f, 0x7e, 0x70, 0x9b, 0xf8, 0xdd, 0xca, 0x1f, 0xfa, 0xda, 0xfd, 0x4b, 0x1c, 0x98, 0x43, 0x7f,
+	0x36, 0xbe, 0x88, 0x5a, 0x12, 0x50, 0x52, 0x9b, 0x51, 0xd0, 0x23, 0x90, 0x99, 0x00, 0xf1, 0x5d,
+	0x5b, 0x94, 0x5c, 0x99, 0x12, 0x0c, 0xdf, 0xb5, 0xd5, 0x3f, 0x48, 0x4b, 0xc3, 0xa1, 0xc0, 0x0e,
+	0x0f, 0x47, 0xff, 0xa5, 0xa6, 0x9b, 0xed, 0xfe, 0xe0, 0xf8, 0xe4, 0x3c, 0x8a, 0x89, 0x02, 0x3b,
+	0x3c, 0x26, 0x0b, 0xbc, 0x02, 0x7a, 0x0f, 0x6a, 0x5c, 0x6f, 0xd0, 0xeb, 0x68, 0xba, 0x69, 0xf4,
+	0xbb, 0x1d, 0xce, 0x2a, 0x52, 0x16, 0x57, 0x9b, 0x67, 0xad, 0xb5, 0x2b, 0xa9, 0xa0, 0xa9, 0x26,
+	0x94, 0x8c, 0xd0, 0x0a, 0x67, 0x64, 0xd9, 0xe0, 0xe0, 0xdc, 0x95, 0x9d, 0xa3, 0x02, 0x1b, 0x5a,
+	0xaf, 0xd5, 0xee, 0x6a, 0x9d, 0xaa, 0x44, 0xdb, 0xc8, 0x59, 0x6b, 0x60, 0x68, 0x9d, 0x6a, 0x41,
+	0x35, 0x41, 0xee, 0x38, 0x01, 0x1e, 0x31, 0xaf, 0x97, 0x74, 0xc0, 0x58, 0x20, 0x6d, 0xe6, 0xc3,
+	0x3c, 0x33, 0x1b, 0x50, 0x6c, 0x0f, 0x7e, 0x51, 0x95, 0x68, 0x2b, 0x34, 0xb4, 0x2e, 0x1d, 0x4b,
+	0xbf, 0x2f, 0x40, 0xf9, 0xcc, 0x27, 0x3c, 0xac, 0x87, 0x20, 0xdb, 0x11, 0xd8, 0x0a, 0x2b, 0x89,
+	0x20, 0xed, 0xf2, 0xac, 0xcf, 0xb0, 0xce, 0x23, 0x92, 0xce, 0x3a, 0x0f, 0x6b, 0x4d, 0x34, 0xef,
+	0x6c, 0x4a, 0x08, 0xbe, 0xc8, 0x3b, 0x23, 0x71, 0x81, 0x4f, 0xa2, 0x3e, 0xe5, 0x4c, 0x30, 0xcb,
+	0xfb, 0xf5, 0x93, 0x90, 0x37, 0x2b, 0x67, 0x82, 0xd1, 0x8f, 0x80, 0xc3, 0x70, 0xcd, 0xf5, 0xd5,
+	0x33, 0x94, 0x49, 0x33, 0xd5, 0x6d, 0x28, 0x38, 0x36, 0x9b, 0x6c, 0xb2, 0x5e, 0x70, 0x6c, 0xf5,
+	0x4f, 0x12, 0x94, 0xf8, 0xf8, 0x5c, 0x9a, 0x49, 0xc6, 0x4d, 0x85, 0xf8, 0x56, 0xbb, 0x88, 0xfa,
+	0x6c, 0x59, 0xda, 0x07, 0xba, 0x39, 0x30, 0x3a, 0x7c, 0x62, 0x0c, 0x8c, 0x8e, 0x79, 0xdc, 0x3e,
+	0xab, 0x16, 0xd4, 0x67, 0xb0, 0x41, 0x5f, 0xa0, 0x81, 0x43, 0xa4, 0xc2, 0x7a, 0x30, 0x73, 0x31,
+	0xa9, 0x4b, 0x8f, 0x8b, 0xfb, 0x95, 0xe6, 0x66, 0xfa, 0x85, 0xea, 0x9c, 0xa5, 0xfe, 0xbd, 0x08,
+	0x65, 0x23, 0x0c, 0xac, 0x10, 0x8f, 0xaf, 0xe8, 0xdc, 0x8e, 0x1d, 0x90, 0xc5, 0x5d, 0x3f, 0x86,
+	0x0a, 0xf6, 0xc2, 0xe0, 0xca, 0xe4, 0x50, 0xbc, 0x59, 0xde, 0x4d, 0x43, 0x19, 0x38, 0xd4, 0x81,
+	0xc9, 0xd0, 0x13, 0x41, 0x0d, 0x00, 0xfc, 0xd6, 0x09, 0x85, 0x42, 0x31, 0x5f, 0x41, 0xa6, 0x22,
+	0x5c, 0x7e, 0x17, 0x20, 0x0c, 0x2c, 0x1b, 0x9b, 0xc4, 0xf9, 0x0a, 0x8b, 0xe7, 0x2b, 0x33, 0x8a,
+	0xe1, 0x7c, 0xc5, 0xaa, 0x20, 0xb4, 0x5e, 0xd3, 0x22, 0xf0, 0x5f, 0x39, 0xa1, 0xd8, 0x33, 0x80,
+	0x92, 0xce, 0x18, 0x85, 0xbe, 0x7e, 0x12, 0xfa, 0x53, 0xd3, 0xf5, 0x09, 0x11, 0x2b, 0x47, 0x99,
+	0x12, 0xba, 0x3e, 0x21, 0x34, 0xd4, 0x84, 0xbd, 0x24, 0xb6, 0x77, 0x2c, 0x79, 0x5f, 0x42, 0x44,
+	0xe4, 0xb6, 0x1c, 0xe5, 0x36, 0xb5, 0x2f, 0xc9, 0xd7, 0xee, 0x4b, 0x0d, 0x90, 0xa7, 0xe2, 0x25,
+	0x90, 0x3a, 0xb0, 0x60, 0x57, 0xe3, 0x29, 0x2b, 0x18, 0x7a, 0x22, 0x82, 0x5a, 0xb0, 0xed, 0x5a,
+	0x24, 0x34, 0xf1, 0xa5, 0xe5, 0xce, 0xac, 0x10, 0xdb, 0xf5, 0xca, 0xca, 0x12, 0xdc, 0xa2, 0x1a,
+	0x5a, 0xa4, 0xa0, 0x6a, 0x50, 0x3b, 0x0a, 0xb0, 0x15, 0xe2, 0x28, 0x79, 0x3a, 0xfe, 0xf5, 0x0c,
+	0x93, 0x10, 0x3d, 0x85, 0x32, 0x11, 0x24, 0x31, 0x3d, 0xab, 0x89, 0xcb, 0x42, 0x34, 0x96, 0x50,
+	0xf7, 0x61, 0x67, 0x1e, 0x86, 0x4c, 0x7d, 0x8f, 0x44, 0x75, 0x2e, 0xc5, 0x75, 0xae, 0x41, 0x6d,
+	0x30, 0xb5, 0xdf, 0xd9, 0x60, 0x1d, 0x76, 0xe6, 0x61, 0xb8, 0x41, 0xf5, 0x09, 0xd4, 0x3a, 0xd8,
+	0xc5, 0x8b, 0x06, 0xe6, 0x6f, 0x52, 0x87, 0x9d, 0x79, 0x41, 0x01, 0xf1, 0x10, 0x6a, 0x5d, 0x87,
+	0x84, 0x82, 0xee, 0x60, 0x22, 0x20, 0xd4, 0x9f, 0xc1, 0xce, 0x3c, 0x43, 0xb8, 0xf9, 0x31, 0x00,
+	0x89, 0xa9, 0xe2, 0xa1, 0x2c, 0xde, 0x3f, 0x25, 0xa3, 0xfe, 0x46, 0x82, 0x87, 0xda, 0xa5, 0x35,
+	0x73, 0xdf, 0x35, 0x16, 0xe8, 0x13, 0xd8, 0x1c, 0x25, 0x7b, 0x3d, 0x7d, 0x5b, 0xd4, 0x7a, 0x5c,
+	0xa1, 0xa9, 0x9d, 0x5f, 0xcf, 0x08, 0xaa, 0x7f, 0x29, 0x42, 0x3d, 0x2a, 0x85, 0x85, 0xc4, 0xfd,
+	0x04, 0x4a, 0x56, 0xd2, 0x87, 0x2b, 0xcd, 0x27, 0x11, 0xde, 0x32, 0x8d, 0x46, 0x8b, 0x89, 0xeb,
+	0x42, 0x4d, 0xf9, 0x67, 0x01, 0x4a, 0x9c, 0x84, 0xbe, 0x84, 0x2d, 0xde, 0xa0, 0x45, 0xe9, 0x0a,
+	0xc8, 0xc3, 0x1b, 0x42, 0xb2, 0x65, 0x31, 0x7a, 0x00, 0x27, 0x77, 0xf4, 0x4d, 0x3f, 0x75, 0x46,
+	0xbf, 0x84, 0x6d, 0xd1, 0xde, 0x23, 0x74, 0xde, 0x5c, 0x9e, 0xdf, 0x14, 0xfd, 0x88, 0x4d, 0x82,
+	0x04, 0x7e, 0x6b, 0x94, 0x26, 0x28, 0x5f, 0xc0, 0x66, 0xda, 0xfe, 0xff, 0x38, 0xa3, 0x1e, 0xc0,
+	0x7a, 0x7a, 0x3c, 0xf1, 0x83, 0xf2, 0x01, 0x6c, 0x65, 0xac, 0x27, 0x62, 0x52, 0x4a, 0xac, 0x5d,
+	0x8e, 0x72, 0xa1, 0xfe, 0x14, 0x76, 0x8e, 0x71, 0xc8, 0xc6, 0xd6, 0x89, 0x43, 0x42, 0x3f, 0x88,
+	0x6b, 0x26, 0x69, 0x32, 0xd2, 0x75, 0x4d, 0x46, 0xd5, 0xe1, 0xe1, 0x02, 0x82, 0x48, 0xf9, 0x7c,
+	0x21, 0x49, 0x37, 0x2d, 0xa4, 0x1e, 0xd4, 0x5a, 0xb6, 0x9d, 0xe6, 0x8b, 0x4b, 0x3d, 0x87, 0x4a,
+	0x4a, 0x50, 0xdc, 0x2c, 0x17, 0x30, 0x2d, 0x47, 0x9f, 0xe6, 0x3c, 0x9e, 0x78, 0x9a, 0x8f, 0xe0,
+	0xbd, 0x63, 0x1c, 0x1e, 0xf1, 0x9f, 0x91, 0xe2, 0x67, 0x7b, 0xfc, 0x3c, 0x7f, 0x0c, 0x4a, 0x1e,
+	0x53, 0x78, 0x37, 0xff, 0xc3, 0xbe, 0x98, 0xf9, 0x61, 0xaf, 0x76, 0x01, 0xd1, 0x34, 0x0b, 0xb5,
+	0xc8, 0x01, 0x05, 0xca, 0x33, 0x82, 0x83, 0xd4, 0x38, 0x8b, 0xcf, 0x94, 0x37, 0xb5, 0x08, 0x79,
+	0xe3, 0x07, 0x7c, 0xd3, 0x94, 0xf5, 0xf8, 0xac, 0x1e, 0xc2, 0xfd, 0x0c, 0xda, 0x92, 0x3b, 0x64,
+	0x3f, 0x2e, 0xa8, 0x7f, 0x96, 0xb8, 0x5a, 0xdc, 0xec, 0xc5, 0x2d, 0x56, 0x7c, 0x93, 0xc8, 0x54,
+	0x64, 0xe1, 0xd6, 0x15, 0x59, 0x4c, 0x95, 0x5a, 0xaa, 0x8c, 0xd6, 0xae, 0x2d, 0xa3, 0xaf, 0x25,
+	0x78, 0x90, 0xbd, 0x6a, 0x7e, 0xc3, 0xa7, 0x43, 0x0a, 0xbf, 0xc5, 0xa3, 0x19, 0x15, 0xe2, 0x7b,
+	0x52, 0x61, 0xf5, 0x90, 0x8a, 0x35, 0xd8, 0xae, 0xf4, 0x04, 0xee, 0x26, 0x10, 0xe9, 0x3b, 0x27,
+	0xc8, 0xac, 0x9e, 0xd5, 0x3f, 0x4a, 0xf0, 0x20, 0xf3, 0x9e, 0x6e, 0x18, 0xc0, 0x5b, 0x7d, 0xd4,
+	0xe1, 0x0e, 0x16, 0x63, 0x07, 0xe3, 0x38, 0xae, 0xa5, 0xe2, 0xa8, 0xfe, 0x4e, 0x82, 0xda, 0xdc,
+	0x55, 0x44, 0x80, 0x16, 0x03, 0x22, 0xfd, 0x1f, 0x02, 0x52, 0xc8, 0x0d, 0x08, 0x86, 0xf7, 0x8f,
+	0x71, 0xc8, 0xbd, 0xc8, 0x6b, 0x1a, 0x2b, 0xe2, 0x72, 0xc3, 0x0f, 0x3d, 0xea, 0xe7, 0xb0, 0xbb,
+	0xc4, 0xcc, 0x3b, 0x76, 0x96, 0xe6, 0xbf, 0x8b, 0x50, 0xe9, 0x58, 0xa1, 0x65, 0xf0, 0xef, 0x65,
+	0xa8, 0x0f, 0xdb, 0xd9, 0x45, 0x03, 0xed, 0xc6, 0x20, 0x79, 0x7b, 0x8c, 0xf2, 0xad, 0x65, 0x6c,
+	0x71, 0xb3, 0x3e, 0x6c, 0x67, 0x17, 0x89, 0x04, 0x30, 0x77, 0x4f, 0x49, 0x00, 0xf3, 0xf7, 0x0f,
+	0x0a, 0x98, 0x5d, 0x2b, 0x12, 0xc0, 0xdc, 0xbd, 0x24, 0x01, 0xcc, 0xdf, 0x46, 0x28, 0x60, 0x76,
+	0xe9, 0x48, 0x00, 0x73, 0xb7, 0x94, 0x04, 0x70, 0xc9, 0xae, 0xa2, 0xc3, 0xdd, 0xb9, 0x09, 0x80,
+	0x62, 0x95, 0xfc, 0xe1, 0xa2, 0xec, 0x2d, 0xe5, 0x27, 0x97, 0xcc, 0x76, 0xec, 0xe4, 0x92, 0xb9,
+	0x93, 0x21, 0xb9, 0x64, 0x7e, 0xa3, 0x6f, 0x0e, 0xe1, 0x5e, 0x14, 0x09, 0x31, 0xbf, 0xfd, 0x00,
+	0xbd, 0x80, 0x72, 0x34, 0xcc, 0xd1, 0x5e, 0x6a, 0xbc, 0xe7, 0x2d, 0x51, 0xca, 0xe3, 0x55, 0xf3,
+	0xbf, 0xf9, 0xb7, 0x22, 0x6c, 0xf1, 0xa2, 0x8d, 0xca, 0xeb, 0x4b, 0x40, 0x8b, 0x13, 0x04, 0x7d,
+	0x3b, 0xe5, 0x7d, 0xfe, 0xe8, 0x51, 0xd4, 0xeb, 0x44, 0x44, 0x8c, 0x3e, 0x85, 0x4a, 0x6a, 0x26,
+	0x20, 0x25, 0xfd, 0x29, 0x2c, 0x3b, 0x76, 0x94, 0x47, 0xb9, 0x3c, 0x81, 0x73, 0x3a, 0xb7, 0x90,
+	0x64, 0x84, 0xe7, 0x3a, 0x9f, 0xf2, 0x7e, 0x3e, 0x53, 0x40, 0x75, 0xe7, 0xf7, 0x8f, 0x58, 0x3c,
+	0xaf, 0x8d, 0x2a, 0xbb, 0x4b, 0xb8, 0x02, 0xcd, 0x86, 0x5a, 0x6e, 0x1b, 0x40, 0xdf, 0x49, 0x45,
+	0x67, 0x69, 0x33, 0x52, 0x3e, 0x58, 0x21, 0xc5, 0xad, 0xb4, 0xf7, 0xbe, 0xd8, 0x1d, 0x3b, 0xe1,
+	0xc5, 0x6c, 0xd8, 0x18, 0xf9, 0x93, 0x03, 0x7b, 0x36, 0x1a, 0x1d, 0xbc, 0x7e, 0xf3, 0xcd, 0xd7,
+	0x5e, 0xc8, 0xbf, 0xf1, 0x93, 0x21, 0xff, 0xf4, 0xff, 0xfd, 0xff, 0x06, 0x00, 0x00, 0xff, 0xff,
+	0xd3, 0xa2, 0x83, 0x38, 0x11, 0x18, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -2189,7 +2519,7 @@ type DataServiceClient interface {
 	DeleteStrategy(ctx context.Context, in *DeleteStrategyRequest, opts ...grpc.CallOption) (*DeleteStrategyResponse, error)
 	ListStrategies(ctx context.Context, in *ListStrategiesRequest, opts ...grpc.CallOption) (*ListStrategiesResponse, error)
 	GetPriceHistory(ctx context.Context, in *GetPriceHistoryRequest, opts ...grpc.CallOption) (*GetPriceHistoryResponse, error)
-	AddPriceHistory(ctx context.Context, in *AddPriceHistoryRequest, opts ...grpc.CallOption) (*AddPriceHistoryResponse, error)
+	AddCandlestick(ctx context.Context, in *AddCandlestickRequest, opts ...grpc.CallOption) (*AddCandlestickResponse, error)
 }
 
 type dataServiceClient struct {
@@ -2245,9 +2575,9 @@ func (c *dataServiceClient) GetPriceHistory(ctx context.Context, in *GetPriceHis
 	return out, nil
 }
 
-func (c *dataServiceClient) AddPriceHistory(ctx context.Context, in *AddPriceHistoryRequest, opts ...grpc.CallOption) (*AddPriceHistoryResponse, error) {
-	out := new(AddPriceHistoryResponse)
-	err := c.cc.Invoke(ctx, "/protos.DataService/AddPriceHistory", in, out, opts...)
+func (c *dataServiceClient) AddCandlestick(ctx context.Context, in *AddCandlestickRequest, opts ...grpc.CallOption) (*AddCandlestickResponse, error) {
+	out := new(AddCandlestickResponse)
+	err := c.cc.Invoke(ctx, "/protos.DataService/AddCandlestick", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -2261,7 +2591,7 @@ type DataServiceServer interface {
 	DeleteStrategy(context.Context, *DeleteStrategyRequest) (*DeleteStrategyResponse, error)
 	ListStrategies(context.Context, *ListStrategiesRequest) (*ListStrategiesResponse, error)
 	GetPriceHistory(context.Context, *GetPriceHistoryRequest) (*GetPriceHistoryResponse, error)
-	AddPriceHistory(context.Context, *AddPriceHistoryRequest) (*AddPriceHistoryResponse, error)
+	AddCandlestick(context.Context, *AddCandlestickRequest) (*AddCandlestickResponse, error)
 }
 
 // UnimplementedDataServiceServer can be embedded to have forward compatible implementations.
@@ -2283,8 +2613,8 @@ func (*UnimplementedDataServiceServer) ListStrategies(ctx context.Context, req *
 func (*UnimplementedDataServiceServer) GetPriceHistory(ctx context.Context, req *GetPriceHistoryRequest) (*GetPriceHistoryResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetPriceHistory not implemented")
 }
-func (*UnimplementedDataServiceServer) AddPriceHistory(ctx context.Context, req *AddPriceHistoryRequest) (*AddPriceHistoryResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method AddPriceHistory not implemented")
+func (*UnimplementedDataServiceServer) AddCandlestick(ctx context.Context, req *AddCandlestickRequest) (*AddCandlestickResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddCandlestick not implemented")
 }
 
 func RegisterDataServiceServer(s *grpc.Server, srv DataServiceServer) {
@@ -2381,20 +2711,20 @@ func _DataService_GetPriceHistory_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
-func _DataService_AddPriceHistory_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AddPriceHistoryRequest)
+func _DataService_AddCandlestick_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddCandlestickRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(DataServiceServer).AddPriceHistory(ctx, in)
+		return srv.(DataServiceServer).AddCandlestick(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/protos.DataService/AddPriceHistory",
+		FullMethod: "/protos.DataService/AddCandlestick",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(DataServiceServer).AddPriceHistory(ctx, req.(*AddPriceHistoryRequest))
+		return srv.(DataServiceServer).AddCandlestick(ctx, req.(*AddCandlestickRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -2424,8 +2754,8 @@ var _DataService_serviceDesc = grpc.ServiceDesc{
 			Handler:    _DataService_GetPriceHistory_Handler,
 		},
 		{
-			MethodName: "AddPriceHistory",
-			Handler:    _DataService_AddPriceHistory_Handler,
+			MethodName: "AddCandlestick",
+			Handler:    _DataService_AddCandlestick_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -2508,9 +2838,11 @@ var _StrategyEvaluator_serviceDesc = grpc.ServiceDesc{
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type BrokerServiceClient interface {
+	GetCurrentSessions(ctx context.Context, in *GetCurrentSessionsRequest, opts ...grpc.CallOption) (*GetCurrentSessionsResponse, error)
+	OpenSession(ctx context.Context, in *OpenSessionRequest, opts ...grpc.CallOption) (*OpenSessionResponse, error)
 	OpenPosition(ctx context.Context, in *OpenPositionRequest, opts ...grpc.CallOption) (*OpenPositionResponse, error)
 	ClosePosition(ctx context.Context, in *ClosePositionRequest, opts ...grpc.CallOption) (*ClosePositionResponse, error)
-	GetPriceHistory(ctx context.Context, in *GetPriceHistoryRequest, opts ...grpc.CallOption) (*GetPriceHistoryResponse, error)
+	GetBrokerPriceHistory(ctx context.Context, in *GetBrokerPriceHistoryRequest, opts ...grpc.CallOption) (*GetBrokerPriceHistoryResponse, error)
 }
 
 type brokerServiceClient struct {
@@ -2519,6 +2851,24 @@ type brokerServiceClient struct {
 
 func NewBrokerServiceClient(cc *grpc.ClientConn) BrokerServiceClient {
 	return &brokerServiceClient{cc}
+}
+
+func (c *brokerServiceClient) GetCurrentSessions(ctx context.Context, in *GetCurrentSessionsRequest, opts ...grpc.CallOption) (*GetCurrentSessionsResponse, error) {
+	out := new(GetCurrentSessionsResponse)
+	err := c.cc.Invoke(ctx, "/protos.BrokerService/GetCurrentSessions", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *brokerServiceClient) OpenSession(ctx context.Context, in *OpenSessionRequest, opts ...grpc.CallOption) (*OpenSessionResponse, error) {
+	out := new(OpenSessionResponse)
+	err := c.cc.Invoke(ctx, "/protos.BrokerService/OpenSession", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *brokerServiceClient) OpenPosition(ctx context.Context, in *OpenPositionRequest, opts ...grpc.CallOption) (*OpenPositionResponse, error) {
@@ -2539,9 +2889,9 @@ func (c *brokerServiceClient) ClosePosition(ctx context.Context, in *ClosePositi
 	return out, nil
 }
 
-func (c *brokerServiceClient) GetPriceHistory(ctx context.Context, in *GetPriceHistoryRequest, opts ...grpc.CallOption) (*GetPriceHistoryResponse, error) {
-	out := new(GetPriceHistoryResponse)
-	err := c.cc.Invoke(ctx, "/protos.BrokerService/GetPriceHistory", in, out, opts...)
+func (c *brokerServiceClient) GetBrokerPriceHistory(ctx context.Context, in *GetBrokerPriceHistoryRequest, opts ...grpc.CallOption) (*GetBrokerPriceHistoryResponse, error) {
+	out := new(GetBrokerPriceHistoryResponse)
+	err := c.cc.Invoke(ctx, "/protos.BrokerService/GetBrokerPriceHistory", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -2550,27 +2900,71 @@ func (c *brokerServiceClient) GetPriceHistory(ctx context.Context, in *GetPriceH
 
 // BrokerServiceServer is the server API for BrokerService service.
 type BrokerServiceServer interface {
+	GetCurrentSessions(context.Context, *GetCurrentSessionsRequest) (*GetCurrentSessionsResponse, error)
+	OpenSession(context.Context, *OpenSessionRequest) (*OpenSessionResponse, error)
 	OpenPosition(context.Context, *OpenPositionRequest) (*OpenPositionResponse, error)
 	ClosePosition(context.Context, *ClosePositionRequest) (*ClosePositionResponse, error)
-	GetPriceHistory(context.Context, *GetPriceHistoryRequest) (*GetPriceHistoryResponse, error)
+	GetBrokerPriceHistory(context.Context, *GetBrokerPriceHistoryRequest) (*GetBrokerPriceHistoryResponse, error)
 }
 
 // UnimplementedBrokerServiceServer can be embedded to have forward compatible implementations.
 type UnimplementedBrokerServiceServer struct {
 }
 
+func (*UnimplementedBrokerServiceServer) GetCurrentSessions(ctx context.Context, req *GetCurrentSessionsRequest) (*GetCurrentSessionsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetCurrentSessions not implemented")
+}
+func (*UnimplementedBrokerServiceServer) OpenSession(ctx context.Context, req *OpenSessionRequest) (*OpenSessionResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method OpenSession not implemented")
+}
 func (*UnimplementedBrokerServiceServer) OpenPosition(ctx context.Context, req *OpenPositionRequest) (*OpenPositionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method OpenPosition not implemented")
 }
 func (*UnimplementedBrokerServiceServer) ClosePosition(ctx context.Context, req *ClosePositionRequest) (*ClosePositionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ClosePosition not implemented")
 }
-func (*UnimplementedBrokerServiceServer) GetPriceHistory(ctx context.Context, req *GetPriceHistoryRequest) (*GetPriceHistoryResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetPriceHistory not implemented")
+func (*UnimplementedBrokerServiceServer) GetBrokerPriceHistory(ctx context.Context, req *GetBrokerPriceHistoryRequest) (*GetBrokerPriceHistoryResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetBrokerPriceHistory not implemented")
 }
 
 func RegisterBrokerServiceServer(s *grpc.Server, srv BrokerServiceServer) {
 	s.RegisterService(&_BrokerService_serviceDesc, srv)
+}
+
+func _BrokerService_GetCurrentSessions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetCurrentSessionsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BrokerServiceServer).GetCurrentSessions(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/protos.BrokerService/GetCurrentSessions",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BrokerServiceServer).GetCurrentSessions(ctx, req.(*GetCurrentSessionsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _BrokerService_OpenSession_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(OpenSessionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BrokerServiceServer).OpenSession(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/protos.BrokerService/OpenSession",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BrokerServiceServer).OpenSession(ctx, req.(*OpenSessionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _BrokerService_OpenPosition_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -2609,20 +3003,20 @@ func _BrokerService_ClosePosition_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
-func _BrokerService_GetPriceHistory_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetPriceHistoryRequest)
+func _BrokerService_GetBrokerPriceHistory_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetBrokerPriceHistoryRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(BrokerServiceServer).GetPriceHistory(ctx, in)
+		return srv.(BrokerServiceServer).GetBrokerPriceHistory(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/protos.BrokerService/GetPriceHistory",
+		FullMethod: "/protos.BrokerService/GetBrokerPriceHistory",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(BrokerServiceServer).GetPriceHistory(ctx, req.(*GetPriceHistoryRequest))
+		return srv.(BrokerServiceServer).GetBrokerPriceHistory(ctx, req.(*GetBrokerPriceHistoryRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -2632,6 +3026,14 @@ var _BrokerService_serviceDesc = grpc.ServiceDesc{
 	HandlerType: (*BrokerServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
+			MethodName: "GetCurrentSessions",
+			Handler:    _BrokerService_GetCurrentSessions_Handler,
+		},
+		{
+			MethodName: "OpenSession",
+			Handler:    _BrokerService_OpenSession_Handler,
+		},
+		{
 			MethodName: "OpenPosition",
 			Handler:    _BrokerService_OpenPosition_Handler,
 		},
@@ -2640,8 +3042,8 @@ var _BrokerService_serviceDesc = grpc.ServiceDesc{
 			Handler:    _BrokerService_ClosePosition_Handler,
 		},
 		{
-			MethodName: "GetPriceHistory",
-			Handler:    _BrokerService_GetPriceHistory_Handler,
+			MethodName: "GetBrokerPriceHistory",
+			Handler:    _BrokerService_GetBrokerPriceHistory_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

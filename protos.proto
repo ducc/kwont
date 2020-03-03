@@ -5,22 +5,43 @@ option go_package = "github.com/ducc/kwɒnt/protos";
 
 import "google/protobuf/timestamp.proto";
 
+message SessionInfo {
+    string session_id = 1;
+    Broker.Name broker = 2;
+    string service_address = 3;
+}
+
 message Broker {
     enum Name {
         UNKNOWN = 0;
-        SIMULATION = 1;
+        XTB_DEMO = 1;
+        XTB_REAL = 2;
     }
 
     Name name = 1;
 }
 
+// prices are represented in micro amounts
+// 1,000,000 = £1
+//   100,000 = £0.10
+//    10,000 = £0.01
+//     1,000 = £0.001
+//       100 = £0.0001
+//        10 = £0.00001
+//         1 = £0.000001
+// 1,280,510 = £1.28051
+
 message Candlestick {
     google.protobuf.Timestamp timestamp = 1;
-    int64 current = 2;
-    int64 low = 3;
-    int64 high = 4;
-    int64 open = 5;
-    int64 close = 6;
+    Symbol symbol = 2;
+    int64 current = 3;
+    int64 low = 4;
+    int64 high = 5;
+    int64 open = 6;
+    int64 close = 7;
+    int64 spread = 8;
+    int64 buy_volume = 9;
+    int64 sell_volume = 10;
 }
 
 message PriceType {
@@ -120,7 +141,7 @@ message Symbol {
     }
 
     Name name = 1;
-    Broker broker = 2;
+    Broker.Name broker = 2;
 }
 
 message RuleSet {
@@ -148,7 +169,7 @@ service DataService {
     rpc ListStrategies(ListStrategiesRequest) returns (ListStrategiesResponse);
 
     rpc GetPriceHistory(GetPriceHistoryRequest) returns (GetPriceHistoryResponse);
-    rpc AddPriceHistory(AddPriceHistoryRequest) returns (AddPriceHistoryResponse);
+    rpc AddCandlestick(AddCandlestickRequest) returns (AddCandlestickResponse);
 }
 
 message CreateStrategyRequest {
@@ -212,27 +233,40 @@ message GetPriceHistoryResponse {
     repeated Candlestick candlesticks = 1;
 }
 
-message PriceChange {
-    Symbol symbol = 1;
-    google.protobuf.Timestamp timestamp = 2;
-    int64 price = 3;
+message AddCandlestickRequest {
+    Candlestick candlestick = 1;
 }
-
-message AddPriceHistoryRequest {
-    PriceChange price_change = 1;
-}
-message AddPriceHistoryResponse {}
+message AddCandlestickResponse {}
 
 service BrokerService {
+    rpc GetCurrentSessions(GetCurrentSessionsRequest) returns (GetCurrentSessionsResponse);
+    rpc OpenSession(OpenSessionRequest) returns (OpenSessionResponse);
     rpc OpenPosition(OpenPositionRequest) returns (OpenPositionResponse);
     rpc ClosePosition(ClosePositionRequest) returns (ClosePositionResponse);
-    rpc GetPriceHistory(GetPriceHistoryRequest) returns (GetPriceHistoryResponse);
+    rpc GetBrokerPriceHistory(GetBrokerPriceHistoryRequest) returns (GetBrokerPriceHistoryResponse);
+}
+
+message GetCurrentSessionsRequest {
+}
+message GetCurrentSessionsResponse {
+    repeated string session_id = 1;
+}
+
+message OpenSessionRequest {
+    string username = 1;
+    string password = 2;
+}
+message OpenSessionResponse {
+    string session_id = 1;
 }
 
 message OpenPositionRequest {
-    Direction.Name direction = 1;
-    int64 price = 2;
+    string session_id = 1;
+    Direction.Name direction = 2;
+    int64 price = 3;
+    Symbol symbol = 4;
 }
+
 message OpenPositionResponse {
     string id = 1;
     google.protobuf.Timestamp execution_time = 2;
@@ -240,12 +274,22 @@ message OpenPositionResponse {
 }
 
 message ClosePositionRequest {
-    string id = 1;
-    int64 price = 2;
+    string session_id = 1;
+    Broker.Name broker = 2;
+    string id = 3;
+    int64 price = 4;
 }
 message ClosePositionResponse {
     google.protobuf.Timestamp execution_time = 1;
     int64 execution_price = 2;
+}
+
+message GetBrokerPriceHistoryRequest {
+    string session_id = 1;
+    Symbol symbol = 2;
+}
+message GetBrokerPriceHistoryResponse {
+    repeated Candlestick candlesticks = 1;
 }
 
 
