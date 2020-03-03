@@ -10,7 +10,7 @@ type GetTickPricesRequest struct {
 	StreamSessionID string `json:"streamSessionId"`
 	Symbol          string `json:"symbol"`
 	MinArrivalTime  int    `json:"minArrivalTime"`
-	MaxLevel        int    `json:"maxLevel,omitempty"`
+	MaxLevel        int    `json:"maxLevel"`
 }
 
 type GetTickPricesResponse struct {

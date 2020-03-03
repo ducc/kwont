@@ -45,7 +45,7 @@ func (c *Client) ProcessMessages() {
 
 	for data := range c.conn.ReadMessages() {
 		var dataMap map[string]interface{}
-		if err := json.Unmarshal(data, dataMap); err != nil {
+		if err := json.Unmarshal(data, &dataMap); err != nil {
 			c.log.WithError(err).Error("unmarshalling data as map")
 			continue
 		}
@@ -101,7 +101,7 @@ func (c *Client) SendGetTickPrices(ctx context.Context, symbol string) error {
 		Command:         "getTickPrices",
 		StreamSessionID: c.streamSessionID,
 		Symbol:          symbol,
-		MinArrivalTime:  5000,
+		MinArrivalTime:  200,
 		MaxLevel:        0,
 	})
 }

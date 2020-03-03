@@ -14,6 +14,7 @@ type server struct {
 	sessionsLock sync.Mutex
 	sessions     map[string]*sessions.Session
 	producer     *nsq.Producer
+	topic        string
 }
 
 func New(producer *nsq.Producer) *server {
@@ -92,7 +93,7 @@ func (s *server) listSessionIDs() []string {
 }
 
 func (s *server) createSession(ctx context.Context, username, password string) (*sessions.Session, error) {
-	session, err := sessions.New(ctx, username, password)
+	session, err := sessions.New(ctx, s.producer, s.topic, username, password)
 	if err != nil {
 		return nil, err
 	}

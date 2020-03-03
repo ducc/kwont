@@ -3,8 +3,6 @@ package dataservice
 import (
 	"context"
 	"github.com/ducc/kwɒnt/protos"
-	"github.com/golang/protobuf/proto"
-	"github.com/golang/protobuf/ptypes"
 )
 
 type server struct {
@@ -23,7 +21,7 @@ func NewServer(ctx context.Context, databaseAddress string) (*server, error) {
 	}, nil
 }
 
-func (s *server) CreateStrategy(ctx context.Context, req *protos.CreateStrategyRequest) (*protos.CreateStrategyResponse, error) {
+/*func (s *server) CreateStrategy(ctx context.Context, req *protos.CreateStrategyRequest) (*protos.CreateStrategyResponse, error) {
 	entryRulesBytes, err := proto.Marshal(req.Strategy.EntryRules)
 	if err != nil {
 		return nil, err
@@ -71,4 +69,4 @@ func (s *server) AddPriceHistory(ctx context.Context, req *protos.AddPriceHistor
 
 	return &protos.AddPriceHistoryResponse{}, nil
 
-}
+}*/

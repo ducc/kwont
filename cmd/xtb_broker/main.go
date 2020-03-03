@@ -3,10 +3,10 @@ package main
 import (
 	"context"
 	"flag"
-	"github.com/ducc/kwɒnt/brokers/xtb/connections/streaming"
-	"github.com/ducc/kwɒnt/brokers/xtb/connections/transactional"
+	"github.com/ducc/kwɒnt/brokers/xtb/sessions"
+	"github.com/ducc/kwɒnt/protos"
+	"github.com/nsqio/go-nsq"
 	"github.com/sirupsen/logrus"
-	"time"
 )
 
 var username string
@@ -23,7 +23,24 @@ func main() {
 
 	ctx := context.Background()
 
-	txClient, err := transactional.New(ctx)
+	producer, err := nsq.NewProducer("127.0.0.1:4150", nsq.NewConfig())
+	if err != nil {
+		panic(err)
+	}
+	if err := producer.Ping(); err != nil {
+		panic(err)
+	}
+
+	session, err := sessions.New(ctx, producer, "candlesticks", username, password)
+	if err != nil {
+		panic(err)
+	}
+
+	if err := session.AddCandlestickSubscription(ctx, protos.Symbol_EUR_USD); err != nil {
+		panic(err)
+	}
+
+	/*txClient, err := transactional.New(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -44,7 +61,7 @@ func main() {
 
 	Must(streamClient.SendGetNews(ctx))
 	Must(streamClient.SendGetTickPrices(ctx, "EURUSD"))
-	Must(streamClient.SendGetTickPrices(ctx, "GBPUSD"))
+	Must(streamClient.SendGetTickPrices(ctx, "GBPUSD"))*/
 
 	/*socketClient, err := xtb.NewAPIClient(ctx, "wss://ws.xapi.pro/demo", username, password)
 	if err != nil {
