@@ -8,8 +8,8 @@ on:
 
 jobs:
 
-  build xtb broker:
-    name: Build XTB Broker
+  xtb_broker:
+    name: XTB Broker
     runs-on: ubuntu-latest
     steps:
     - name: Set up Go 1.12
@@ -35,8 +35,8 @@ jobs:
     - name: Push Docker Image
       run: docker push joeburnardredbrain/kwont:xtb_broker-latest
 
-  build data service:
-    name: Build Data Service
+  data_service:
+    name: Data Service
     runs-on: ubuntu-latest
     steps:
       - name: Set up Go 1.12
