@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: xtb
+  namespace: brokers
+  labels:
+    app: xtb
+    keel.sh/policy: force
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: xtb
+  template:
+    metadata:
+      labels:
+        app: xtb
+    spec:
+      containers:
+        - name: xtb
+          image: joeburnardredbrain/kwont:xtb_broker-latest
+          imagePullPolicy: Always
+          args:
+            - --level=debug
+            - --nats-address=nats-cluster.default.svc.local
+            # todo username and password
+          resources:
+            requests:
+              cpu: 50m
+              memory: 100M
+            limits:
+              cpu: 100m
+              memory: 200M
+          volumeMounts:
+            - name: "cacerts"
+              mountPath: "/etc/ssl/cacerts"
+              readOnly: true
+      volumes:
+        - name: "cacerts"
+          hostPath:
+            path: "/etc/ssl/certs"
