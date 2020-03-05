@@ -37,7 +37,7 @@ jobs:
     - name: Docker login
       run: echo $DOCKER_AUTH | docker login --username joeburnardredbrain --password-stdin
       env:
-        - DOCKER_AUTH: ${{ secrets.DOCKER_AUTH }}
+        DOCKER_AUTH: ${{ secrets.DOCKER_AUTH }}
 
     - name: Push Docker Image
       run: docker push joeburnardredbrain/kwont:xtb_broker-latest
