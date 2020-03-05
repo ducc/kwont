@@ -17,6 +17,10 @@ func newDatabase(ctx context.Context, connectionString string) (*database, error
 		return nil, err
 	}
 
+	if err := db.Ping(); err != nil {
+		return nil, err
+	}
+
 	return &database{
 		db: db,
 	}, nil
