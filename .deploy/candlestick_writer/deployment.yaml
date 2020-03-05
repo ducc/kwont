@@ -1,28 +1,29 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: dataservice
+  name: candlestick-writer
   namespace: data
   labels:
-    app: dataservice
+    app: candlestick-writer
     keel.sh/policy: force
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: dataservice
+      app: candlestick-writer
   template:
     metadata:
       labels:
-        app: dataservice
+        app: candlestick-writer
     spec:
       containers:
-        - name: dataservice
-          image: joeburnardredbrain/kwont:dataservice-latest
+        - name: candlestick-writer
+          image: joeburnardredbrain/kwont:candlestick_writer-latest
           imagePullPolicy: Always
           args:
             - --level=debug
-            - --database-address=postgres://kwont-cockroachdb-public.default:26257/kwont?sslmode=disable
+            - --nats-address=nats-cluster.default.svc:4222
+            - --topic=candlesticks
           resources:
             requests:
               cpu: 50m

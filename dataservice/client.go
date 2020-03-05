@@ -12,7 +12,7 @@ var (
 )
 
 func init() {
-	flag.StringVar(&dataServiceClientAddress, "data-service-client-address", "", "") // todo default
+	flag.StringVar(&dataServiceClientAddress, "dataservice.default", "", "")
 }
 
 func NewClient(ctx context.Context) (protos.DataServiceClient, error) {
