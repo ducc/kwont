@@ -32,7 +32,7 @@ func main() {
 
 	ctx := context.Background()
 
-	server, err := dataservice.NewServer(ctx, serverAddress)
+	server, err := dataservice.NewServer(ctx, databaseAddress)
 	if err != nil {
 		logrus.WithError(err).Fatal("creating server")
 	}
