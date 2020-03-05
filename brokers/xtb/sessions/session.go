@@ -7,7 +7,6 @@ import (
 	"github.com/ducc/kwɒnt/brokers/xtb/utils"
 	"github.com/ducc/kwɒnt/protos"
 	"github.com/golang/protobuf/proto"
-	"github.com/google/uuid"
 	"github.com/nats-io/nats.go"
 	"github.com/sirupsen/logrus"
 	"time"
@@ -23,9 +22,12 @@ type Session struct {
 
 	tx     *transactional.Client
 	stream *streaming.Client
+
+	finished  chan struct{}
+	startTime time.Time
 }
 
-func New(ctx context.Context, natsConn *nats.Conn, topic, username, password string) (*Session, error) {
+func newSession(ctx context.Context, natsConn *nats.Conn, topic, username, password, sessionID string) (*Session, error) {
 	tx, err := transactional.New(ctx)
 	if err != nil {
 		panic(err)
@@ -51,11 +53,13 @@ func New(ctx context.Context, natsConn *nats.Conn, topic, username, password str
 	s := &Session{
 		natsConn:  natsConn,
 		topic:     topic,
-		SessionID: uuid.New().String(),
+		SessionID: sessionID,
 		username:  username,
 		password:  password,
 		tx:        tx,
 		stream:    stream,
+		finished:  make(chan struct{}, 1),
+		startTime: time.Now(),
 	}
 
 	go s.transformTickPricesToCandlesticks()
@@ -73,6 +77,11 @@ func (s *Session) AddCandlestickSubscription(ctx context.Context, symbol protos.
 }
 
 func (s *Session) transformTickPricesToCandlesticks() {
+	defer func() {
+		// todo other real time data needs to use this chan too
+		s.finished <- struct{}{}
+	}()
+
 	for tickPrice := range s.stream.GetTickPricesResponses() {
 		ctx := context.Background()
 

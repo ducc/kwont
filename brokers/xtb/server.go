@@ -12,14 +12,14 @@ import (
 
 type server struct {
 	sessionsLock sync.Mutex
-	sessions     map[string]*sessions.Session
+	sessions     map[string]*sessions.SessionController
 	natsConn     *nats.Conn
 	topic        string
 }
 
 func New(natsConn *nats.Conn, topic string) *server {
 	return &server{
-		sessions: make(map[string]*sessions.Session),
+		sessions: make(map[string]*sessions.SessionController),
 		natsConn: natsConn,
 		topic:    topic,
 	}
@@ -90,7 +90,7 @@ func (s *server) SubscribeToPriceChanges(ctx context.Context, req *protos.Subscr
 	return &protos.SubscribeToPriceChangesResponse{}, nil
 }
 
-func (s *server) getSession(sessionID string) *sessions.Session {
+func (s *server) getSession(sessionID string) *sessions.SessionController {
 	s.sessionsLock.Lock()
 	defer s.sessionsLock.Unlock()
 	return s.sessions[sessionID]
@@ -106,7 +106,7 @@ func (s *server) listSessionIDs() []string {
 	return out
 }
 
-func (s *server) createSession(ctx context.Context, username, password string) (*sessions.Session, error) {
+func (s *server) createSession(ctx context.Context, username, password string) (*sessions.SessionController, error) {
 	session, err := sessions.New(ctx, s.natsConn, s.topic, username, password)
 	if err != nil {
 		return nil, err
