@@ -8,6 +8,8 @@ require (
 	github.com/google/uuid v1.1.1
 	github.com/gorilla/websocket v1.4.1
 	github.com/lib/pq v1.3.0
+	github.com/nats-io/nats-server/v2 v2.1.4 // indirect
+	github.com/nats-io/nats.go v1.9.1
 	github.com/nsqio/go-nsq v1.0.8
 	github.com/onsi/ginkgo v1.12.0 // indirect
 	github.com/onsi/gomega v1.9.0 // indirect
