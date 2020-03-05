@@ -27,6 +27,16 @@ func (w *writer) processMessages(ctx context.Context, subscription *nats.Subscri
 			logrus.WithError(err).Fatal("getting next message")
 		}
 
+		if msg == nil {
+			logrus.Debug("received nil message")
+			continue
+		}
+
+		if msg.Data == nil || len(msg.Data) == 0 {
+			logrus.Debug("data is nil or empty")
+			continue
+		}
+
 		w.processMessage(ctx, msg)
 	}
 }
@@ -44,14 +54,14 @@ func (w *writer) processMessage(ctx context.Context, msg *nats.Msg) {
 		}
 	}
 
-	var candlestick *protos.Candlestick
-	if err := proto.Unmarshal(msg.Data, candlestick); err != nil {
+	var candlestick protos.Candlestick
+	if err := proto.Unmarshal(msg.Data, &candlestick); err != nil {
 		logrus.WithError(err).Error("unmarshalling message to candlestick")
 		failed()
 		return
 	}
 
-	w.sendToDatabase(ctx, candlestick, success, failed)
+	w.sendToDatabase(ctx, &candlestick, success, failed)
 }
 
 func (w *writer) sendToDatabase(ctx context.Context, candlestick *protos.Candlestick, success, failed func()) {
