@@ -21,11 +21,11 @@ jobs:
       uses: actions/checkout@v2
     - name: Build Binary
       run: GO111MODULE=on CGO_ENABLED=0 GOOS=linux go build -mod=vendor -o kwont "./cmd/xtb_broker/main.go"
-    - name: Upload Artifacts
-      uses: actions/upload-artifact@v1
-      with:
-        name: kwont
-        path: ./kwont
+#    - name: Upload Artifacts
+#      uses: actions/upload-artifact@v1
+#      with:
+#        name: kwont
+#        path: ./kwont
     - name: Build XTB Broker Docker Image
       run: docker build -t joeburnardredbrain/kwont:xtb_broker-latest -f Dockerfile .
     - name: Docker login
@@ -48,11 +48,11 @@ jobs:
         uses: actions/checkout@v2
       - name: Build Binary
         run: GO111MODULE=on CGO_ENABLED=0 GOOS=linux go build -mod=vendor -o kwont "./cmd/dataservice/main.go"
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v1
-        with:
-          name: kwont
-          path: ./kwont
+#      - name: Upload Artifacts
+#        uses: actions/upload-artifact@v1
+#        with:
+#          name: kwont
+#          path: ./kwont
       - name: Build Data Service Docker Image
         run: docker build -t joeburnardredbrain/kwont:dataservice-latest -f Dockerfile .
       - name: Docker login
@@ -75,11 +75,11 @@ jobs:
         uses: actions/checkout@v2
       - name: Build Binary
         run: GO111MODULE=on CGO_ENABLED=0 GOOS=linux go build -mod=vendor -o kwont "./cmd/candlestick_writer/main.go"
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v1
-        with:
-          name: kwont
-          path: ./kwont
+#      - name: Upload Artifacts
+#        uses: actions/upload-artifact@v1
+#        with:
+#          name: kwont
+#          path: ./kwont
       - name: Build Data Service Docker Image
         run: docker build -t joeburnardredbrain/kwont:candlestick_writer-latest -f Dockerfile .
       - name: Docker login
