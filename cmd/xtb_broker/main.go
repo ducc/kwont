@@ -12,8 +12,6 @@ import (
 
 var (
 	level         string
-	username      string
-	password      string
 	natsAddress   string
 	natsUsername  string
 	natsPassword  string
@@ -23,8 +21,6 @@ var (
 
 func init() {
 	flag.StringVar(&level, "level", "debug", "logrus logging level")
-	flag.StringVar(&username, "username", "", "xopen hub username")
-	flag.StringVar(&password, "password", "", "xopen hub password")
 	flag.StringVar(&natsAddress, "nats-address", "127.0.0.1:4150", "nats server address")
 	flag.StringVar(&natsUsername, "nats-username", "kwont", "nats username")
 	flag.StringVar(&natsPassword, "nats-password", "password", "nats password")
