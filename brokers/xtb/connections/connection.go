@@ -2,6 +2,7 @@ package connections
 
 import (
 	"context"
+	"crypto/x509"
 	"encoding/json"
 	"errors"
 	"github.com/gorilla/websocket"
@@ -24,7 +25,17 @@ func New(ctx context.Context, address string) (*Connection, error) {
 	log := logrus.WithField("address", address)
 	log.Debug("connecting")
 
-	conn, res, err := websocket.DefaultDialer.DialContext(ctx, address, nil)
+	certPool, err := x509.SystemCertPool()
+	if err != nil {
+		return nil, err
+	}
+
+	log.Debug("certpool length:", len(certPool.Subjects()))
+
+	dialer := *websocket.DefaultDialer
+	dialer.TLSClientConfig.RootCAs = certPool
+
+	conn, res, err := (&dialer).DialContext(ctx, address, nil)
 	if err != nil {
 		return nil, err
 	}
