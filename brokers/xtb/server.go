@@ -77,6 +77,19 @@ func (s *server) GetBrokerPriceHistory(ctx context.Context, req *protos.GetBroke
 	return nil, nil
 }
 
+func (s *server) SubscribeToPriceChanges(ctx context.Context, req *protos.SubscribeToPriceChangesRequest) (*protos.SubscribeToPriceChangesResponse, error) {
+	session := s.getSession(req.SessionId)
+	if session == nil {
+		return nil, ErrSessionDoesNotExist
+	}
+
+	if err := session.AddCandlestickSubscription(ctx, req.Symbol); err != nil {
+		return nil, err
+	}
+
+	return &protos.SubscribeToPriceChangesResponse{}, nil
+}
+
 func (s *server) getSession(sessionID string) *sessions.Session {
 	s.sessionsLock.Lock()
 	defer s.sessionsLock.Unlock()

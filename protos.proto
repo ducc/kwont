@@ -244,6 +244,7 @@ service BrokerService {
     rpc OpenPosition(OpenPositionRequest) returns (OpenPositionResponse);
     rpc ClosePosition(ClosePositionRequest) returns (ClosePositionResponse);
     rpc GetBrokerPriceHistory(GetBrokerPriceHistoryRequest) returns (GetBrokerPriceHistoryResponse);
+    rpc SubscribeToPriceChanges(SubscribeToPriceChangesRequest) returns (SubscribeToPriceChangesResponse);
 }
 
 message GetCurrentSessionsRequest {
@@ -290,6 +291,13 @@ message GetBrokerPriceHistoryRequest {
 }
 message GetBrokerPriceHistoryResponse {
     repeated Candlestick candlesticks = 1;
+}
+
+message SubscribeToPriceChangesRequest {
+    string session_id = 1;
+    Symbol.Name symbol = 2;
+}
+message SubscribeToPriceChangesResponse {
 }
 
 
