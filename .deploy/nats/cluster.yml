@@ -1,0 +1,11 @@
+apiVersion: nats.io/v1alpha2
+kind: NatsCluster
+metadata:
+  name: nats-cluster
+spec:
+  size: 3
+  version: "1.3.0"
+auth:
+  clientsAuthSecret: "nats-clients-auth"
+  clientsAuthTimeout: 5
+

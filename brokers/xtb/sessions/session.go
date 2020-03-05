@@ -8,13 +8,13 @@ import (
 	"github.com/ducc/kwɒnt/protos"
 	"github.com/golang/protobuf/proto"
 	"github.com/google/uuid"
-	"github.com/nsqio/go-nsq"
+	"github.com/nats-io/nats.go"
 	"github.com/sirupsen/logrus"
 	"time"
 )
 
 type Session struct {
-	producer *nsq.Producer
+	natsConn *nats.Conn
 	topic    string
 
 	SessionID string
@@ -25,7 +25,7 @@ type Session struct {
 	stream *streaming.Client
 }
 
-func New(ctx context.Context, producer *nsq.Producer, topic, username, password string) (*Session, error) {
+func New(ctx context.Context, natsConn *nats.Conn, topic, username, password string) (*Session, error) {
 	tx, err := transactional.New(ctx)
 	if err != nil {
 		panic(err)
@@ -49,7 +49,7 @@ func New(ctx context.Context, producer *nsq.Producer, topic, username, password 
 	}
 
 	s := &Session{
-		producer:  producer,
+		natsConn:  natsConn,
 		topic:     topic,
 		SessionID: uuid.New().String(),
 		username:  username,
@@ -82,18 +82,18 @@ func (s *Session) transformTickPricesToCandlesticks() {
 			continue
 		}
 
-		s.sendCandlestickToNSQ(ctx, candlestick)
+		s.sendCandlestickToQueue(ctx, candlestick)
 	}
 }
 
-func (s *Session) sendCandlestickToNSQ(ctx context.Context, candlestick *protos.Candlestick) {
+func (s *Session) sendCandlestickToQueue(ctx context.Context, candlestick *protos.Candlestick) {
 	bytes, err := proto.Marshal(candlestick)
 	if err != nil {
 		logrus.WithError(err).Error("error marshalling candlestick")
 		return
 	}
 
-	if err := s.producer.Publish(s.topic, bytes); err != nil {
+	if err := s.natsConn.Publish(s.topic, bytes); err != nil {
 		logrus.WithError(err).Error("error publishing candlestick")
 	}
 }

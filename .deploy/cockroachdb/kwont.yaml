@@ -1,0 +1,14 @@
+statefulset:
+  resources:
+    limits:
+      memory: "256Mi"
+    requests:
+      memory: "256Mi"
+conf:
+  cache: "256Mi"
+  max-sql-memory: "256Mi"
+tls:
+  enabled: false
+storage:
+    persistentVolume:
+        size: 5Gi

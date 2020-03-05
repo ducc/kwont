@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/ducc/kwɒnt/brokers/xtb/sessions"
 	"github.com/ducc/kwɒnt/protos"
-	"github.com/nsqio/go-nsq"
+	"github.com/nats-io/nats.go"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"sync"
@@ -13,14 +13,15 @@ import (
 type server struct {
 	sessionsLock sync.Mutex
 	sessions     map[string]*sessions.Session
-	producer     *nsq.Producer
+	natsConn     *nats.Conn
 	topic        string
 }
 
-func New(producer *nsq.Producer) *server {
+func New(natsConn *nats.Conn, topic string) *server {
 	return &server{
 		sessions: make(map[string]*sessions.Session),
-		producer: producer,
+		natsConn: natsConn,
+		topic:    topic,
 	}
 }
 
@@ -93,7 +94,7 @@ func (s *server) listSessionIDs() []string {
 }
 
 func (s *server) createSession(ctx context.Context, username, password string) (*sessions.Session, error) {
-	session, err := sessions.New(ctx, s.producer, s.topic, username, password)
+	session, err := sessions.New(ctx, s.natsConn, s.topic, username, password)
 	if err != nil {
 		return nil, err
 	}

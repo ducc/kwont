@@ -1,0 +1,14 @@
+{
+  "users": [
+    { "username": "kwont", "password": "password",
+      "permissions": {
+        "publish": [">"],
+        "subscribe": [">"]
+      }
+    }
+  ],
+  "default_permissions": {
+    "publish": ["SANDBOX.*"],
+    "subscribe": ["PUBLIC.>"]
+  }
+}
