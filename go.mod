@@ -1,6 +1,6 @@
 module github.com/ducc/kwɒnt
 
-go 1.13
+go 1.12
 
 require (
 	github.com/go-redis/redis v6.15.7+incompatible

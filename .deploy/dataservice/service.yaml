@@ -1,0 +1,15 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: dataservice
+  namespace: data
+  labels:
+    name: dataservice
+spec:
+  type: NodePort
+  selector:
+    app: dataservice
+  ports:
+    - targetPort: 8080
+      protocol: TCP
+      port: 8080

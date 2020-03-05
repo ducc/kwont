@@ -19,7 +19,7 @@ var (
 func init() {
 	flag.StringVar(&level, "level", "debug", "")
 	flag.StringVar(&serverAddress, "server-address", ":8080", "")
-	flag.StringVar(&databaseAddress, "database-address", "", "")
+	flag.StringVar(&databaseAddress, "database-address", "postgres://kwont-cockroachdb-public.default/kwont", "postgres url")
 }
 
 func main() {

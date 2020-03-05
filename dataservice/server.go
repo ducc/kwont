@@ -3,6 +3,7 @@ package dataservice
 import (
 	"context"
 	"github.com/ducc/kwɒnt/protos"
+	"github.com/golang/protobuf/ptypes"
 )
 
 type server struct {
@@ -70,3 +71,18 @@ func (s *server) AddPriceHistory(ctx context.Context, req *protos.AddPriceHistor
 	return &protos.AddPriceHistoryResponse{}, nil
 
 }*/
+
+func (s *server) AddCandlestick(ctx context.Context, req *protos.AddCandlestickRequest) (*protos.AddCandlestickResponse, error) {
+	c := req.Candlestick
+
+	ts, err := ptypes.Timestamp(c.Timestamp)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := s.db.InsertCandlestick(ctx, c.Symbol.Name.String(), c.Symbol.Broker.String(), ts, c.Open, c.Close, c.High, c.Low, c.Current, c.Spread, c.BuyVolume, c.SellVolume); err != nil {
+		return nil, err
+	}
+
+	return &protos.AddCandlestickResponse{}, nil
+}

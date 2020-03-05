@@ -27,15 +27,17 @@ CREATE TABLE IF NOT EXISTS symbol_prices (
 );
 
 -- todo can this be auto populated on insert to symbol_prices?
-CREATE TABLE IF NOT EXISTS symbol_candlesticks (
+CREATE TABLE IF NOT EXISTS candlesticks (
+    candlestick_id UUID NOT NULL DEFAULT gen_random_uuid(),
     symbol_name STRING NOT NULL,
     symbol_broker STRING NOT NULL,
     timestamp TIMESTAMPTZ NOT NULL,
-    open_timestamp TIMESTAMPTZ NOT NULL,
-    close_timestamp TIMESTAMPTZ NOT NULL,
     open INT NOT NULL,
     close INT NOT NULL,
     high INT NOT NULL,
     low INT NOT NULL,
-    current INT NOT NULL
+    current INT NOT NULL,
+    spread INT NOT NULL,
+    buy_volume INT NOT NULL,
+    sell_volume INT NOT NULL
 );
