@@ -42,39 +42,22 @@ func (w *writer) processMessages(ctx context.Context, subscription *nats.Subscri
 }
 
 func (w *writer) processMessage(ctx context.Context, msg *nats.Msg) {
-	success := func() {
-		if err := msg.Respond([]byte("success")); err != nil {
-			logrus.WithError(err).Error("responding success to message")
-		}
-	}
-
-	failed := func() {
-		if err := msg.Respond([]byte("failed")); err != nil {
-			logrus.WithError(err).Error("responding failed to message")
-		}
-	}
-
 	var candlestick protos.Candlestick
 	if err := proto.Unmarshal(msg.Data, &candlestick); err != nil {
 		logrus.WithError(err).Error("unmarshalling message to candlestick")
-		failed()
 		return
 	}
 
-	w.sendToDatabase(ctx, &candlestick, success, failed)
+	w.sendToDatabase(ctx, &candlestick)
 }
 
-func (w *writer) sendToDatabase(ctx context.Context, candlestick *protos.Candlestick, success, failed func()) {
+func (w *writer) sendToDatabase(ctx context.Context, candlestick *protos.Candlestick) {
 	logrus.WithField("candlestick", candlestick).Debug("sending candlestick to database")
 
-	_, err := w.ds.AddCandlestick(ctx, &protos.AddCandlestickRequest{
+	if _, err := w.ds.AddCandlestick(ctx, &protos.AddCandlestickRequest{
 		Candlestick: candlestick,
-	})
-	if err != nil {
+	}); err != nil {
 		logrus.WithError(err).Error("sending candlestick to database")
-		failed()
 		return
 	}
-
-	success()
 }

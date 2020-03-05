@@ -1,7 +1,7 @@
 package utils
 
-func PoundsToMicros(pounds int64) int64 {
-	return pounds * 1000000
+func PoundsToMicros(pounds float64) int64 {
+	return int64(pounds * 1000000)
 }
 
 func MicrosToPounds(micros int64) float64 {
