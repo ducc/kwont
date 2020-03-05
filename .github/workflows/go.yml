@@ -9,7 +9,7 @@ on:
 jobs:
 
   build:
-    name: Build
+    name: Build XTB Broker
     runs-on: ubuntu-latest
     steps:
 
@@ -22,20 +22,17 @@ jobs:
     - name: Check out code into the Go module directory
       uses: actions/checkout@v2
 
-    - name: list it
-      run: ls
-
-    - name: pwd it
-      run: pwd
-
-    - name: Build XTB Broker
+    - name: Build Binary
       run: GO111MODULE=on CGO_ENABLED=0 GOOS=linux go build -mod=vendor -o kwont "./cmd/xtb_broker/main.go"
 
-    - name: Upload Artifact
+    - name: Upload Artifacts
       uses: actions/upload-artifact@v1
       with:
         name: kwont
         path: ./kwont
 
     - name: Build XTB Broker Docker Image
-      run: docker build -t xtb_broker:latest -f Dockerfile .
+      run: docker build -t joeburnardredbrain/kwont:xtb_broker-latest -f Dockerfile .
+
+    - name: Push Docker Image
+      run: docker push joeburnardredbrain/kwont:xtb_broker-latest
