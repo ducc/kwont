@@ -19,8 +19,11 @@ jobs:
         go-version: 1.12
       id: go
 
-    - name: testing
-      run: ls && pwd
+    - name: list it
+      run: ls
+
+    - name: pwd it
+      run: pwd
 
     - name: Build XTB Broker
       run: GO111MODULE=on GOFLAGS= CGO_ENABLED=0 GOOS=linux go build -o kwont "./cmd/xtb_broker/main.go"
