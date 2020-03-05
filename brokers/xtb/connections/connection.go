@@ -32,10 +32,7 @@ func New(ctx context.Context, address string) (*Connection, error) {
 
 	log.Debug("certpool length:", len(certPool.Subjects()))
 
-	dialer := *websocket.DefaultDialer
-	dialer.TLSClientConfig.RootCAs = certPool
-
-	conn, res, err := (&dialer).DialContext(ctx, address, nil)
+	conn, res, err := websocket.DefaultDialer.DialContext(ctx, address, nil)
 	if err != nil {
 		return nil, err
 	}
