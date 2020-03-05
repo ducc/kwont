@@ -29,7 +29,7 @@ jobs:
       run: pwd
 
     - name: Build XTB Broker
-      run: GO111MODULE=on GOFLAGS= CGO_ENABLED=0 GOOS=linux go build -o kwont "./cmd/xtb_broker/main.go"
+      run: GO111MODULE=on CGO_ENABLED=0 GOOS=linux go build -mod=vendor -o kwont "./cmd/xtb_broker/main.go"
 
     - name: Build XTB Broker Docker Image
       run: docker build -t xtb_broker:latest -f Dockerfile .
