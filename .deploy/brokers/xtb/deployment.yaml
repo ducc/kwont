@@ -23,6 +23,7 @@ spec:
           args:
             - --level=debug
             - --nats-address=nats-cluster.default.svc:4222
+            # todo username and password
           resources:
             requests:
               cpu: 50m
@@ -31,9 +32,10 @@ spec:
               cpu: 100m
               memory: 200M
           volumeMounts:
-            - mountPath: /usr/local/share/ca-certificates
-              name: ca-certificates
+            - name: "cacerts"
+              mountPath: "/etc/ssl/cacerts"
+              readOnly: true
       volumes:
-        - name: ca-certificates
+        - name: "cacerts"
           hostPath:
-            path: /usr/share/ca-certificates
+            path: "/etc/ssl/certs"
