@@ -30,6 +30,9 @@ jobs:
 
     - name: Build XTB Broker
       run: GO111MODULE=on CGO_ENABLED=0 GOOS=linux go build -mod=vendor -o kwont "./cmd/xtb_broker/main.go"
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v1
       with:
         name: kwont
         path: ./kwont
