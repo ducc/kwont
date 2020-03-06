@@ -43,6 +43,7 @@ func New(ctx context.Context, natsConn *nats.Conn, topic, username, password str
 		for {
 			<-s.finished
 
+			// todo should the retries count be kept in redis with an expiry?
 			log := log.WithField("retries", retries)
 			s.Lock()
 

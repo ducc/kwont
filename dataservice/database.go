@@ -3,6 +3,8 @@ package dataservice
 import (
 	"context"
 	"database/sql"
+	"github.com/ducc/kwɒnt/protos"
+	"github.com/golang/protobuf/ptypes"
 	_ "github.com/lib/pq"
 	"time"
 )
@@ -26,29 +28,40 @@ func newDatabase(ctx context.Context, connectionString string) (*database, error
 	}, nil
 }
 
-/*func (d *database) InsertStrategy(ctx context.Context, entryRules, exitRules []byte, status, name, symbolName, symbolBroker string) (string, error) {
-	const statement = `INSERT INTO strategies (entry_rules, exit_rules, status, name, symbol_name, symbol_broker, last_evaluated) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING (strategy_id);`
+func (d *database) GetPartialCandlesticks(ctx context.Context, symbolName, symbolBroker string, start, end time.Time) ([]*protos.Candlestick, error) {
+	const statement = `SELECT timestamp, high, low, current FROM candlesticks WHERE timestamp >= $1 AND timestamp < $2 ORDER BY timestamp ASC`
 
-	res := d.db.QueryRowContext(ctx, statement, entryRules, exitRules, status, name, symbolName, symbolBroker, time.Time{})
+	iter, err := d.db.QueryContext(ctx, statement, start.Format(time.RFC3339), start.Format(time.RFC3339))
+	if err != nil {
+		return nil, err
+	}
+	defer iter.Close()
 
-	var strategyID string
-	if err := res.Scan(&strategyID); err != nil {
-		return "", err
+	output := make([]*protos.Candlestick, 0)
+
+	for iter.Next() {
+		var timestamp time.Time
+		var high, low, current int64
+
+		if err := iter.Scan(&timestamp, &high, &low, &current); err != nil {
+			return nil, err
+		}
+
+		ts, err := ptypes.TimestampProto(timestamp)
+		if err != nil {
+			return nil, err
+		}
+
+		output = append(output, &protos.Candlestick{
+			Timestamp: ts,
+			High:      high,
+			Low:       low,
+			Current:   current,
+		})
 	}
 
-	return strategyID, nil
+	return output, nil
 }
-
-func (d *database) InsertSymbolPrice(ctx context.Context, symbolName, symbolBroker string, timestamp time.Time, price int64) error {
-	const statement = `INSERT INTO symbol_prices (symbol_name, symbol_broker, timestamp, price) VALUES ($1, $2, $3, $4);`
-
-	if _, err := d.db.ExecContext(ctx, statement, symbolName, symbolBroker, timestamp, price); err != nil {
-		return err
-	}
-
-	return nil
-}
-*/
 
 func (d *database) InsertCandlestick(ctx context.Context, symbolName, symbolBroker string, timestamp time.Time, open, close, high, low, current, spread, buyVolume, sellVolume int64) error {
 	const statement = `INSERT INTO candlesticks (symbol_name, symbol_broker, timestamp, open, close, high, low, current, spread, buy_volume, sell_volume) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11);`

@@ -4,6 +4,8 @@ import (
 	"context"
 	"github.com/ducc/kwɒnt/protos"
 	"github.com/golang/protobuf/ptypes"
+	"sort"
+	"time"
 )
 
 type server struct {
@@ -53,24 +55,83 @@ func (s *server) ListStrategies(ctx context.Context, req *protos.ListStrategiesR
 	return nil, nil
 }
 
+*/
 func (s *server) GetPriceHistory(ctx context.Context, req *protos.GetPriceHistoryRequest) (*protos.GetPriceHistoryResponse, error) {
-
-	return nil, nil
-}
-
-func (s *server) AddPriceHistory(ctx context.Context, req *protos.AddPriceHistoryRequest) (*protos.AddPriceHistoryResponse, error) {
-	ts, err := ptypes.Timestamp(req.PriceChange.Timestamp)
+	partials, err := s.db.GetPartialCandlesticks(ctx, req.Symbol.Name.String(), req.Symbol.Broker.String(), time.Now().Add((time.Hour*3)*-1), time.Now())
 	if err != nil {
 		return nil, err
 	}
 
-	if err := s.db.InsertSymbolPrice(ctx, req.PriceChange.Symbol.String(), ts, req.PriceChange.Price); err != nil {
-		return nil, err
+	windows := make(map[time.Time][]*protos.Candlestick)
+
+	for _, partial := range partials {
+		timestamp, err := ptypes.Timestamp(partial.Timestamp)
+		if err != nil {
+			return nil, err
+		}
+
+		windowTime := timestamp.Truncate(time.Minute)
+		window, ok := windows[windowTime]
+		if !ok {
+			window = make([]*protos.Candlestick, 0)
+			windows[windowTime] = window
+		}
+
+		window = append(window, partial)
 	}
 
-	return &protos.AddPriceHistoryResponse{}, nil
+	aggregated := make([]*protos.Candlestick, 0, len(windows))
 
-}*/
+	for windowTime, window := range windows {
+		var high, low, open, close int64
+
+		for i, partial := range window {
+			if i == 0 {
+				open = partial.Current
+			}
+
+			if i == len(window)-1 {
+				close = partial.Current
+			}
+
+			if partial.High > high {
+				high = partial.High
+			}
+
+			if partial.Low < low || low == 0 {
+				low = partial.Low
+			}
+		}
+
+		ts, err := ptypes.TimestampProto(windowTime)
+		if err != nil {
+			return nil, err
+		}
+
+		aggregated = append(aggregated, &protos.Candlestick{
+			Timestamp: ts,
+			Symbol:    req.Symbol,
+			High:      high,
+			Low:       low,
+			Open:      open,
+			Close:     close,
+		})
+	}
+
+	sort.Slice(aggregated, func(i, j int) bool {
+		var iTimestamp time.Time
+		var jTimestamp time.Time
+
+		iTimestamp, err = ptypes.Timestamp(aggregated[i].Timestamp)
+		jTimestamp, err = ptypes.Timestamp(aggregated[i].Timestamp)
+
+		return iTimestamp.Before(jTimestamp)
+	})
+
+	return &protos.GetPriceHistoryResponse{
+		Candlesticks: aggregated,
+	}, nil
+}
 
 func (s *server) AddCandlestick(ctx context.Context, req *protos.AddCandlestickRequest) (*protos.AddCandlestickResponse, error) {
 	c := req.Candlestick
