@@ -6,6 +6,7 @@ import (
 	"github.com/ducc/kwɒnt/protos"
 	"github.com/golang/protobuf/ptypes"
 	_ "github.com/lib/pq"
+	"github.com/sirupsen/logrus"
 	"time"
 )
 
@@ -30,6 +31,7 @@ func newDatabase(ctx context.Context, connectionString string) (*database, error
 
 func (d *database) GetPartialCandlesticks(ctx context.Context, symbolName, symbolBroker string, start, end time.Time) ([]*protos.Candlestick, error) {
 	const statement = `SELECT timestamp, high, low, current FROM candlesticks WHERE timestamp >= $1 AND timestamp < $2 ORDER BY timestamp ASC`
+	logrus.Debugf("getting partial candlesticks with symbol name %s symbol broker %s start %s end %s", symbolName, symbolBroker, start.String(), end.String())
 
 	iter, err := d.db.QueryContext(ctx, statement, start.Format(time.RFC3339), start.Format(time.RFC3339))
 	if err != nil {

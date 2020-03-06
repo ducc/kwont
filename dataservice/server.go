@@ -57,7 +57,7 @@ func (s *server) ListStrategies(ctx context.Context, req *protos.ListStrategiesR
 
 */
 func (s *server) GetPriceHistory(ctx context.Context, req *protos.GetPriceHistoryRequest) (*protos.GetPriceHistoryResponse, error) {
-	partials, err := s.db.GetPartialCandlesticks(ctx, req.Symbol.Name.String(), req.Symbol.Broker.String(), time.Now().Add((time.Hour*3)*-1), time.Now())
+	partials, err := s.db.GetPartialCandlesticks(ctx, req.Symbol.Name.String(), req.Symbol.Broker.String(), time.Now().Add((time.Hour*12)*-1), time.Now())
 	if err != nil {
 		return nil, err
 	}
