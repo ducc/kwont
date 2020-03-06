@@ -74,10 +74,10 @@ func (s *server) GetPriceHistory(ctx context.Context, req *protos.GetPriceHistor
 		window, ok := windows[windowTime]
 		if !ok {
 			window = make([]*protos.Candlestick, 0)
-			windows[windowTime] = window
 		}
 
 		window = append(window, partial)
+		windows[windowTime] = window
 	}
 
 	aggregated := make([]*protos.Candlestick, 0, len(windows))
