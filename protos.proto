@@ -250,6 +250,9 @@ message EvaluateStrategyResponse {
 
 message GetPriceHistoryRequest {
     Symbol symbol = 1;
+    google.protobuf.Timestamp start = 2;
+    google.protobuf.Timestamp end = 3;
+    int64 window_nanoseconds = 4;
 }
 message GetPriceHistoryResponse {
     repeated Candlestick candlesticks = 1;

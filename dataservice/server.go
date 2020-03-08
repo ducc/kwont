@@ -70,7 +70,7 @@ func (s *server) GetPriceHistory(ctx context.Context, req *protos.GetPriceHistor
 			return nil, err
 		}
 
-		windowTime := timestamp.Truncate(time.Minute)
+		windowTime := timestamp.Truncate(time.Duration(req.WindowNanoseconds))
 		window, ok := windows[windowTime]
 		if !ok {
 			window = make([]*protos.Candlestick, 0)
