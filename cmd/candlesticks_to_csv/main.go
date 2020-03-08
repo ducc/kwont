@@ -27,7 +27,7 @@ func main() {
 	res, err := c.GetPriceHistory(ctx, &protos.GetPriceHistoryRequest{
 		Symbol: &protos.Symbol{
 			Broker: protos.Broker_XTB_DEMO,
-			Name:   protos.Symbol_USD_GBP,
+			Name:   protos.Symbol_BITCOIN,
 		},
 	})
 	if err != nil {
