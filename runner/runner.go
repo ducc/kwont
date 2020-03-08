@@ -5,45 +5,64 @@ import (
 	"github.com/ducc/kwɒnt/protos"
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes"
-	"github.com/nsqio/go-nsq"
+	"github.com/nats-io/nats.go"
 	"github.com/sirupsen/logrus"
 )
 
 type runner struct {
-	ds       protos.DataServiceClient
-	se       protos.StrategyEvaluatorClient
-	broker   protos.BrokerServiceClient
-	consumer *nsq.Consumer
-	topic    string
+	ds           protos.DataServiceClient
+	se           protos.StrategyEvaluatorClient
+	broker       protos.BrokerServiceClient
+	subscription *nats.Subscription
+	topic        string
 }
 
-func Run(ctx context.Context, ds protos.DataServiceClient, se protos.StrategyEvaluatorClient, broker protos.BrokerServiceClient, consumer *nsq.Consumer, topic string) {
+func Run(ctx context.Context, ds protos.DataServiceClient, se protos.StrategyEvaluatorClient, broker protos.BrokerServiceClient, subscription *nats.Subscription, topic string) {
 	r := &runner{
-		ds:       ds,
-		se:       se,
-		broker:   broker,
-		consumer: consumer,
-		topic:    topic,
+		ds:           ds,
+		se:           se,
+		broker:       broker,
+		subscription: subscription,
+		topic:        topic,
 	}
 
-	consumer.AddHandler(r)
+	r.processMessages(subscription)
 }
 
-func (r *runner) HandleMessage(msg *nsq.Message) error {
-	ctx := context.Background()
+func (r *runner) processMessages(subscription *nats.Subscription) {
+	for {
+		ctx := context.Background()
 
+		msg, err := subscription.NextMsgWithContext(ctx)
+		if err != nil {
+			logrus.WithError(err).Fatal("getting next message")
+		}
+
+		if msg == nil {
+			logrus.Debug("received nil message")
+			continue
+		}
+
+		if msg.Data == nil || len(msg.Data) == 0 {
+			logrus.Debug("data is nil or empty")
+			continue
+		}
+
+		r.processMessage(ctx, msg)
+	}
+}
+
+func (r *runner) processMessage(ctx context.Context, msg *nats.Msg) {
 	var strategy *protos.Strategy
-	if err := proto.Unmarshal(msg.Body, strategy); err != nil {
+	if err := proto.Unmarshal(msg.Data, strategy); err != nil {
 		logrus.WithError(err).Error("unmarshalling message to strategy")
-		msg.Finish()
-		return nil
+		return
 	}
 
-	r.getPriceHistory(ctx, strategy, msg.Finish)
-	return nil
+	r.getPriceHistory(ctx, strategy)
 }
 
-func (r *runner) getPriceHistory(ctx context.Context, strategy *protos.Strategy, ack func()) {
+func (r *runner) getPriceHistory(ctx context.Context, strategy *protos.Strategy) {
 	history, err := r.ds.GetPriceHistory(ctx, &protos.GetPriceHistoryRequest{
 		Symbol: strategy.Symbol,
 	})
@@ -53,14 +72,14 @@ func (r *runner) getPriceHistory(ctx context.Context, strategy *protos.Strategy,
 	}
 
 	if len(history.Candlesticks) == 0 {
-		ack()
+		logrus.Debug("get price history returned no candlesticks")
 		return
 	}
 
-	r.evaluateStrategy(ctx, strategy, history.Candlesticks, ack)
+	r.evaluateStrategy(ctx, strategy, history.Candlesticks)
 }
 
-func (r *runner) evaluateStrategy(ctx context.Context, strategy *protos.Strategy, history []*protos.Candlestick, ack func()) {
+func (r *runner) evaluateStrategy(ctx context.Context, strategy *protos.Strategy, history []*protos.Candlestick) {
 	res, err := r.se.Evaluate(ctx, &protos.EvaulateStrategyRequest{
 		Strategy:     strategy,
 		Candlesticks: history,
@@ -71,17 +90,17 @@ func (r *runner) evaluateStrategy(ctx context.Context, strategy *protos.Strategy
 	}
 
 	if openPosition := res.Action.GetOpenPosition(); openPosition != nil {
-		r.openPosition(ctx, strategy, openPosition, ack)
+		r.openPosition(ctx, strategy, openPosition)
 		return
 	}
 
 	if closePosition := res.Action.GetClosePosition(); closePosition != nil {
-		r.closePosition(ctx, strategy, closePosition, ack)
+		r.closePosition(ctx, strategy, closePosition)
 		return
 	}
 }
 
-func (r *runner) openPosition(ctx context.Context, strategy *protos.Strategy, openPosition *protos.EvaluateStrategyResponse_Action_OpenPosition, ack func()) {
+func (r *runner) openPosition(ctx context.Context, strategy *protos.Strategy, openPosition *protos.EvaluateStrategyResponse_Action_OpenPosition) {
 	res, err := r.broker.OpenPosition(ctx, &protos.OpenPositionRequest{
 		Direction: openPosition.Direction,
 		Price:     openPosition.Price,
@@ -104,11 +123,9 @@ func (r *runner) openPosition(ctx context.Context, strategy *protos.Strategy, op
 		logrus.WithError(err).Error("updating strategy")
 		return
 	}
-
-	ack()
 }
 
-func (r *runner) closePosition(ctx context.Context, strategy *protos.Strategy, closePosition *protos.EvaluateStrategyResponse_Action_ClosePosition, ack func()) {
+func (r *runner) closePosition(ctx context.Context, strategy *protos.Strategy, closePosition *protos.EvaluateStrategyResponse_Action_ClosePosition) {
 	index, openPosition, err := findOpenPosition(strategy)
 	if err != nil {
 		logrus.WithError(err).Error("finding open position")
@@ -117,7 +134,6 @@ func (r *runner) closePosition(ctx context.Context, strategy *protos.Strategy, c
 
 	if openPosition == nil {
 		logrus.Error("strategy does not have an open position")
-		ack()
 		return
 	}
 
@@ -140,8 +156,6 @@ func (r *runner) closePosition(ctx context.Context, strategy *protos.Strategy, c
 		logrus.WithError(err).Error("updating strategy")
 		return
 	}
-
-	ack()
 }
 
 func findOpenPosition(strategy *protos.Strategy) (int, *protos.Position, error) {

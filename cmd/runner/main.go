@@ -5,22 +5,25 @@ import (
 	"flag"
 	"github.com/ducc/kwɒnt/dataservice"
 	"github.com/ducc/kwɒnt/runner"
-	"github.com/nsqio/go-nsq"
+	"github.com/nats-io/nats.go"
 	"github.com/sirupsen/logrus"
 )
 
 var (
-	level   string
-	address string
-	channel string
-	topic   string
+	level        string
+	natsAddress  string
+	natsUsername string
+	natsPassword string
+	topic        string
 )
 
 func init() {
 	flag.StringVar(&level, "level", "debug", "")
-	flag.StringVar(&address, "address", "", "")
-	flag.StringVar(&channel, "channel", "", "")
+	flag.StringVar(&natsAddress, "nats-address", "127.0.0.1:4150", "nats server address")
+	flag.StringVar(&natsUsername, "nats-username", "kwont", "nats username")
+	flag.StringVar(&natsPassword, "nats-password", "password", "nats password")
 	flag.StringVar(&topic, "topic", "", "")
+
 }
 
 func main() {
@@ -38,16 +41,14 @@ func main() {
 		logrus.WithError(err).Fatal("creating dataservice client")
 	}
 
-	config := nsq.NewConfig()
-	// todo configure
-
-	consumer, err := nsq.NewConsumer(topic, channel, config)
+	natsConn, err := nats.Connect(natsAddress, nats.UserInfo(natsUsername, natsPassword))
 	if err != nil {
-		logrus.WithError(err).Fatal("creating consumer")
+		logrus.WithError(err).Fatal("connecting to nats")
 	}
 
-	if err := consumer.ConnectToNSQLookupd(address); err != nil {
-		logrus.WithError(err).Fatal("connecting to nsq")
+	subscription, err := natsConn.SubscribeSync(topic)
+	if err != nil {
+		logrus.WithError(err).Fatal("subscribing to topic")
 	}
 
 	runner.Run(ctx, ds, nil, nil, consumer, topic)

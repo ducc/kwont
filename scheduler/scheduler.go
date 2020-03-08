@@ -5,21 +5,21 @@ import (
 	"github.com/ducc/kwɒnt/protos"
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes"
-	"github.com/nsqio/go-nsq"
+	"github.com/nats-io/nats.go"
 	"github.com/sirupsen/logrus"
 	"time"
 )
 
 type scheduler struct {
 	ds       protos.DataServiceClient
-	producer *nsq.Producer
+	natsConn *nats.Conn
 	topic    string
 }
 
-func Run(ctx context.Context, ds protos.DataServiceClient, producer *nsq.Producer, topic string) {
+func Run(ctx context.Context, ds protos.DataServiceClient, natsConn *nats.Conn, topic string) {
 	r := &scheduler{
 		ds:       ds,
-		producer: producer,
+		natsConn: natsConn,
 		topic:    topic,
 	}
 
@@ -76,7 +76,7 @@ func (r *scheduler) sendStrategyForProcessing(ctx context.Context, strategy *pro
 		return
 	}
 
-	if err := r.producer.Publish(r.topic, data); err != nil {
+	if err := r.natsConn.Publish(r.topic, data); err != nil {
 		logrus.WithError(err).Error("sending strategy to topic")
 		return
 	}

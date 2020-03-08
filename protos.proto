@@ -136,8 +136,30 @@ message Position {
 message Symbol {
     enum Name {
         UNKNOWN = 0;
-        EUR_USD = 1;
-        USD_GBP = 2;
+
+        // FX
+        AUD_USD = 100;
+        EUR_USD = 101;
+        EUR_CHF = 102;
+        GBP_JPY = 103;
+        USD_CHF = 104;
+        USD_GBP = 105;
+        USD_CAD = 106;
+        USD_JPY = 107;
+
+        // CRYPTO
+        BITCOIN = 200;
+        LITECOIN = 201;
+        ETHEREUM = 202;
+
+        // INDICIES
+        US_30 = 300;
+        UK_100 = 301;
+        DE_30 = 302;
+
+        // COMMODITIES
+        SILVER = 400;
+        GOLD = 401;
     }
 
     Name name = 1;
