@@ -94,12 +94,12 @@ func (s *server) GetPriceHistory(ctx context.Context, req *protos.GetPriceHistor
 				close = partial.Current
 			}
 
-			if partial.High > high {
-				high = partial.High
+			if partial.Current > high {
+				high = partial.Current
 			}
 
-			if partial.Low < low || low == 0 {
-				low = partial.Low
+			if partial.Current < low || low == 0 {
+				low = partial.Current
 			}
 		}
 

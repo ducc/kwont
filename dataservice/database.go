@@ -30,7 +30,7 @@ func newDatabase(ctx context.Context, connectionString string) (*database, error
 }
 
 func (d *database) GetPartialCandlesticks(ctx context.Context, symbolName, symbolBroker string, start, end time.Time) ([]*protos.Candlestick, error) {
-	const statement = `SELECT timestamp, high, low, current FROM candlesticks WHERE symbol_name = $1 and symbol_broker = $2 ORDER BY timestamp ASC`
+	const statement = `SELECT timestamp, current FROM candlesticks WHERE symbol_name = $1 and symbol_broker = $2 ORDER BY timestamp ASC`
 	logrus.Debugf("getting partial candlesticks with symbol name %s symbol broker %s start %s end %s", symbolName, symbolBroker, start.String(), end.String())
 
 	iter, err := d.db.QueryContext(ctx, statement, symbolName, symbolBroker)
@@ -43,9 +43,9 @@ func (d *database) GetPartialCandlesticks(ctx context.Context, symbolName, symbo
 
 	for iter.Next() {
 		var timestamp time.Time
-		var high, low, current int64
+		var current int64
 
-		if err := iter.Scan(&timestamp, &high, &low, &current); err != nil {
+		if err := iter.Scan(&timestamp, &current); err != nil {
 			return nil, err
 		}
 
@@ -56,8 +56,6 @@ func (d *database) GetPartialCandlesticks(ctx context.Context, symbolName, symbo
 
 		output = append(output, &protos.Candlestick{
 			Timestamp: ts,
-			High:      high,
-			Low:       low,
 			Current:   current,
 		})
 	}

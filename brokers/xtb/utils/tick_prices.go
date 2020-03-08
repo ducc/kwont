@@ -27,8 +27,6 @@ func TickPriceToCandlestick(tickPrice *streaming.GetTickPricesResponse) (*protos
 			Broker: protos.Broker_XTB_DEMO,
 		},
 		Current:    PoundsToMicros(tickPrice.Data.Ask),
-		Low:        PoundsToMicros(tickPrice.Data.Low),
-		High:       PoundsToMicros(tickPrice.Data.High),
 		Spread:     PoundsToMicros(tickPrice.Data.SpreadRaw),
 		BuyVolume:  int64(tickPrice.Data.AskVolume),
 		SellVolume: int64(tickPrice.Data.BidVolume),
