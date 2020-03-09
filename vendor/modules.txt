@@ -16,6 +16,8 @@ github.com/golang/protobuf/ptypes/duration
 github.com/google/uuid
 # github.com/gorilla/websocket v1.4.1
 github.com/gorilla/websocket
+# github.com/jpillora/backoff v1.0.0
+github.com/jpillora/backoff
 # github.com/konsorten/go-windows-terminal-sequences v1.0.1
 github.com/konsorten/go-windows-terminal-sequences
 # github.com/lib/pq v1.3.0

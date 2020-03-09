@@ -7,6 +7,7 @@ require (
 	github.com/golang/protobuf v1.3.4
 	github.com/google/uuid v1.1.1
 	github.com/gorilla/websocket v1.4.1
+	github.com/jpillora/backoff v1.0.0
 	github.com/lib/pq v1.3.0
 	github.com/nats-io/nats-server/v2 v2.1.4 // indirect
 	github.com/nats-io/nats.go v1.9.1

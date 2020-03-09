@@ -9,10 +9,13 @@ import (
 	"github.com/golang/protobuf/proto"
 	"github.com/nats-io/nats.go"
 	"github.com/sirupsen/logrus"
+	"sync"
 	"time"
 )
 
 type Session struct {
+	sync.Mutex
+
 	natsConn *nats.Conn
 	topic    string
 
@@ -25,6 +28,8 @@ type Session struct {
 
 	finished  chan struct{}
 	startTime time.Time
+
+	candlestickSubscriptions map[protos.Symbol_Name]bool
 }
 
 func newSession(ctx context.Context, natsConn *nats.Conn, topic, username, password, sessionID string) (*Session, error) {
@@ -51,15 +56,16 @@ func newSession(ctx context.Context, natsConn *nats.Conn, topic, username, passw
 	}
 
 	s := &Session{
-		natsConn:  natsConn,
-		topic:     topic,
-		SessionID: sessionID,
-		username:  username,
-		password:  password,
-		tx:        tx,
-		stream:    stream,
-		finished:  make(chan struct{}, 1),
-		startTime: time.Now(),
+		natsConn:                 natsConn,
+		topic:                    topic,
+		SessionID:                sessionID,
+		username:                 username,
+		password:                 password,
+		tx:                       tx,
+		stream:                   stream,
+		finished:                 make(chan struct{}, 1),
+		startTime:                time.Now(),
+		candlestickSubscriptions: make(map[protos.Symbol_Name]bool),
 	}
 
 	go s.transformTickPricesToCandlesticks()
@@ -73,7 +79,27 @@ func (s *Session) AddCandlestickSubscription(ctx context.Context, symbol protos.
 		return utils.ErrUnsupportedSymbol
 	}
 
-	return s.stream.SendGetTickPrices(ctx, symbolName)
+	if err := s.stream.SendGetTickPrices(ctx, symbolName); err != nil {
+		return err
+	}
+
+	s.Lock()
+	defer s.Unlock()
+	s.candlestickSubscriptions[symbol] = true
+
+	return nil
+}
+
+func (s *Session) GetCandlestickSubscription() []protos.Symbol_Name {
+	s.Lock()
+	defer s.Unlock()
+
+	copied := make([]protos.Symbol_Name, 0, len(s.candlestickSubscriptions))
+	for symbolName := range s.candlestickSubscriptions {
+		copied = append(copied, symbolName)
+	}
+
+	return copied
 }
 
 func (s *Session) transformTickPricesToCandlesticks() {

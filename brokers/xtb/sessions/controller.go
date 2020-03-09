@@ -3,6 +3,7 @@ package sessions
 import (
 	"context"
 	"github.com/google/uuid"
+	"github.com/jpillora/backoff"
 	"github.com/nats-io/nats.go"
 	"github.com/sirupsen/logrus"
 	"sync"
@@ -38,28 +39,22 @@ func New(ctx context.Context, natsConn *nats.Conn, topic, username, password str
 	s.Unlock()
 
 	go func() {
-		const maxRetries = 3
-		retries := 0
+		b := backoff.Backoff{
+			Factor: 1.5,
+			Jitter: false,
+			Min:    0,
+			Max:    time.Minute * 5,
+		}
+
 		for {
 			<-s.finished
 
-			// todo should the retries count be kept in redis with an expiry?
-			log := log.WithField("retries", retries)
+			dur := b.Duration()
+			log.Debug("session finished, sleeping for %v", dur)
+			time.Sleep(dur)
+
 			s.Lock()
-
-			if s.Session.startTime.After(s.Session.startTime.Add(time.Minute * 5)) {
-				log.Debug("session kept alive for more than 5 minutes, resetting retries to 1")
-				retries = 0
-			}
-
-			if retries >= maxRetries {
-				log.Error("session has had more than max retries")
-				s.Unlock()
-				break
-			}
-
 			log.Debug("retrying session")
-			retries++
 			if err := createSession(); err != nil {
 				log.WithError(err).Error("creating retry session")
 				s.Unlock()
@@ -67,6 +62,14 @@ func New(ctx context.Context, natsConn *nats.Conn, topic, username, password str
 			}
 
 			s.Unlock()
+
+			ctx := context.Background()
+			for _, symbolName := range s.GetCandlestickSubscription() {
+				if err := s.Session.AddCandlestickSubscription(ctx, symbolName); err != nil {
+					log.WithError(err).WithField("symbol_name", symbolName).Error("adding candlestick subscription")
+					continue
+				}
+			}
 		}
 	}()
 
