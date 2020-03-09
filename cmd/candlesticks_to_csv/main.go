@@ -29,6 +29,7 @@ func main() {
 			Broker: protos.Broker_XTB_DEMO,
 			Name:   protos.Symbol_BITCOIN,
 		},
+		WindowNanoseconds: int64(time.Hour),
 	})
 	if err != nil {
 		panic(err)

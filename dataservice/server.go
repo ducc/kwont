@@ -62,6 +62,8 @@ func (s *server) GetPriceHistory(ctx context.Context, req *protos.GetPriceHistor
 		return nil, err
 	}
 
+	windowDuration := time.Duration(req.WindowNanoseconds)
+
 	windows := make(map[time.Time][]*protos.Candlestick)
 
 	for _, partial := range partials {
@@ -70,7 +72,7 @@ func (s *server) GetPriceHistory(ctx context.Context, req *protos.GetPriceHistor
 			return nil, err
 		}
 
-		windowTime := timestamp.Truncate(time.Duration(req.WindowNanoseconds))
+		windowTime := timestamp.Truncate(windowDuration)
 		window, ok := windows[windowTime]
 		if !ok {
 			window = make([]*protos.Candlestick, 0)
@@ -123,10 +125,13 @@ func (s *server) GetPriceHistory(ctx context.Context, req *protos.GetPriceHistor
 		var jTimestamp time.Time
 
 		iTimestamp, err = ptypes.Timestamp(aggregated[i].Timestamp)
-		jTimestamp, err = ptypes.Timestamp(aggregated[i].Timestamp)
+		jTimestamp, err = ptypes.Timestamp(aggregated[j].Timestamp)
 
 		return iTimestamp.Before(jTimestamp)
 	})
+	if err != nil {
+		return nil, err
+	}
 
 	return &protos.GetPriceHistoryResponse{
 		Candlesticks: aggregated,
