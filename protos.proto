@@ -227,6 +227,7 @@ service StrategyEvaluator {
 message EvaulateStrategyRequest {
     Strategy strategy = 1;
     repeated Candlestick candlesticks = 2;
+    bool has_open_position = 3;
 }
 message EvaluateStrategyResponse {
     message Action {

@@ -65,6 +65,8 @@ func (r *runner) processMessage(ctx context.Context, msg *nats.Msg) {
 func (r *runner) getPriceHistory(ctx context.Context, strategy *protos.Strategy) {
 	history, err := r.ds.GetPriceHistory(ctx, &protos.GetPriceHistoryRequest{
 		Symbol: strategy.Symbol,
+		// todo start, end
+		WindowNanoseconds: 300000000000, // todo find lowest window from all rules so it can be rewindowed in the strategy evaluator server
 	})
 	if err != nil {
 		logrus.WithError(err).Error("getting price history")

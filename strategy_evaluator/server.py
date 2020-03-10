@@ -3,14 +3,20 @@ import time
 import math
 import logging
 import grpc
+import pandas as pd
 
 import protos_pb2
 import protos_pb2_grpc
 
+from evaluator import evaluate
+
 class StrategyEvaluatorServer(protos_pb2_grpc.StrategyEvaluatorServicer):
     def Evaluate(self, request: protos_pb2.EvaulateStrategyRequest, context):
+        action = evaluate(request.strategy, request.candlesticks, request.has_open_position)
+
         response = protos_pb2.EvaluateStrategyResponse()
-        response.action.open_position.price = 123
+        if action is not None:
+            response.action = action
 
         return response
 
