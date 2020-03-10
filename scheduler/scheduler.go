@@ -16,19 +16,20 @@ type scheduler struct {
 	topic    string
 }
 
-func Run(ctx context.Context, ds protos.DataServiceClient, natsConn *nats.Conn, topic string) {
+func Run(ctx context.Context, ds protos.DataServiceClient, natsConn *nats.Conn, topic string, pollInterval time.Duration) {
 	r := &scheduler{
 		ds:       ds,
 		natsConn: natsConn,
 		topic:    topic,
 	}
 
-	r.pollStrategies(ctx)
+	r.pollStrategies(ctx, pollInterval)
 }
 
-func (r *scheduler) pollStrategies(ctx context.Context) {
+func (r *scheduler) pollStrategies(ctx context.Context, pollInterval time.Duration) {
 	for {
 		r.findStrategyToSchedule(ctx)
+		time.Sleep(pollInterval)
 	}
 }
 
@@ -45,6 +46,11 @@ func (r *scheduler) findStrategyToSchedule(ctx context.Context) {
 	}
 
 	for _, strategy := range strategies.Strategies {
+		if strategy == nil {
+			logrus.Error("nil strategy")
+			continue
+		}
+
 		r.processStrategy(ctx, strategy)
 	}
 }
@@ -70,6 +76,8 @@ func (r *scheduler) processStrategy(ctx context.Context, strategy *protos.Strate
 }
 
 func (r *scheduler) sendStrategyForProcessing(ctx context.Context, strategy *protos.Strategy) {
+	logrus.WithField("strategy", *strategy).Debug("sending strategy for processing")
+
 	data, err := proto.Marshal(strategy)
 	if err != nil {
 		logrus.WithError(err).Error("marshalling strategy to proto bytes")
@@ -79,6 +87,21 @@ func (r *scheduler) sendStrategyForProcessing(ctx context.Context, strategy *pro
 	if err := r.natsConn.Publish(r.topic, data); err != nil {
 		logrus.WithError(err).Error("sending strategy to topic")
 		return
+	}
+
+	lastEval, err := ptypes.TimestampProto(time.Now())
+	if err != nil {
+		logrus.WithError(err).Error("converting time to proto")
+		return
+	}
+
+	strategy.LastEvaluated = lastEval
+
+	// todo this will be a race condititon
+	if _, err := r.ds.UpdateStrategy(ctx, &protos.UpdateStrategyRequest{
+		Strategy: strategy,
+	}); err != nil {
+		logrus.WithError(err).Error("updating strategy")
 	}
 }
 

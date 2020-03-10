@@ -1,0 +1,15 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: scheduler
+  namespace: strategies
+  labels:
+    name: scheduler
+spec:
+  type: NodePort
+  selector:
+    app: scheduler
+  ports:
+    - targetPort: 8080
+      protocol: TCP
+      port: 8080

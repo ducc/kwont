@@ -7,4 +7,10 @@ kind: Namespace
 apiVersion: v1
 metadata:
   name: data
+---
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: strategies
+
 

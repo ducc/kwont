@@ -7,14 +7,16 @@ import (
 	"github.com/ducc/kwɒnt/scheduler"
 	"github.com/nats-io/nats.go"
 	"github.com/sirupsen/logrus"
+	"time"
 )
 
 var (
-	level        string
-	natsAddress  string
-	natsUsername string
-	natsPassword string
-	topic        string
+	level               string
+	natsAddress         string
+	natsUsername        string
+	natsPassword        string
+	topic               string
+	pollIntervalSeconds int64
 )
 
 func init() {
@@ -23,6 +25,7 @@ func init() {
 	flag.StringVar(&natsAddress, "nats-address", "127.0.0.1:4150", "nats server address")
 	flag.StringVar(&natsUsername, "nats-username", "kwont", "nats username")
 	flag.StringVar(&natsPassword, "nats-password", "password", "nats password")
+	flag.Int64Var(&pollIntervalSeconds, "poll-interval-seconds", 15, "interval between polling for strategies to run")
 }
 
 func main() {
@@ -45,5 +48,5 @@ func main() {
 		logrus.WithError(err).Fatal("connecting to nats")
 	}
 
-	scheduler.Run(ctx, ds, natsConn, topic)
+	scheduler.Run(ctx, ds, natsConn, topic, time.Duration(pollIntervalSeconds)*time.Second)
 }

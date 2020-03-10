@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scheduler
+  namespace: strategies
+  labels:
+    app: scheduler
+    keel.sh/policy: force
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: scheduler
+  template:
+    metadata:
+      labels:
+        app: scheduler
+    spec:
+      containers:
+        - name: scheduler
+          image: joeburnardredbrain/kwont:scheduler-latest
+          imagePullPolicy: Always
+          args:
+            - --level=debug
+            - --nats-address=nats-cluster.default.svc:4222
+            - --topic=strategies
+            - --dataservice-address=dataservice.data:8080
+            - --poll-interval-seconds=15
+          resources:
+            requests:
+              cpu: 50m
+              memory: 100M
+            limits:
+              cpu: 100m
+              memory: 200M
+          volumeMounts:
+            - name: "cacerts"
+              mountPath: "/etc/ssl/cacerts"
+              readOnly: true
+      volumes:
+        - name: "cacerts"
+          hostPath:
+            path: "/etc/ssl/certs"
