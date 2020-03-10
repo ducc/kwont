@@ -134,10 +134,10 @@ func (d *database) ListStrategies(ctx context.Context) ([]*protos.Strategy, erro
 		strategy := &protos.Strategy{}
 
 		var entryRules, exitRules []byte
-		var symbolName, symbolBroker string
+		var status, symbolName, symbolBroker string
 		var lastEvaluated time.Time
 
-		if err := rows.Scan(&strategy.Id, &entryRules, &exitRules, &strategy.Status, &strategy.Name, &symbolName, &symbolBroker, &lastEvaluated); err != nil {
+		if err := rows.Scan(&strategy.Id, &entryRules, &exitRules, &status, &strategy.Name, &symbolName, &symbolBroker, &lastEvaluated); err != nil {
 			return nil, err
 		}
 
@@ -153,6 +153,8 @@ func (d *database) ListStrategies(ctx context.Context) ([]*protos.Strategy, erro
 
 		strategy.EntryRules = &entryRulesSet
 		strategy.ExitRules = &exitRulesSet
+
+		strategy.Status = protos.Status_Name(protos.Status_Name_value[status])
 
 		strategy.Symbol = &protos.Symbol{
 			Name:   protos.Symbol_Name(protos.Symbol_Name_value[symbolName]),
