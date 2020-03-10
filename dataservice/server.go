@@ -3,6 +3,7 @@ package dataservice
 import (
 	"context"
 	"github.com/ducc/kwɒnt/protos"
+	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes"
 	"sort"
 	"time"
@@ -24,7 +25,7 @@ func NewServer(ctx context.Context, databaseAddress string) (*server, error) {
 	}, nil
 }
 
-/*func (s *server) CreateStrategy(ctx context.Context, req *protos.CreateStrategyRequest) (*protos.CreateStrategyResponse, error) {
+func (s *server) CreateStrategy(ctx context.Context, req *protos.CreateStrategyRequest) (*protos.CreateStrategyResponse, error) {
 	entryRulesBytes, err := proto.Marshal(req.Strategy.EntryRules)
 	if err != nil {
 		return nil, err
@@ -35,7 +36,7 @@ func NewServer(ctx context.Context, databaseAddress string) (*server, error) {
 		return nil, err
 	}
 
-	strategyID, err := s.db.InsertStrategy(ctx, entryRulesBytes, exitRulesBytes, req.Strategy.Status.String(), req.Strategy.Name, req.Strategy.Symbol.String())
+	strategyID, err := s.db.InsertStrategy(ctx, entryRulesBytes, exitRulesBytes, req.Strategy.Status.String(), req.Strategy.Name, req.Strategy.Symbol.String(), req.Strategy.Symbol.Broker.String())
 	if err != nil {
 		return nil, err
 	}
@@ -46,16 +47,39 @@ func NewServer(ctx context.Context, databaseAddress string) (*server, error) {
 }
 
 func (s *server) UpdateStrategy(ctx context.Context, req *protos.UpdateStrategyRequest) (*protos.UpdateStrategyResponse, error) {
+	entryRulesBytes, err := proto.Marshal(req.Strategy.EntryRules)
+	if err != nil {
+		return nil, err
+	}
 
-	return nil, nil
+	exitRulesBytes, err := proto.Marshal(req.Strategy.ExitRules)
+	if err != nil {
+		return nil, err
+	}
+
+	ts, err := ptypes.Timestamp(req.Strategy.LastEvaluated)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := s.db.UpdateStrategy(ctx, req.Strategy.Id, entryRulesBytes, exitRulesBytes, req.Strategy.Status.String(), req.Strategy.Name, req.Strategy.Symbol.String(), req.Strategy.Symbol.Broker.String(), ts); err != nil {
+		return nil, err
+	}
+
+	return &protos.UpdateStrategyResponse{}, nil
 }
 
 func (s *server) ListStrategies(ctx context.Context, req *protos.ListStrategiesRequest) (*protos.ListStrategiesResponse, error) {
+	strategies, err := s.db.ListStrategies(ctx)
+	if err != nil {
+		return nil, err
+	}
 
-	return nil, nil
+	return &protos.ListStrategiesResponse{
+		Strategies: strategies,
+	}, nil
 }
 
-*/
 func (s *server) GetPriceHistory(ctx context.Context, req *protos.GetPriceHistoryRequest) (*protos.GetPriceHistoryResponse, error) {
 	partials, err := s.db.GetPartialCandlesticks(ctx, req.Symbol.Name.String(), req.Symbol.Broker.String(), time.Now().Add((time.Hour*12)*-1), time.Now())
 	if err != nil {
