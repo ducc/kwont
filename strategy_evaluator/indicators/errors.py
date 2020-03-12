@@ -1,0 +1,2 @@
+class UnknownConditionError(Exception):
+    pass

@@ -82,8 +82,8 @@ message Rule {
                 UNKNOWN = 0;
                 ABOVE_OVER_BOUGHT_LINE = 1;
                 BELOW_OVER_BOUGHT_LINE = 2;
-                ABOVE_UNDER_SOLD_LINE = 3;
-                BELOW_UNDER_SOLD_LINE = 4;
+                ABOVE_OVER_SOLD_LINE = 3;
+                BELOW_OVER_SOLD_LINE = 4;
             }
 
             Condition condition = 1;
@@ -92,9 +92,40 @@ message Rule {
             int64 over_sold = 4;
         }
 
+        message MACD {
+            enum Condition {
+                UNKNOWN = 0;
+                SIGNAL_LINE_ABOVE_MACD = 1;
+                SIGNAL_LINE_BELOW_MACD = 2;
+            }
+
+            Condition condition = 1;
+            int64 short_term = 2;
+            int64 long_term = 3;
+            int64 length = 4;
+        }
+
+        message BollingerBands {
+            enum Condition {
+                UNKNOWN = 0;
+                PRICE_ABOVE_UPPER_BAND = 1;
+                PRICE_BELOW_UPPER_BAND = 2;
+                PRICE_ABOVE_LOWER_BAND = 3;
+                PRICE_BELOW_LOWER_BAND = 4;
+                PRICE_ABOVE_MA = 5;
+                PRICE_BELOW_MA = 6;
+            }
+
+            Condition condition = 1;
+            int64 period = 2;
+            double deviation = 3;
+        }
+
         oneof condition {
             SimpleMovingAverage simple_moving_average = 1;
             RelativeStrengthIndex relative_strength_index = 2;
+            MACD macd = 3;
+            BollingerBands bollinger_bands = 4;
         }
     }
 

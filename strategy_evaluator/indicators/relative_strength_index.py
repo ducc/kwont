@@ -1,5 +1,8 @@
 import protos_pb2
 
+from indicators.errors import UnknownConditionError
+
+
 class RelativeStrengthIndex():
     def __init__(self, values, window_periods, overbought, oversold):
         self.overbought = overbought
@@ -37,12 +40,9 @@ def evaluate_relative_strength_index(indicator: protos_pb2.Rule.Indicator.Relati
         return rsi.is_overbought()
     elif indicator.condition == protos_pb2.Rule.Indicator.RelativeStrengthIndex.Condition.BELOW_OVER_BOUGHT_LINE:
         return not rsi.is_overbought()
-    elif indicator.condition == protos_pb2.Rule.Indicator.RelativeStrengthIndex.Condition.ABOVE_UNDER_SOLD_LINE:
+    elif indicator.condition == protos_pb2.Rule.Indicator.RelativeStrengthIndex.Condition.ABOVE_OVER_SOLD_LINE:
         return not rsi.is_oversold()
-    elif indicator.condition == protos_pb2.Rule.Indicator.RelativeStrengthIndex.Condition.BELOW_UNDER_SOLD_LINE:
+    elif indicator.condition == protos_pb2.Rule.Indicator.RelativeStrengthIndex.Condition.BELOW_OVER_SOLD_LINE:
         return rsi.is_oversold()
     else:
         raise UnknownConditionError("unknown rsi condition")
-
-class UnknownConditionError(Exception):
-    pass

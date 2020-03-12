@@ -2,7 +2,9 @@ import pandas as pd
 import protos_pb2
 from dataframe import candlesticks_to_dataframe
 from indicators.relative_strength_index import evaluate_relative_strength_index
-from indicators.relative_strength_index import UnknownConditionError
+from indicators.macd import evaluate_macd
+from indicators.bollinger_bands import evaluate_bollinger_bands
+from indicators.errors import UnknownConditionError
 import traceback
 
 def evaluate(strategy: protos_pb2.Strategy, candlesticks, has_open_position):
@@ -61,6 +63,22 @@ def evaluate_rule(rule: protos_pb2.Rule, candlesticks):
     elif indicator.HasField("relative_strength_index"):
         try:
             result = evaluate_relative_strength_index(indicator.relative_strength_index, series)
+            return result
+        except UnknownConditionError as e:
+            raise InvalidRuleError(e)
+        except Exception:
+            traceback.print_exc()
+    elif indicator.HasField("macd"):
+        try:
+            result = evaluate_macd(indicator.macd, series)
+            return result
+        except UnknownConditionError as e:
+            raise InvalidRuleError(e)
+        except Exception:
+            traceback.print_exc()
+    elif indicator.HasField("bollinger_bands"):
+        try:
+            result = evaluate_bollinger_bands(indicator.bollinger_bands, series)
             return result
         except UnknownConditionError as e:
             raise InvalidRuleError(e)
