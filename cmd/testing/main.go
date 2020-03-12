@@ -20,7 +20,7 @@ func main() {
 		panic(err)
 	}
 
-	se, err :=newStrategyEvaluatorClient(ctx)
+	se, err := newStrategyEvaluatorClient(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -36,7 +36,7 @@ func main() {
 	candlesticks, err := ds.GetPriceHistory(ctx, &protos.GetPriceHistoryRequest{
 		Symbol: &protos.Symbol{
 			Broker: protos.Broker_XTB_DEMO,
-			Name: protos.Symbol_BITCOIN,
+			Name:   protos.Symbol_BITCOIN,
 		},
 		WindowNanoseconds: int64(time.Minute * 5),
 	})
@@ -47,8 +47,8 @@ func main() {
 	logrus.Debugf("candlesticks %d", len(candlesticks.Candlesticks))
 
 	res, err := se.Evaluate(ctx, &protos.EvaulateStrategyRequest{
-		Strategy: strat,
-		Candlesticks: candlesticks.Candlesticks,
+		Strategy:        strat,
+		Candlesticks:    candlesticks.Candlesticks,
 		HasOpenPosition: false,
 	})
 	if err != nil {
@@ -59,7 +59,7 @@ func main() {
 	logrus.Debug(res.Action.GetClosePosition())
 }
 
-func newStrategyEvaluatorClient(ctx context.Context) (protos.StrategyEvaluatorClient, error){
+func newStrategyEvaluatorClient(ctx context.Context) (protos.StrategyEvaluatorClient, error) {
 	logrus.Debug("connecting to strategy evaluator")
 	conn, err := grpc.DialContext(ctx, "127.0.0.1:50051", grpc.WithBlock(), grpc.WithInsecure())
 	if err != nil {

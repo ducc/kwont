@@ -2,7 +2,7 @@ kind: Service
 apiVersion: v1
 metadata:
   name: strategy-evaluator
-  namespace: data
+  namespace: strategies
   labels:
     name: strategy-evaluator
 spec:
