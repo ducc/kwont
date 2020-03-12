@@ -63,6 +63,8 @@ func (r *runner) processMessage(ctx context.Context, msg *nats.Msg) {
 }
 
 func (r *runner) getPriceHistory(ctx context.Context, strategy *protos.Strategy) {
+	logrus.WithField("strategy_id", strategy.Id).Debugf("getting price history")
+
 	history, err := r.ds.GetPriceHistory(ctx, &protos.GetPriceHistoryRequest{
 		Symbol: strategy.Symbol,
 		// todo start, end
@@ -82,6 +84,8 @@ func (r *runner) getPriceHistory(ctx context.Context, strategy *protos.Strategy)
 }
 
 func (r *runner) evaluateStrategy(ctx context.Context, strategy *protos.Strategy, history []*protos.Candlestick) {
+	logrus.WithField("strategy_id", strategy.Id).Debugf("evaluating strategy")
+
 	res, err := r.se.Evaluate(ctx, &protos.EvaulateStrategyRequest{
 		Strategy:     strategy,
 		Candlesticks: history,
@@ -90,6 +94,8 @@ func (r *runner) evaluateStrategy(ctx context.Context, strategy *protos.Strategy
 		logrus.WithError(err).Error("evaluating strategy rules")
 		return
 	}
+
+	logrus.WithField("strategy_id", strategy.Id).Debugf("received evaluate strategy response")
 
 	if openPosition := res.Action.GetOpenPosition(); openPosition != nil {
 		r.openPosition(ctx, strategy, openPosition)
@@ -103,6 +109,8 @@ func (r *runner) evaluateStrategy(ctx context.Context, strategy *protos.Strategy
 }
 
 func (r *runner) openPosition(ctx context.Context, strategy *protos.Strategy, openPosition *protos.EvaluateStrategyResponse_Action_OpenPosition) {
+	logrus.WithField("strategy_id", strategy.Id).Debugf("opening position")
+
 	res, err := r.broker.OpenPosition(ctx, &protos.OpenPositionRequest{
 		Direction: openPosition.Direction,
 		Price:     openPosition.Price,
@@ -128,6 +136,8 @@ func (r *runner) openPosition(ctx context.Context, strategy *protos.Strategy, op
 }
 
 func (r *runner) closePosition(ctx context.Context, strategy *protos.Strategy, closePosition *protos.EvaluateStrategyResponse_Action_ClosePosition) {
+	logrus.WithField("strategy_id", strategy.Id).Debugf("closing position")
+
 	index, openPosition, err := findOpenPosition(strategy)
 	if err != nil {
 		logrus.WithError(err).Error("finding open position")
