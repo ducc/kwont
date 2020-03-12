@@ -36,7 +36,7 @@ func (s *server) CreateStrategy(ctx context.Context, req *protos.CreateStrategyR
 		return nil, err
 	}
 
-	strategyID, err := s.db.InsertStrategy(ctx, entryRulesBytes, exitRulesBytes, req.Strategy.Status.String(), req.Strategy.Name, req.Strategy.Symbol.String(), req.Strategy.Symbol.Broker.String())
+	strategyID, err := s.db.InsertStrategy(ctx, entryRulesBytes, exitRulesBytes, req.Strategy.Status.String(), req.Strategy.Name, req.Strategy.Symbol.Name.String(), req.Strategy.Symbol.Broker.String())
 	if err != nil {
 		return nil, err
 	}
@@ -62,7 +62,7 @@ func (s *server) UpdateStrategy(ctx context.Context, req *protos.UpdateStrategyR
 		return nil, err
 	}
 
-	if err := s.db.UpdateStrategy(ctx, req.Strategy.Id, entryRulesBytes, exitRulesBytes, req.Strategy.Status.String(), req.Strategy.Name, req.Strategy.Symbol.String(), req.Strategy.Symbol.Broker.String(), ts); err != nil {
+	if err := s.db.UpdateStrategy(ctx, req.Strategy.Id, entryRulesBytes, exitRulesBytes, req.Strategy.Status.String(), req.Strategy.Name, req.Strategy.Symbol.Name.String(), req.Strategy.Symbol.Broker.String(), ts); err != nil {
 		return nil, err
 	}
 
