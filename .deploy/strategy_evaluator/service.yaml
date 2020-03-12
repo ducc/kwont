@@ -1,0 +1,15 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: strategy-evaluator
+  namespace: data
+  labels:
+    name: strategy-evaluator
+spec:
+  type: NodePort
+  selector:
+    app: strategy-evaluator
+  ports:
+    - targetPort: 50051
+      protocol: TCP
+      port: 50051

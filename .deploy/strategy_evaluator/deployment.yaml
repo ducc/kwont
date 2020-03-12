@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: strategy-evaluator
+  namespace: strategies
+  labels:
+    app: strategy-evaluator
+    keel.sh/policy: force
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: strategy-evaluator
+  template:
+    metadata:
+      labels:
+        app: strategy-evaluator
+    spec:
+      containers:
+        - name: strategy-evaluator
+          image: joeburnardredbrain/kwont:strategy_evaluator-latest
+          imagePullPolicy: Always
+          resources:
+            requests:
+              cpu: 50m
+              memory: 100M
+            limits:
+              cpu: 100m
+              memory: 200M
+          volumeMounts:
+            - name: "cacerts"
+              mountPath: "/etc/ssl/cacerts"
+              readOnly: true
+      volumes:
+        - name: "cacerts"
+          hostPath:
+            path: "/etc/ssl/certs"
