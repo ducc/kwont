@@ -12,10 +12,9 @@ jobs:
     steps:
     - name: Check out code
       uses: actions/checkout@v2
-    - name: Move into directory
-      run: cd strategy_evaluator/
     - name: Build Docker Image
       run: docker build -t joeburnardredbrain/kwont:strategy_evaluator-latest -f Dockerfile .
+      working-directory: ./strategy_evaluator/
     - name: Docker login
       run: echo $DOCKER_AUTH | docker login --username joeburnardredbrain --password-stdin
       env:
