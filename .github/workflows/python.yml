@@ -1,0 +1,24 @@
+name: Python
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+
+  strategy_evaluator:
+    name: Strategy Evaluator
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v2
+    - name: Build Docker Image
+      run: docker build -t joeburnardredbrain/kwont:strategy_evaluator-latest -f ./strategy_evaluator/Dockerfile .
+    - name: Docker login
+      run: echo $DOCKER_AUTH | docker login --username joeburnardredbrain --password-stdin
+      env:
+        DOCKER_AUTH: ${{ secrets.DOCKER_AUTH }}
+    - name: Push Docker Image
+      run: docker push joeburnardredbrain/kwont:strategy_evaluator-latest
+
+

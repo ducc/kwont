@@ -41,3 +41,8 @@ CREATE TABLE IF NOT EXISTS candlesticks (
     buy_volume INT NOT NULL,
     sell_volume INT NOT NULL
 );
+
+CREATE INDEX IF NOT EXISTS candlesticks_symbol_broker_name_idx ON candlesticks (
+    symbol_broker ASC,
+    symbol_name ASC
+);

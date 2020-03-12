@@ -13,4 +13,5 @@ def candlesticks_to_dataframe(candlesticks):
             "close": float(candlestick.close) / 1000000,
         })
 
-    return pd.DataFrame(data).set_index('time')
+    df = pd.DataFrame(data)
+    return df.set_index('time')

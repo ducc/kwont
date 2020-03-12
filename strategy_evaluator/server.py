@@ -9,14 +9,20 @@ import protos_pb2
 import protos_pb2_grpc
 
 from evaluator import evaluate
+import traceback
 
 class StrategyEvaluatorServer(protos_pb2_grpc.StrategyEvaluatorServicer):
     def Evaluate(self, request: protos_pb2.EvaulateStrategyRequest, context):
-        action = evaluate(request.strategy, request.candlesticks, request.has_open_position)
-
         response = protos_pb2.EvaluateStrategyResponse()
+
+        try:
+            action = evaluate(request.strategy, request.candlesticks, request.has_open_position)
+        except Exception:
+            traceback.print_exc()
+            return response
+
         if action is not None:
-            response.action = action
+            response.action.MergeFrom(action)
 
         return response
 

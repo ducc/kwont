@@ -2,6 +2,8 @@ import pandas as pd
 import protos_pb2
 from dataframe import candlesticks_to_dataframe
 from indicators.relative_strength_index import evaluate_relative_strength_index
+from indicators.relative_strength_index import UnknownConditionError
+import traceback
 
 def evaluate(strategy: protos_pb2.Strategy, candlesticks, has_open_position):
     df = candlesticks_to_dataframe(candlesticks)
@@ -15,22 +17,18 @@ def evaluate(strategy: protos_pb2.Strategy, candlesticks, has_open_position):
 
     result = False
     try:
-        result = evaluate_rules(rules, candlesticks)
-    except Exception as e:
-        raise e
+        result = evaluate_rules(rules, df)
+    except InvalidRuleError as e:
+        return None
 
     if result:
         action = protos_pb2.EvaluateStrategyResponse.Action()
 
-        if has_open_position:
-            open_position = protos_pb2.EvaluateStrategyResponse.Action.OpenPosition()
+        if not has_open_position:
             # todo determine which way to open/close position
-            open_position.price = 999 # todo is price necessary
-            action.open_position = open_position
+            action.open_position.price = 999 # todo is price necessary
         else:
-            close_position = protos_pb2.EvaluateStrategyResponse.Action.ClosePosition()
-            close_position.price = 111
-            action.close_position = close_position
+            action.close_position.price = 111
 
         return action
     else:
@@ -42,14 +40,12 @@ def evaluate_rules(rules: protos_pb2.RuleSet, candlesticks):
         try:
             if not evaluate_rule(rule, candlesticks):
                 return False
-        except Exception as e:
+        except InvalidRuleError as e:
             raise e
 
     return True
 
 def evaluate_rule(rule: protos_pb2.Rule, candlesticks):
-    # todo rewindow for rule.period_nanoseconds
-
     indicator = rule.indicator
 
     series = 0 # todo learn how scoping works in python
@@ -58,13 +54,21 @@ def evaluate_rule(rule: protos_pb2.Rule, candlesticks):
     elif rule.price_type == protos_pb2.PriceType.CLOSE:
         series = candlesticks['close']
     else:
-        raise Exception("unknown price type")
+        raise InvalidRuleError("unknown price type")
 
     if indicator.HasField("simple_moving_average"):
         raise Exception("sma not implemented")
     elif indicator.HasField("relative_strength_index"):
-        return evaluate_relative_strength_index(rule.relative_strength_index, series)
+        try:
+            result = evaluate_relative_strength_index(indicator.relative_strength_index, series)
+            return result
+        except UnknownConditionError as e:
+            raise InvalidRuleError(e)
+        except Exception:
+            traceback.print_exc()
     else:
-        raise Exception("unknown indicator")
+        raise InvalidRuleError("unknown indicator")
 
+class InvalidRuleError(Exception):
+    pass
 

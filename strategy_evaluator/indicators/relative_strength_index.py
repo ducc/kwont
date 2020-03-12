@@ -42,4 +42,7 @@ def evaluate_relative_strength_index(indicator: protos_pb2.Rule.Indicator.Relati
     elif indicator.condition == protos_pb2.Rule.Indicator.RelativeStrengthIndex.Condition.BELOW_UNDER_SOLD_LINE:
         return rsi.is_oversold()
     else:
-        raise Exception("unknown rsi condition")
+        raise UnknownConditionError("unknown rsi condition")
+
+class UnknownConditionError(Exception):
+    pass
