@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: runner
+  namespace: strategies
+  labels:
+    app: runner
+    keel.sh/policy: force
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: runner
+  template:
+    metadata:
+      labels:
+        app: runner
+    spec:
+      containers:
+        - name: runner
+          image: joeburnardredbrain/kwont:runner-latest
+          imagePullPolicy: Always
+          args:
+            - --level=debug
+            - --nats-address=nats-cluster.default.svc:4222
+            - --topic=strategies
+            - --dataservice-address=dataservice.data:8080
+            - --strategy-evaluator-address=strategy-evaluator.strategies:50051
+          resources:
+            requests:
+              cpu: 50m
+              memory: 100M
+            limits:
+              cpu: 100m
+              memory: 200M
+          volumeMounts:
+            - name: "cacerts"
+              mountPath: "/etc/ssl/cacerts"
+              readOnly: true
+      volumes:
+        - name: "cacerts"
+          hostPath:
+            path: "/etc/ssl/certs"

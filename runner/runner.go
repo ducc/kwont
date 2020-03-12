@@ -53,13 +53,13 @@ func (r *runner) processMessages(subscription *nats.Subscription) {
 }
 
 func (r *runner) processMessage(ctx context.Context, msg *nats.Msg) {
-	var strategy *protos.Strategy
-	if err := proto.Unmarshal(msg.Data, strategy); err != nil {
+	var strategy protos.Strategy
+	if err := proto.Unmarshal(msg.Data, &strategy); err != nil {
 		logrus.WithError(err).Error("unmarshalling message to strategy")
 		return
 	}
 
-	r.getPriceHistory(ctx, strategy)
+	r.getPriceHistory(ctx, &strategy)
 }
 
 func (r *runner) getPriceHistory(ctx context.Context, strategy *protos.Strategy) {

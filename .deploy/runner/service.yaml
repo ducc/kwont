@@ -1,0 +1,15 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: runner
+  namespace: strategies
+  labels:
+    name: runner
+spec:
+  type: NodePort
+  selector:
+    app: runner
+  ports:
+    - targetPort: 8080
+      protocol: TCP
+      port: 8080
