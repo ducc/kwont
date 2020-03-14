@@ -207,7 +207,7 @@ func (d *database) GetUser(ctx context.Context, userID string) (*protos.User, er
 
 	for rows.Next() {
 		var name, brokerName, username, password, sessionID string
-		if err := rows.Scan(&userID, &name, &brokerName, &username, &password, &sessionID); err != nil {
+		if err := rows.Scan(&name, &brokerName, &username, &password, &sessionID); err != nil {
 			return nil, err
 		}
 
