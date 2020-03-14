@@ -197,7 +197,7 @@ func (s *server) UpdateUser(ctx context.Context, req *protos.UpdateUserRequest) 
 		return nil, err
 	}
 
-	if oldUser.Name != oldUser.Name {
+	if oldUser.Name != newUser.Name {
 		if err := s.db.UpdateUser(ctx, userID, newUser.Name); err != nil {
 			return nil, err
 		}
