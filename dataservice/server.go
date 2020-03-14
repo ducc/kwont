@@ -176,3 +176,78 @@ func (s *server) AddCandlestick(ctx context.Context, req *protos.AddCandlestickR
 
 	return &protos.AddCandlestickResponse{}, nil
 }
+
+func (s *server) CreateUser(ctx context.Context, req *protos.CreateUserRequest) (*protos.CreateUserResponse, error) {
+	userID, err := s.db.InsertUser(ctx, req.User.Name)
+	if err != nil {
+		return nil, err
+	}
+
+	return &protos.CreateUserResponse{
+		Id: userID,
+	}, nil
+}
+
+func (s *server) UpdateUser(ctx context.Context, req *protos.UpdateUserRequest) (*protos.UpdateUserResponse, error) {
+	newUser := req.User
+	userID := newUser.Id
+
+	oldUser, err := s.db.GetUser(ctx, userID)
+	if err != nil {
+		return nil, err
+	}
+
+	if oldUser.Name != oldUser.Name {
+		if err := s.db.UpdateUser(ctx, userID, newUser.Name); err != nil {
+			return nil, err
+		}
+	}
+
+	oldConnections := make(map[protos.Broker_Name]*protos.User_BrokerConnection)
+	for _, oldConnection := range oldUser.BrokerConnections {
+		oldConnections[oldConnection.Broker] = oldConnection
+	}
+
+	for _, newConnection := range newUser.BrokerConnections {
+		// todo deleting connections
+
+		var create bool
+		var update bool
+
+		oldConnection := oldConnections[newConnection.Broker]
+		if oldConnection == nil {
+			create = true
+		} else {
+			if oldConnection.SessionId != newConnection.SessionId {
+				update = true
+			} else if oldConnection.Username != newConnection.Username {
+				update = true
+			} else if oldConnection.Password != newConnection.Password {
+				update = true
+			}
+		}
+
+		if create {
+			if err := s.db.InsertBrokerConnections(ctx, userID, newConnection.Broker.String(), newConnection.Username, newConnection.Password); err != nil {
+				return nil, err
+			}
+		} else if update {
+			if err := s.db.UpdateBrokerConnection(ctx, userID, newConnection.Broker.String(), newConnection.Username, newConnection.Password, newConnection.SessionId); err != nil {
+				return nil, err
+			}
+		}
+	}
+
+	return &protos.UpdateUserResponse{}, nil
+}
+
+func (s *server) ListUsers(ctx context.Context, req *protos.ListUsersRequest) (*protos.ListUsersResponse, error) {
+	users, err := s.db.ListUsers(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	return &protos.ListUsersResponse{
+		Users: users,
+	}, nil
+}

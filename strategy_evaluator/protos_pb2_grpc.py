@@ -44,6 +44,21 @@ class DataServiceStub(object):
         request_serializer=protos__pb2.AddCandlestickRequest.SerializeToString,
         response_deserializer=protos__pb2.AddCandlestickResponse.FromString,
         )
+    self.CreateUser = channel.unary_unary(
+        '/protos.DataService/CreateUser',
+        request_serializer=protos__pb2.CreateUserRequest.SerializeToString,
+        response_deserializer=protos__pb2.CreateUserResponse.FromString,
+        )
+    self.UpdateUser = channel.unary_unary(
+        '/protos.DataService/UpdateUser',
+        request_serializer=protos__pb2.UpdateUserRequest.SerializeToString,
+        response_deserializer=protos__pb2.UpdateUserResponse.FromString,
+        )
+    self.ListUsers = channel.unary_unary(
+        '/protos.DataService/ListUsers',
+        request_serializer=protos__pb2.ListUsersRequest.SerializeToString,
+        response_deserializer=protos__pb2.ListUsersResponse.FromString,
+        )
 
 
 class DataServiceServicer(object):
@@ -92,6 +107,27 @@ class DataServiceServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
+  def CreateUser(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def UpdateUser(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def ListUsers(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
 
 def add_DataServiceServicer_to_server(servicer, server):
   rpc_method_handlers = {
@@ -124,6 +160,21 @@ def add_DataServiceServicer_to_server(servicer, server):
           servicer.AddCandlestick,
           request_deserializer=protos__pb2.AddCandlestickRequest.FromString,
           response_serializer=protos__pb2.AddCandlestickResponse.SerializeToString,
+      ),
+      'CreateUser': grpc.unary_unary_rpc_method_handler(
+          servicer.CreateUser,
+          request_deserializer=protos__pb2.CreateUserRequest.FromString,
+          response_serializer=protos__pb2.CreateUserResponse.SerializeToString,
+      ),
+      'UpdateUser': grpc.unary_unary_rpc_method_handler(
+          servicer.UpdateUser,
+          request_deserializer=protos__pb2.UpdateUserRequest.FromString,
+          response_serializer=protos__pb2.UpdateUserResponse.SerializeToString,
+      ),
+      'ListUsers': grpc.unary_unary_rpc_method_handler(
+          servicer.ListUsers,
+          request_deserializer=protos__pb2.ListUsersRequest.FromString,
+          response_serializer=protos__pb2.ListUsersResponse.SerializeToString,
       ),
   }
   generic_handler = grpc.method_handlers_generic_handler(

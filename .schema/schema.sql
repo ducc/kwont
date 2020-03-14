@@ -44,5 +44,19 @@ CREATE TABLE IF NOT EXISTS candlesticks (
 
 CREATE INDEX IF NOT EXISTS candlesticks_symbol_broker_name_idx ON candlesticks (
     symbol_broker ASC,
-    symbol_name ASC
+    symbol_name ASC,
+    timestamp ASC
+);
+
+CREATE TABLE IF NOT EXISTS users (
+    user_id UUID NOT NULL DEFAULT gen_random_uuid(),
+    name STRING NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS broker_connections (
+    user_id UUID NOT NULL,
+    broker_name STRING NOT NULL,
+    username STRING NOT NULL,
+    password STRING NOT NULL,
+    session_id STRING NOT NULL
 );

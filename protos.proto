@@ -15,7 +15,8 @@ message Broker {
     enum Name {
         UNKNOWN = 0;
         XTB_DEMO = 1;
-        XTB_REAL = 2;
+        XTB_RETAIL = 2;
+        XTB_PRO = 3;
     }
 
     Name name = 1;
@@ -121,11 +122,39 @@ message Rule {
             double deviation = 3;
         }
 
+        message SimpleTakeProfit {
+            int64 pips = 1;
+        }
+
+        message PivotTakeProfit {
+            // todo
+        }
+
+        message SimpleStopLoss {
+            enum Type {
+                UNKNOWN = 0;
+                FIXED = 1;
+                BAR_TRAILING = 2;
+            }
+
+            int64 pips = 1;
+        }
+
+        message PivotStopLoss {
+            // todo
+        }
+
         oneof condition {
-            SimpleMovingAverage simple_moving_average = 1;
-            RelativeStrengthIndex relative_strength_index = 2;
-            MACD macd = 3;
-            BollingerBands bollinger_bands = 4;
+            SimpleTakeProfit simple_take_profit = 100;
+            PivotTakeProfit pivot_take_profit = 101;
+
+            SimpleStopLoss simple_stop_loss = 200;
+            PivotStopLoss pivot_stop_loss = 201;
+
+            SimpleMovingAverage simple_moving_average = 300;
+            RelativeStrengthIndex relative_strength_index = 301;
+            MACD macd = 302;
+            BollingerBands bollinger_bands = 303;
         }
     }
 
@@ -223,6 +252,10 @@ service DataService {
 
     rpc GetPriceHistory(GetPriceHistoryRequest) returns (GetPriceHistoryResponse);
     rpc AddCandlestick(AddCandlestickRequest) returns (AddCandlestickResponse);
+
+    rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);
+    rpc UpdateUser(UpdateUserRequest) returns (UpdateUserResponse);
+    rpc ListUsers(ListUsersRequest) returns (ListUsersResponse);
 }
 
 message CreateStrategyRequest {
@@ -294,6 +327,38 @@ message AddCandlestickRequest {
     Candlestick candlestick = 1;
 }
 message AddCandlestickResponse {}
+
+message User {
+    message BrokerConnection {
+        Broker.Name broker = 1;
+        string username = 2; // todo (obviously) make this a lot more secure
+        string password = 3; // todo will this work with oauth or is a oneof better
+        string session_id = 4; // todo this shouldnt be next to the username and password thats dumb as fuck
+    }
+
+    string id = 1;
+    string name = 2;
+    repeated BrokerConnection broker_connections = 3;
+}
+
+message CreateUserRequest {
+    User user = 1;
+}
+message CreateUserResponse {
+    string id = 1;
+}
+
+message UpdateUserRequest {
+    User user = 1;
+}
+message UpdateUserResponse {}
+
+message ListUsersRequest {
+    // todo filters e.g. has_session
+}
+message ListUsersResponse {
+    repeated User users = 1;
+}
 
 service BrokerService {
     rpc GetCurrentSessions(GetCurrentSessionsRequest) returns (GetCurrentSessionsResponse);

@@ -172,3 +172,145 @@ func (d *database) ListStrategies(ctx context.Context) ([]*protos.Strategy, erro
 
 	return strategies, nil
 }
+
+func (d *database) InsertUser(ctx context.Context, name string) (string, error) {
+	const stmt = `INSERT INTO users (name) VALUES ($1) RETURNING user_id;`
+	row := d.db.QueryRowContext(ctx, stmt, name)
+
+	var id string
+	if err := row.Scan(&id); err != nil {
+		return "", err
+	}
+
+	return id, nil
+}
+
+func (d *database) GetUser(ctx context.Context, userID string) (*protos.User, error) {
+	const stmt = `SELECT u.name                      as name,
+						 COALESCE(b.broker_name, '') as broker_name, 
+						 COALESCE(b.username, '')    as username, 
+                         COALESCE(b.password, '')    as password, 
+					     COALESCE(b.session_id, '')  as session_id
+				  FROM users u
+                  LEFT JOIN broker_connections b ON b.user_id = u.user_id
+				  WHERE u.user_id = $1`
+
+	rows, err := d.db.QueryContext(ctx, stmt, userID)
+	if err != nil {
+		return nil, err
+	}
+
+	user := &protos.User{
+		Id:                userID,
+		BrokerConnections: make([]*protos.User_BrokerConnection, 0),
+	}
+
+	for rows.Next() {
+		var name, brokerName, username, password, sessionID string
+		if err := rows.Scan(&userID, &name, &brokerName, &username, &password, &sessionID); err != nil {
+			return nil, err
+		}
+
+		user.Name = name
+		if brokerName != "" {
+			user.BrokerConnections = append(user.BrokerConnections, &protos.User_BrokerConnection{
+				Broker:    protos.Broker_Name(protos.Broker_Name_value[brokerName]),
+				Username:  username,
+				Password:  password,
+				SessionId: sessionID,
+			})
+		}
+	}
+
+	return user, nil
+}
+
+func (d *database) ListUsers(ctx context.Context) ([]*protos.User, error) {
+	const stmt = `SELECT u.user_id                   as user_id, 
+						 u.name                      as name, 
+						 COALESCE(b.broker_name, '') as broker_name, 
+						 COALESCE(b.username, '')    as username, 
+                         COALESCE(b.password, '')    as password, 
+					     COALESCE(b.session_id, '')  as session_id
+				  FROM users u
+				  LEFT JOIN broker_connections b ON b.user_id = u.user_id
+                  ORDER BY b.user_id ASC` // this algorithm depends on the user ids being in order
+
+	rows, err := d.db.QueryContext(ctx, stmt)
+	if err != nil {
+		return nil, err
+	}
+
+	users := make([]*protos.User, 0)
+
+	var lastUser *protos.User
+
+	for rows.Next() {
+		var userID, name, brokerName, username, password, sessionID string
+		if err := rows.Scan(&userID, &name, &brokerName, &username, &password, &sessionID); err != nil {
+			return nil, err
+		}
+
+		if lastUser == nil {
+			lastUser = &protos.User{
+				Id:                userID,
+				Name:              name,
+				BrokerConnections: make([]*protos.User_BrokerConnection, 0),
+			}
+		} else if lastUser.Id != userID {
+			users = append(users, lastUser)
+			lastUser = &protos.User{
+				Id:                userID,
+				Name:              name,
+				BrokerConnections: make([]*protos.User_BrokerConnection, 0),
+			}
+		}
+
+		if brokerName != "" {
+			lastUser.BrokerConnections = append(lastUser.BrokerConnections, &protos.User_BrokerConnection{
+				Broker:    protos.Broker_Name(protos.Broker_Name_value[brokerName]),
+				Username:  username,
+				Password:  password,
+				SessionId: sessionID,
+			})
+		}
+	}
+
+	if lastUser != nil {
+		users = append(users, lastUser)
+	}
+
+	return users, nil
+}
+
+func (d *database) UpdateUser(ctx context.Context, userID, name string) error {
+	const stmt = `UPDATE users SET name = $1 WHERE user_id = $2`
+	if _, err := d.db.ExecContext(ctx, stmt, name, userID); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (d *database) InsertBrokerConnections(ctx context.Context, userID, brokerName, username, password string) error {
+	const stmt = `INSERT INTO broker_connections (user_id, broker_name, username, password, session_id) VALUES ($1, $2, $3, $4, $5);`
+	if _, err := d.db.ExecContext(ctx, stmt, userID, brokerName, username, password, ""); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (d *database) UpdateBrokerConnection(ctx context.Context, userID, brokerName, username, password, sessionID string) error {
+	const stmt = `UPDATE broker_connections
+				  SET username = $1,
+					  password = $2,
+					  session_id = $3
+                  WHERE user_id = $4
+					AND broker_name = $5;`
+	if _, err := d.db.ExecContext(ctx, stmt, username, password, sessionID, userID, brokerName); err != nil {
+		return err
+	}
+
+	return nil
+}
