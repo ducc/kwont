@@ -35,6 +35,11 @@ spec:
             - name: "cacerts"
               mountPath: "/etc/ssl/cacerts"
               readOnly: true
+          env:
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
       volumes:
         - name: "cacerts"
           hostPath:

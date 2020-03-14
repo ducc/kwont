@@ -8,6 +8,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"net"
+	"os"
 )
 
 var (
@@ -35,6 +36,8 @@ func main() {
 	} else {
 		logrus.SetLevel(ll)
 	}
+
+	logrus.WithField("POD_IP", os.Getenv("POD_IP")).Debug("starting xtb broker")
 
 	natsConn, err := nats.Connect(natsAddress, nats.UserInfo(natsUsername, natsPassword))
 	if err != nil {
