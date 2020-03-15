@@ -67,7 +67,7 @@ func main() {
 }
 
 func newStrategyEvaluatorClient(ctx context.Context) (protos.StrategyEvaluatorClient, error) {
-	logrus.Debug("connecting to strategy evaluator")
+	logrus.WithField("address", strategyEvaluatorAddress).Debug("connecting to strategy evaluator")
 	conn, err := grpc.DialContext(ctx, strategyEvaluatorAddress, grpc.WithBlock(), grpc.WithInsecure())
 	if err != nil {
 		return nil, err
