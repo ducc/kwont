@@ -2,68 +2,62 @@ package router
 
 import (
 	"context"
-	"errors"
-	"fmt"
-	"github.com/ducc/kwɒnt/protos"
-	"github.com/go-redis/redis"
-	"github.com/golang/protobuf/proto"
-	"strings"
+	"github.com/sirupsen/logrus"
+	"sync"
 )
 
 type SessionFinder struct {
-	client *redis.Client
+	sync.RWMutex
+	// session ids to broker service addresses
+	sessionAddresses map[string]string
 }
 
-func NewSessionFinder(ctx context.Context, address string) (*SessionFinder, error) {
-	client := redis.NewClient(&redis.Options{
-		Addr:     address,
-		Password: "",
-		DB:       0,
-		PoolSize: 20,
-	})
-
-	if _, err := client.WithContext(ctx).Ping().Result(); err != nil {
-		return nil, err
-	}
-
+func NewSessionFinder(ctx context.Context) *SessionFinder {
 	return &SessionFinder{
-		client: client,
-	}, nil
+		sessionAddresses: make(map[string]string),
+	}
 }
 
-func (r *SessionFinder) getBytes(ctx context.Context, key string) ([]byte, error) {
-	return r.client.WithContext(ctx).Get(key).Bytes()
+func (s *SessionFinder) SetServiceAddress(sessionID, serviceAddress string) {
+	s.RLock()
+	if s.GetServiceAddress(sessionID) == serviceAddress {
+		s.RUnlock()
+		return
+	}
+	s.RUnlock()
+
+	s.Lock()
+	defer s.Unlock()
+
+	logrus.WithFields(logrus.Fields{
+		"session_id":      sessionID,
+		"service_address": serviceAddress,
+	}).Info("adding new session service address")
+	s.sessionAddresses[sessionID] = serviceAddress
 }
 
-func (r *SessionFinder) setBytes(ctx context.Context, key string, val []byte) error {
-	return r.client.WithContext(ctx).Set(key, val, 0).Err() // todo expiration
+func (s *SessionFinder) GetServiceAddress(sessionID string) string {
+	return s.sessionAddresses[sessionID]
 }
 
-var ErrSessionNotFound = errors.New("session not found")
+func (s *SessionFinder) GetSessionsForAddress(serviceAddress string) []string {
+	s.RLock()
+	defer s.RUnlock()
 
-func (r *SessionFinder) getSessionInfo(ctx context.Context, broker protos.Broker_Name, sessionID string) (*protos.SessionInfo, error) {
-	bytes, err := r.getBytes(ctx, fmt.Sprintf("brokers:%s:sessions:%s", strings.ToLower(broker.String()), sessionID))
-	if err != nil {
-		return nil, err
+	sessionIDs := make([]string, 0)
+
+	for sessionID, address := range s.sessionAddresses {
+		if address == serviceAddress {
+			sessionIDs = append(sessionIDs, sessionID)
+		}
 	}
 
-	if len(bytes) == 0 {
-		return nil, ErrSessionNotFound
-	}
-
-	var sessionInfo protos.SessionInfo
-	if err := proto.Unmarshal(bytes, &sessionInfo); err != nil {
-		return nil, err
-	}
-
-	return &sessionInfo, nil
+	return sessionIDs
 }
 
-func (r *SessionFinder) setSessionInfo(ctx context.Context, sessionInfo *protos.SessionInfo) error {
-	data, err := proto.Marshal(sessionInfo)
-	if err != nil {
-		return err
-	}
+func (s *SessionFinder) RemoveSession(sessionID string) {
+	s.Lock()
+	defer s.Unlock()
 
-	return r.setBytes(ctx, fmt.Sprintf("brokers:%s:sessions:%s", strings.ToLower(sessionInfo.Broker.String()), sessionInfo.SessionId), data)
+	delete(s.sessionAddresses, sessionID)
 }

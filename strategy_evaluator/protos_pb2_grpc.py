@@ -264,6 +264,11 @@ class BrokerServiceStub(object):
         request_serializer=protos__pb2.SubscribeToPriceChangesRequest.SerializeToString,
         response_deserializer=protos__pb2.SubscribeToPriceChangesResponse.FromString,
         )
+    self.RegisterBroker = channel.unary_unary(
+        '/protos.BrokerService/RegisterBroker',
+        request_serializer=protos__pb2.RegisterBrokerRequest.SerializeToString,
+        response_deserializer=protos__pb2.RegisterBrokerResponse.FromString,
+        )
 
 
 class BrokerServiceServicer(object):
@@ -312,6 +317,13 @@ class BrokerServiceServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
+  def RegisterBroker(self, request, context):
+    """used by the broker services to notify the router of their existence - maybe a service mesh is better
+    """
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
 
 def add_BrokerServiceServicer_to_server(servicer, server):
   rpc_method_handlers = {
@@ -344,6 +356,11 @@ def add_BrokerServiceServicer_to_server(servicer, server):
           servicer.SubscribeToPriceChanges,
           request_deserializer=protos__pb2.SubscribeToPriceChangesRequest.FromString,
           response_serializer=protos__pb2.SubscribeToPriceChangesResponse.SerializeToString,
+      ),
+      'RegisterBroker': grpc.unary_unary_rpc_method_handler(
+          servicer.RegisterBroker,
+          request_deserializer=protos__pb2.RegisterBrokerRequest.FromString,
+          response_serializer=protos__pb2.RegisterBrokerResponse.SerializeToString,
       ),
   }
   generic_handler = grpc.method_handlers_generic_handler(

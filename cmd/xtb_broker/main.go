@@ -1,7 +1,9 @@
 package main
 
 import (
+	"context"
 	"flag"
+	"github.com/ducc/kwɒnt/brokers"
 	"github.com/ducc/kwɒnt/brokers/xtb"
 	"github.com/ducc/kwɒnt/protos"
 	"github.com/nats-io/nats.go"
@@ -18,6 +20,7 @@ var (
 	natsPassword  string
 	topic         string
 	serverAddress string
+	routerAddress string
 )
 
 func init() {
@@ -27,6 +30,7 @@ func init() {
 	flag.StringVar(&natsPassword, "nats-password", "password", "nats password")
 	flag.StringVar(&topic, "topic", "candlesticks", "nats topic")
 	flag.StringVar(&serverAddress, "server-address", ":8080", "grpc server address")
+	flag.StringVar(&routerAddress, "router-address", "", "router service address")
 }
 
 func main() {
@@ -44,7 +48,14 @@ func main() {
 		logrus.WithError(err).Fatal("connecting to nats")
 	}
 
-	server := xtb.New(natsConn, topic)
+	ctx := context.Background()
+
+	routerConn, err := brokers.NewClient(ctx, routerAddress)
+	if err != nil {
+		logrus.WithError(err).Fatal("connecting to router")
+	}
+
+	server := xtb.New(natsConn, topic, routerConn)
 	grpcServer := grpc.NewServer()
 
 	protos.RegisterBrokerServiceServer(grpcServer, server)

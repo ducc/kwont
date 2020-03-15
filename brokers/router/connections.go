@@ -4,17 +4,20 @@ import (
 	"context"
 	"github.com/ducc/kwɒnt/brokers"
 	"github.com/ducc/kwɒnt/protos"
+	"github.com/sirupsen/logrus"
 	"sync"
 )
 
 type BrokerConnections struct {
 	sync.RWMutex
-	connections map[string]protos.BrokerServiceClient
+	connections    map[string]protos.BrokerServiceClient
+	activeSessions map[string]int64
 }
 
 func NewBrokerConnections() *BrokerConnections {
 	return &BrokerConnections{
-		connections: make(map[string]protos.BrokerServiceClient),
+		connections:    make(map[string]protos.BrokerServiceClient),
+		activeSessions: make(map[string]int64),
 	}
 }
 
@@ -43,7 +46,37 @@ func (b *BrokerConnections) GetOrConnect(ctx context.Context, address string) (p
 	if err != nil {
 		return nil, err
 	}
-
+	logrus.Infof("connected to broker service with address %s", address)
 	b.connections[address] = client
 	return client, nil
+}
+
+func (b *BrokerConnections) SetActiveSessions(address string, sessions int64) {
+	b.Lock()
+	defer b.Unlock()
+	b.activeSessions[address] = sessions
+}
+
+func (b *BrokerConnections) FindAddressWithLeastSessions() string {
+	b.RLock()
+	defer b.RUnlock()
+
+	var min int64
+	var addr string
+	for address, sessions := range b.activeSessions {
+		if addr == "" || sessions < min {
+			addr = address
+			min = sessions
+		}
+	}
+
+	return addr
+}
+
+func (b *BrokerConnections) RemoveConnection(address string) {
+	b.Lock()
+	defer b.Unlock()
+
+	delete(b.connections, address)
+	delete(b.activeSessions, address)
 }

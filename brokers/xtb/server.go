@@ -5,23 +5,40 @@ import (
 	"github.com/ducc/kwɒnt/brokers/xtb/sessions"
 	"github.com/ducc/kwɒnt/protos"
 	"github.com/nats-io/nats.go"
+	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"os"
 	"sync"
+	"time"
 )
 
 type server struct {
+	protos.BrokerServiceServer
 	sessionsLock sync.Mutex
 	sessions     map[string]*sessions.SessionController
 	natsConn     *nats.Conn
 	topic        string
 }
 
-func New(natsConn *nats.Conn, topic string) *server {
+func New(natsConn *nats.Conn, topic string, router protos.BrokerServiceClient) *server {
 	return &server{
 		sessions: make(map[string]*sessions.SessionController),
 		natsConn: natsConn,
 		topic:    topic,
+	}
+
+}
+
+func (s *server) registerWithRouter(router protos.BrokerServiceClient) {
+	for range time.NewTicker(time.Second).C {
+		ctx := context.Background()
+
+		if _, err := router.RegisterBroker(ctx, &protos.RegisterBrokerRequest{
+			Address: os.Getenv("POD_IP") + ":8080",
+		}); err != nil {
+			logrus.WithError(err).Error("registering broker with router")
+		}
 	}
 }
 

@@ -4,21 +4,21 @@ import (
 	"context"
 	"github.com/ducc/kwɒnt/protos"
 	"github.com/sirupsen/logrus"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 	"time"
 )
 
 type router struct {
-	protos.BrokerServiceClient
-	broker      protos.Broker_Name
+	protos.BrokerServiceServer
 	finder      *SessionFinder
 	connections *BrokerConnections
 }
 
-func NewRouter(finder *SessionFinder, broker protos.Broker_Name) *router {
+func NewRouter(finder *SessionFinder) *router {
 	connections := NewBrokerConnections()
 
 	r := &router{
-		broker:      broker,
 		finder:      finder,
 		connections: connections,
 	}
@@ -32,48 +32,67 @@ func (r *router) pollSessions() {
 	for range time.NewTicker(time.Second * 3).C {
 		ctx := context.Background()
 
+		addressesToRemove := make([]string, 0)
+
 		for address, client := range r.connections.GetConnections() {
 			res, err := client.GetCurrentSessions(ctx, &protos.GetCurrentSessionsRequest{})
 			if err != nil {
-				// todo if err means client no longer exits remove it and make sure the sessions have been remapped
+				// if err means client no longer exits remove it and make sure the sessions have been remapped
+				addressesToRemove = append(addressesToRemove, address)
 				logrus.WithError(err).Error("getting current sessions")
 				continue
 			}
 
+			r.connections.SetActiveSessions(address, int64(len(res.SessionId)))
+
 			for _, sessionID := range res.SessionId {
-				_, err := r.finder.getSessionInfo(ctx, r.broker, sessionID)
-				if err == ErrSessionNotFound {
-					if err := r.finder.setSessionInfo(ctx, &protos.SessionInfo{
-						SessionId:      sessionID,
-						Broker:         r.broker,
-						ServiceAddress: address,
-					}); err != nil {
-						logrus.WithError(err).Error("adding session to redis")
-						continue
-					}
-					continue
-				}
-				if err != nil {
-					logrus.WithError(err).Error("getting session info")
-					continue
-				}
+				r.finder.SetServiceAddress(sessionID, address)
+			}
+		}
+
+		for _, address := range addressesToRemove {
+			r.connections.RemoveConnection(address)
+
+			sessions := r.finder.GetSessionsForAddress(address)
+			for _, sessionID := range sessions {
+				r.finder.RemoveSession(sessionID)
 			}
 		}
 	}
 }
 
-func (r *router) OpenSession(ctx context.Context, req *protos.OpenSessionRequest) (*protos.OpenSessionResponse, error) {
-	// todo talk to load balancer
-	return nil, nil
+func (r *router) RegisterBroker(ctx context.Context, req *protos.RegisterBrokerRequest) (*protos.RegisterBrokerResponse, error) {
+	if _, err := r.connections.GetOrConnect(ctx, req.Address); err != nil {
+		return nil, err
+	}
+
+	return &protos.RegisterBrokerResponse{}, nil
 }
 
-func (r *router) OpenPosition(ctx context.Context, req *protos.OpenPositionRequest) (*protos.OpenPositionResponse, error) {
-	sessionInfo, err := r.finder.getSessionInfo(ctx, req.Symbol.Broker, req.SessionId)
+func (r *router) OpenSession(ctx context.Context, req *protos.OpenSessionRequest) (*protos.OpenSessionResponse, error) {
+	// todo dedupe sessions on user id?
+	serviceAddress := r.connections.FindAddressWithLeastSessions()
+	conn, err := r.connections.GetOrConnect(ctx, serviceAddress)
 	if err != nil {
 		return nil, err
 	}
 
-	client, err := r.connections.GetOrConnect(ctx, sessionInfo.ServiceAddress)
+	res, err := conn.OpenSession(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+
+	r.finder.SetServiceAddress(res.SessionId, serviceAddress)
+	return res, nil
+}
+
+func (r *router) OpenPosition(ctx context.Context, req *protos.OpenPositionRequest) (*protos.OpenPositionResponse, error) {
+	serviceAddress := r.finder.GetServiceAddress(req.SessionId)
+	if serviceAddress == "" {
+		return nil, status.Error(codes.NotFound, "session does not exist")
+	}
+
+	client, err := r.connections.GetOrConnect(ctx, serviceAddress)
 	if err != nil {
 		return nil, err
 	}
@@ -82,12 +101,12 @@ func (r *router) OpenPosition(ctx context.Context, req *protos.OpenPositionReque
 }
 
 func (r *router) ClosePosition(ctx context.Context, req *protos.ClosePositionRequest) (*protos.ClosePositionResponse, error) {
-	sessionInfo, err := r.finder.getSessionInfo(ctx, req.Broker, req.SessionId)
-	if err != nil {
-		return nil, err
+	serviceAddress := r.finder.GetServiceAddress(req.SessionId)
+	if serviceAddress == "" {
+		return nil, status.Error(codes.NotFound, "session does not exist")
 	}
 
-	client, err := r.connections.GetOrConnect(ctx, sessionInfo.ServiceAddress)
+	client, err := r.connections.GetOrConnect(ctx, serviceAddress)
 	if err != nil {
 		return nil, err
 	}
@@ -96,12 +115,12 @@ func (r *router) ClosePosition(ctx context.Context, req *protos.ClosePositionReq
 }
 
 func (r *router) GetBrokerPriceHistory(ctx context.Context, req *protos.GetBrokerPriceHistoryRequest) (*protos.GetBrokerPriceHistoryResponse, error) {
-	sessionInfo, err := r.finder.getSessionInfo(ctx, req.Symbol.Broker, req.SessionId)
-	if err != nil {
-		return nil, err
+	serviceAddress := r.finder.GetServiceAddress(req.SessionId)
+	if serviceAddress == "" {
+		return nil, status.Error(codes.NotFound, "session does not exist")
 	}
 
-	client, err := r.connections.GetOrConnect(ctx, sessionInfo.ServiceAddress)
+	client, err := r.connections.GetOrConnect(ctx, serviceAddress)
 	if err != nil {
 		return nil, err
 	}

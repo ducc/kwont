@@ -367,6 +367,9 @@ service BrokerService {
     rpc ClosePosition(ClosePositionRequest) returns (ClosePositionResponse);
     rpc GetBrokerPriceHistory(GetBrokerPriceHistoryRequest) returns (GetBrokerPriceHistoryResponse);
     rpc SubscribeToPriceChanges(SubscribeToPriceChangesRequest) returns (SubscribeToPriceChangesResponse);
+
+    // used by the broker services to notify the router of their existence - maybe a service mesh is better
+    rpc RegisterBroker(RegisterBrokerRequest) returns (RegisterBrokerResponse);
 }
 
 message GetCurrentSessionsRequest {
@@ -422,7 +425,11 @@ message SubscribeToPriceChangesRequest {
 message SubscribeToPriceChangesResponse {
 }
 
-
+message RegisterBrokerRequest {
+    Broker.Name broker = 1;
+    string address = 2;
+}
+message RegisterBrokerResponse {}
 
 
 

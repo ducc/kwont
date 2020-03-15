@@ -28,6 +28,28 @@ jobs:
     - name: Push Docker Image
       run: docker push joeburnardredbrain/kwont:xtb_broker-latest
 
+  router:
+    name: Router
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Go 1.12
+        uses: actions/setup-go@v1
+        with:
+          go-version: 1.12
+        id: go
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v2
+      - name: Build Binary
+        run: GO111MODULE=on CGO_ENABLED=0 GOOS=linux go build -mod=vendor -o kwont "./cmd/router/main.go"
+      - name: Build XTB Broker Docker Image
+        run: docker build -t joeburnardredbrain/kwont:router-latest -f Dockerfile .
+      - name: Docker login
+        run: echo $DOCKER_AUTH | docker login --username joeburnardredbrain --password-stdin
+        env:
+          DOCKER_AUTH: ${{ secrets.DOCKER_AUTH }}
+      - name: Push Docker Image
+        run: docker push joeburnardredbrain/kwont:router-latest
+
   data_service:
     name: Data Service
     runs-on: ubuntu-latest

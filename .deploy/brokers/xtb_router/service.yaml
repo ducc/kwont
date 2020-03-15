@@ -1,0 +1,15 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: xtb-router
+  namespace: brokers
+  labels:
+    name: xtb-router
+spec:
+  type: NodePort
+  selector:
+    app: xtb-router
+  ports:
+    - targetPort: 8080
+      protocol: TCP
+      port: 8080
