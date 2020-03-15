@@ -69,8 +69,16 @@ func (r *router) RegisterBroker(ctx context.Context, req *protos.RegisterBrokerR
 	return &protos.RegisterBrokerResponse{}, nil
 }
 
+func (r *router) getConnection(ctx context.Context, sessionID string) (protos.BrokerServiceClient, error) {
+	serviceAddress := r.finder.GetServiceAddress(sessionID)
+	if serviceAddress == "" {
+		return nil, status.Error(codes.NotFound, "session does not exist")
+	}
+
+	return r.connections.GetOrConnect(ctx, serviceAddress)
+}
+
 func (r *router) OpenSession(ctx context.Context, req *protos.OpenSessionRequest) (*protos.OpenSessionResponse, error) {
-	// todo dedupe sessions on user id?
 	serviceAddress := r.connections.FindAddressWithLeastSessions()
 	conn, err := r.connections.GetOrConnect(ctx, serviceAddress)
 	if err != nil {
@@ -87,12 +95,7 @@ func (r *router) OpenSession(ctx context.Context, req *protos.OpenSessionRequest
 }
 
 func (r *router) OpenPosition(ctx context.Context, req *protos.OpenPositionRequest) (*protos.OpenPositionResponse, error) {
-	serviceAddress := r.finder.GetServiceAddress(req.SessionId)
-	if serviceAddress == "" {
-		return nil, status.Error(codes.NotFound, "session does not exist")
-	}
-
-	client, err := r.connections.GetOrConnect(ctx, serviceAddress)
+	client, err := r.getConnection(ctx, req.SessionId)
 	if err != nil {
 		return nil, err
 	}
@@ -101,12 +104,7 @@ func (r *router) OpenPosition(ctx context.Context, req *protos.OpenPositionReque
 }
 
 func (r *router) ClosePosition(ctx context.Context, req *protos.ClosePositionRequest) (*protos.ClosePositionResponse, error) {
-	serviceAddress := r.finder.GetServiceAddress(req.SessionId)
-	if serviceAddress == "" {
-		return nil, status.Error(codes.NotFound, "session does not exist")
-	}
-
-	client, err := r.connections.GetOrConnect(ctx, serviceAddress)
+	client, err := r.getConnection(ctx, req.SessionId)
 	if err != nil {
 		return nil, err
 	}
@@ -115,15 +113,17 @@ func (r *router) ClosePosition(ctx context.Context, req *protos.ClosePositionReq
 }
 
 func (r *router) GetBrokerPriceHistory(ctx context.Context, req *protos.GetBrokerPriceHistoryRequest) (*protos.GetBrokerPriceHistoryResponse, error) {
-	serviceAddress := r.finder.GetServiceAddress(req.SessionId)
-	if serviceAddress == "" {
-		return nil, status.Error(codes.NotFound, "session does not exist")
-	}
-
-	client, err := r.connections.GetOrConnect(ctx, serviceAddress)
+	client, err := r.getConnection(ctx, req.SessionId)
 	if err != nil {
 		return nil, err
 	}
-
 	return client.GetBrokerPriceHistory(ctx, req)
+}
+
+func (r *router) SubscribeToPriceChanges(ctx context.Context, req *protos.SubscribeToPriceChangesRequest) (*protos.SubscribeToPriceChangesResponse, error) {
+	client, err := r.getConnection(ctx, req.SessionId)
+	if err != nil {
+		return nil, err
+	}
+	return client.SubscribeToPriceChanges(ctx, req)
 }
