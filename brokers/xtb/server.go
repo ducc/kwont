@@ -22,12 +22,14 @@ type server struct {
 }
 
 func New(natsConn *nats.Conn, topic string, router protos.BrokerServiceClient) *server {
-	return &server{
+	s := &server{
 		sessions: make(map[string]*sessions.SessionController),
 		natsConn: natsConn,
 		topic:    topic,
 	}
+	go s.registerWithRouter(router)
 
+	return s
 }
 
 func (s *server) registerWithRouter(router protos.BrokerServiceClient) {
