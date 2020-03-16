@@ -70,6 +70,17 @@ func newSession(ctx context.Context, natsConn *nats.Conn, topic, username, passw
 
 	go s.transformTickPricesToCandlesticks()
 
+	for symbolIndex := range protos.Symbol_Name_name {
+		symbol := protos.Symbol_Name(symbolIndex)
+		if symbol == protos.Symbol_UNKNOWN {
+			continue
+		}
+
+		if err := s.AddCandlestickSubscription(ctx, symbol); err != nil && err != utils.ErrUnsupportedSymbol {
+			return nil, err
+		}
+	}
+
 	return s, nil
 }
 
