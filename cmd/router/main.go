@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"flag"
 	"github.com/ducc/kwɒnt/brokers/router"
 	"github.com/ducc/kwɒnt/protos"
@@ -29,8 +28,6 @@ func main() {
 	}
 
 	logrus.Debug("starting router")
-
-	ctx := context.Background()
 
 	server := router.NewRouter()
 	grpcServer := grpc.NewServer()
