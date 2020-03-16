@@ -15,11 +15,11 @@ type router struct {
 	connections *BrokerConnections
 }
 
-func NewRouter(finder *SessionFinder) *router {
+func NewRouter() *router {
 	connections := NewBrokerConnections()
 
 	r := &router{
-		finder:      finder,
+		finder:      NewSessionFinder(),
 		connections: connections,
 	}
 
@@ -76,6 +76,13 @@ func (r *router) getConnection(ctx context.Context, sessionID string) (protos.Br
 	}
 
 	return r.connections.GetOrConnect(ctx, serviceAddress)
+}
+
+func (r *router) GetCurrentSessions(ctx context.Context, req *protos.GetCurrentSessionsRequest) (*protos.GetCurrentSessionsResponse, error) {
+	sessionIDs := r.finder.GetSessionIds()
+	return &protos.GetCurrentSessionsResponse{
+		SessionId: sessionIDs,
+	}, nil
 }
 
 func (r *router) OpenSession(ctx context.Context, req *protos.OpenSessionRequest) (*protos.OpenSessionResponse, error) {

@@ -12,7 +12,7 @@ type SessionFinder struct {
 	sessionAddresses map[string]string
 }
 
-func NewSessionFinder(ctx context.Context) *SessionFinder {
+func NewSessionFinder() *SessionFinder {
 	return &SessionFinder{
 		sessionAddresses: make(map[string]string),
 	}
@@ -60,4 +60,16 @@ func (s *SessionFinder) RemoveSession(sessionID string) {
 	defer s.Unlock()
 
 	delete(s.sessionAddresses, sessionID)
+}
+
+func (s *SessionFinder) GetSessionIds() []string {
+	s.RLock()
+	defer s.RUnlock()
+
+	sessionIDs := make([]string, 0)
+	for sessionID := range s.sessionAddresses {
+		sessionIDs = append(sessionIDs, sessionID)
+	}
+
+	return sessionIDs
 }

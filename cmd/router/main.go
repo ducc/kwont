@@ -32,7 +32,7 @@ func main() {
 
 	ctx := context.Background()
 
-	server := router.NewRouter(router.NewSessionFinder(ctx))
+	server := router.NewRouter()
 	grpcServer := grpc.NewServer()
 
 	protos.RegisterBrokerServiceServer(grpcServer, server)
