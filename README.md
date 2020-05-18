@@ -1,4 +1,4 @@
-# /kwɒnt/
+# Kwont
 ![Go](https://github.com/ducc/kwont/workflows/Go/badge.svg)
 
 Distributed CFD trading system which pulls real time price changes from brokers and evaluates python strategies to open/close positons - Written in go & python, deployed on Kubernetes with CockroachDB, Nats.IO, Redis and GRPC!
