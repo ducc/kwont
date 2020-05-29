@@ -1,7 +1,7 @@
 # Kwont
 ![Go](https://github.com/ducc/kwont/workflows/Go/badge.svg)
 
-Distributed CFD trading system which pulls real time price changes from brokers and evaluates python strategies to open/close positons - Written in go & python, deployed on Kubernetes with CockroachDB, Nats.IO, Redis and GRPC!
+Distributed CFD trading system which pulls real time price changes from brokers and evaluates strategies to open/close positions - Written in go & python, deployed on Kubernetes with CockroachDB, Nats.IO, Redis and GRPC!
 
 ## Disclaimer: do not run this with a real brokerage account yet. This is a prototype. It has not been security tested. In fact it is incredibly insecure. I do not take responsibility for you being an idiot.
 
