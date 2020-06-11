@@ -1,3 +1,4 @@
 *.dat
 strategy_evaluator/.ipynb_checkpoints/
+.idea/
 
