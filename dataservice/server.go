@@ -162,21 +162,6 @@ func (s *server) GetPriceHistory(ctx context.Context, req *protos.GetPriceHistor
 	}, nil
 }
 
-func (s *server) AddCandlestick(ctx context.Context, req *protos.AddCandlestickRequest) (*protos.AddCandlestickResponse, error) {
-	c := req.Candlestick
-
-	ts, err := ptypes.Timestamp(c.Timestamp)
-	if err != nil {
-		return nil, err
-	}
-
-	if err := s.db.InsertCandlestick(ctx, c.Symbol.Name.String(), c.Symbol.Broker.String(), ts, c.Open, c.Close, c.High, c.Low, c.Current, c.Spread, c.BuyVolume, c.SellVolume); err != nil {
-		return nil, err
-	}
-
-	return &protos.AddCandlestickResponse{}, nil
-}
-
 func (s *server) AddTick(ctx context.Context, req *protos.AddTickRequest) (*protos.AddTickResponse, error) {
 	t := req.Tick
 
@@ -186,6 +171,10 @@ func (s *server) AddTick(ctx context.Context, req *protos.AddTickRequest) (*prot
 	}
 
 	if err := s.db.InsertTick(ctx, ts, t.Broker.String(), t.Symbol.String(), t.Price, t.Spread, t.BuyVolume, t.SellVolume); err != nil {
+		return nil, err
+	}
+
+	if err := s.db.InsertOrUpdateCandlestick(ctx, protos.CandlestickWindow_ONE_MINUTE, ts, t.Broker.String(), t.Symbol.String(), t.Price, t.Spread, t.BuyVolume, t.SellVolume); err != nil {
 		return nil, err
 	}
 

@@ -38,11 +38,6 @@ class DataServiceStub(object):
                 request_serializer=protos__pb2.GetPriceHistoryRequest.SerializeToString,
                 response_deserializer=protos__pb2.GetPriceHistoryResponse.FromString,
                 )
-        self.AddCandlestick = channel.unary_unary(
-                '/protos.DataService/AddCandlestick',
-                request_serializer=protos__pb2.AddCandlestickRequest.SerializeToString,
-                response_deserializer=protos__pb2.AddCandlestickResponse.FromString,
-                )
         self.AddTick = channel.unary_unary(
                 '/protos.DataService/AddTick',
                 request_serializer=protos__pb2.AddTickRequest.SerializeToString,
@@ -93,12 +88,6 @@ class DataServiceServicer(object):
         raise NotImplementedError('Method not implemented!')
 
     def GetPriceHistory(self, request, context):
-        """Missing associated documentation comment in .proto file"""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
-    def AddCandlestick(self, request, context):
         """Missing associated documentation comment in .proto file"""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -155,11 +144,6 @@ def add_DataServiceServicer_to_server(servicer, server):
                     servicer.GetPriceHistory,
                     request_deserializer=protos__pb2.GetPriceHistoryRequest.FromString,
                     response_serializer=protos__pb2.GetPriceHistoryResponse.SerializeToString,
-            ),
-            'AddCandlestick': grpc.unary_unary_rpc_method_handler(
-                    servicer.AddCandlestick,
-                    request_deserializer=protos__pb2.AddCandlestickRequest.FromString,
-                    response_serializer=protos__pb2.AddCandlestickResponse.SerializeToString,
             ),
             'AddTick': grpc.unary_unary_rpc_method_handler(
                     servicer.AddTick,
@@ -268,22 +252,6 @@ class DataService(object):
         return grpc.experimental.unary_unary(request, target, '/protos.DataService/GetPriceHistory',
             protos__pb2.GetPriceHistoryRequest.SerializeToString,
             protos__pb2.GetPriceHistoryResponse.FromString,
-            options, channel_credentials,
-            call_credentials, compression, wait_for_ready, timeout, metadata)
-
-    @staticmethod
-    def AddCandlestick(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/protos.DataService/AddCandlestick',
-            protos__pb2.AddCandlestickRequest.SerializeToString,
-            protos__pb2.AddCandlestickResponse.FromString,
             options, channel_credentials,
             call_credentials, compression, wait_for_ready, timeout, metadata)
 

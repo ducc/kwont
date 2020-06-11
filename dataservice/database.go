@@ -3,11 +3,13 @@ package dataservice
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"github.com/ducc/kwɒnt/protos"
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes"
 	_ "github.com/lib/pq"
 	"github.com/sirupsen/logrus"
+	"strings"
 	"time"
 )
 
@@ -64,20 +66,57 @@ func (d *database) GetPartialCandlesticks(ctx context.Context, symbolName, symbo
 	return output, nil
 }
 
-func (d *database) InsertCandlestick(ctx context.Context, symbolName, symbolBroker string, timestamp time.Time, open, close, high, low, current, spread, buyVolume, sellVolume int64) error {
-	const statement = `INSERT INTO candlesticks (symbol_name, symbol_broker, timestamp, open, close, high, low, current, spread, buy_volume, sell_volume) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11);`
+func (d *database) InsertTick(ctx context.Context, timestamp time.Time, broker, symbol string, price, spread, buyVolume, sellVolume float64) error {
+	const statement = `INSERT INTO ticks (timestamp, broker, symbol, price, spread, buy_volume, sell_volume) VALUES ($1, $2, $3, $4, $5, $6, $7) ON CONFLICT DO NOTHING;`
 
-	if _, err := d.db.ExecContext(ctx, statement, symbolName, symbolBroker, timestamp, open, close, high, low, current, spread, buyVolume, sellVolume); err != nil {
+	if _, err := d.db.ExecContext(ctx, statement, timestamp, broker, symbol, price, spread, buyVolume, sellVolume); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func (d *database) InsertTick(ctx context.Context, timestamp time.Time, broker, symbol string, price, spread, buyVolume, sellVolume float64) error {
-	const statement = `INSERT INTO ticks (timestamp, broker, symbol, price, spread, buy_volume, sell_volume) VALUES ($1, $2, $3, $4, $5, $6, $7) ON CONFLICT DO NOTHING;`
+func truncateTimestampForWindow(window protos.CandlestickWindow_Name, timestamp time.Time) time.Time {
+	switch window {
+	case protos.CandlestickWindow_ONE_MINUTE:
+		return timestamp.Truncate(time.Minute)
+	default:
+		return time.Time{}
+	}
+}
 
-	if _, err := d.db.ExecContext(ctx, statement, timestamp, broker, symbol, price, spread, buyVolume, sellVolume); err != nil {
+func getCandlestickTableFromWindow(window protos.CandlestickWindow_Name) string {
+	switch window {
+	case protos.CandlestickWindow_ONE_MINUTE:
+		return "candlesticks_1m"
+	default:
+		return ""
+	}
+}
+
+func (d *database) InsertOrUpdateCandlestick(ctx context.Context, window protos.CandlestickWindow_Name, timestamp time.Time, broker, symbol string, price, spread, buyVolume, sellVolume float64) error {
+	windowedTime := truncateTimestampForWindow(window, timestamp)
+	table := getCandlestickTableFromWindow(window)
+
+	if windowedTime.IsZero() || table == "" {
+		return errors.New("unsupported window")
+	}
+
+	// todo use spread
+	const query = `
+insert into TABLENAME values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) 
+on conflict (timestamp, broker, symbol) do update set 
+updated = case when TABLENAME.updated < excluded.updated then excluded.updated else TABLENAME.updated end,
+open_price = case when TABLENAME.updated > excluded.updated then excluded.open_price else TABLENAME.open_price end, 
+close_price = case when TABLENAME.updated < excluded.updated then excluded.close_price else TABLENAME.close_price end, 
+high_price = case when TABLENAME.high_price < excluded.high_price then excluded.high_price else TABLENAME.high_price end, 
+low_price = case when TABLENAME.low_price > excluded.low_price then excluded.low_price else TABLENAME.low_price end, 
+buy_volume = case when TABLENAME.buy_volume < excluded.buy_volume then excluded.buy_volume else TABLENAME.buy_volume end, 
+sell_volume = case when TABLENAME.sell_volume < excluded.sell_volume then excluded.sell_volume else TABLENAME.sell_volume end;
+	`
+	statement := strings.ReplaceAll(query, "TABLENAME", table) // todo BAD DOG BAD DOG BAD DOG BAD DOG BAD DOG
+
+	if _, err := d.db.ExecContext(ctx, statement, windowedTime, timestamp, broker, symbol, price, price, price, price, buyVolume, sellVolume); err != nil {
 		return err
 	}
 

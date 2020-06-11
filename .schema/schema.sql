@@ -83,6 +83,7 @@ CREATE TABLE IF NOT EXISTS candlesticks_1m (
     timestamp timestamp,
     broker text,
     symbol text,
+    updated timestamp,
     open_price decimal not null,
     close_price decimal not null,
     high_price decimal not null,
