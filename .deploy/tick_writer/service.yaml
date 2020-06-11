@@ -1,14 +1,14 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: candlestick-writer
+  name: tick-writer
   namespace: data
   labels:
-    name: candlestick-writer
+    name: tick-writer
 spec:
   type: NodePort
   selector:
-    app: candlestick-writer
+    app: tick-writer
   ports:
     - targetPort: 8080
       protocol: TCP

@@ -102,7 +102,7 @@ func (s *server) SubscribeToPriceChanges(ctx context.Context, req *protos.Subscr
 		return nil, ErrSessionDoesNotExist
 	}
 
-	if err := session.AddCandlestickSubscription(ctx, req.Symbol); err != nil {
+	if err := session.AddTickSubscription(ctx, req.Symbol); err != nil {
 		return nil, err
 	}
 

@@ -3,8 +3,8 @@ package main
 import (
 	"context"
 	"flag"
-	"github.com/ducc/kwɒnt/candlestick_writer"
 	"github.com/ducc/kwɒnt/dataservice"
+	"github.com/ducc/kwɒnt/tick_writer"
 	"github.com/nats-io/nats.go"
 	"github.com/sirupsen/logrus"
 )
@@ -50,5 +50,5 @@ func main() {
 		logrus.WithError(err).Fatal("subscribing to topic")
 	}
 
-	candlestick_writer.Run(ctx, ds, subscription)
+	tick_writer.Run(ctx, ds, subscription)
 }

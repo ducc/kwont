@@ -50,7 +50,7 @@ func New(ctx context.Context, natsConn *nats.Conn, topic, username, password str
 			<-s.finished
 
 			dur := b.Duration()
-			log.Debug("session finished, sleeping for %v", dur)
+			log.Debugf("session finished, sleeping for %v", dur)
 			time.Sleep(dur)
 
 			s.Lock()
@@ -64,9 +64,9 @@ func New(ctx context.Context, natsConn *nats.Conn, topic, username, password str
 			s.Unlock()
 
 			ctx := context.Background()
-			for _, symbolName := range s.GetCandlestickSubscription() {
-				if err := s.Session.AddCandlestickSubscription(ctx, symbolName); err != nil {
-					log.WithError(err).WithField("symbol_name", symbolName).Error("adding candlestick subscription")
+			for _, symbolName := range s.GetTickSubscription() {
+				if err := s.Session.AddTickSubscription(ctx, symbolName); err != nil {
+					log.WithError(err).WithField("symbol_name", symbolName).Error("adding tick subscription")
 					continue
 				}
 			}

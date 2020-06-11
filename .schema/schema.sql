@@ -60,3 +60,38 @@ CREATE TABLE IF NOT EXISTS broker_connections (
     password STRING NOT NULL,
     session_id STRING NOT NULL
 );
+
+
+
+
+
+
+
+
+CREATE TABLE IF NOT EXISTS ticks (
+    timestamp timestamp,
+    broker text,
+    symbol text,
+    price decimal not null,
+    spread decimal not null,
+    buy_volume decimal not null,
+    sell_volume decimal not null,
+    PRIMARY KEY (timestamp, broker, symbol)
+);
+
+CREATE TABLE IF NOT EXISTS candlesticks_1m (
+    timestamp timestamp,
+    broker text,
+    symbol text,
+    open_price decimal not null,
+    close_price decimal not null,
+    high_price decimal not null,
+    low_price decimal not null,
+    buy_volume decimal not null,
+    sell_volume decimal not null,
+    PRIMARY KEY (timestamp, broker, symbol)
+    -- todo min_spread, max_spread, avg_spread
+);
+
+
+

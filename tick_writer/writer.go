@@ -1,4 +1,4 @@
-package candlestick_writer
+package tick_writer
 
 import (
 	"context"
@@ -42,22 +42,22 @@ func (w *writer) processMessages(ctx context.Context, subscription *nats.Subscri
 }
 
 func (w *writer) processMessage(ctx context.Context, msg *nats.Msg) {
-	var candlestick protos.Candlestick
-	if err := proto.Unmarshal(msg.Data, &candlestick); err != nil {
-		logrus.WithError(err).Error("unmarshalling message to candlestick")
+	var tick protos.Tick
+	if err := proto.Unmarshal(msg.Data, &tick); err != nil {
+		logrus.WithError(err).Error("unmarshalling message to tick")
 		return
 	}
 
-	w.sendToDatabase(ctx, &candlestick)
+	w.sendToDatabase(ctx, &tick)
 }
 
-func (w *writer) sendToDatabase(ctx context.Context, candlestick *protos.Candlestick) {
-	logrus.WithField("candlestick", candlestick).Debug("sending candlestick to database")
+func (w *writer) sendToDatabase(ctx context.Context, tick *protos.Tick) {
+	logrus.WithField("tick", tick).Debug("sending tick to database")
 
-	if _, err := w.ds.AddCandlestick(ctx, &protos.AddCandlestickRequest{
-		Candlestick: candlestick,
+	if _, err := w.ds.AddTick(ctx, &protos.AddTickRequest{
+		Tick: tick,
 	}); err != nil {
-		logrus.WithError(err).Error("sending candlestick to database")
+		logrus.WithError(err).Error("sending tick to database")
 		return
 	}
 }

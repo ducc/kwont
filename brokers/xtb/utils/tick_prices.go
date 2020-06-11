@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-func TickPriceToCandlestick(tickPrice *streaming.GetTickPricesResponse) (*protos.Candlestick, error) {
+func TickPriceToProto(tickPrice *streaming.GetTickPricesResponse) (*protos.Tick, error) {
 	// convert timestamp to nanoseconds
 	timestampTime := time.Unix(0, tickPrice.Data.Timestamp*1000000)
 	timestamp, err := ptypes.TimestampProto(timestampTime)
@@ -20,15 +20,13 @@ func TickPriceToCandlestick(tickPrice *streaming.GetTickPricesResponse) (*protos
 		return nil, ErrUnsupportedSymbol
 	}
 
-	return &protos.Candlestick{
-		Timestamp: timestamp,
-		Symbol: &protos.Symbol{
-			Name:   symbolName,
-			Broker: protos.Broker_XTB_DEMO,
-		},
-		Current:    PoundsToMicros(tickPrice.Data.Ask),
-		Spread:     PoundsToMicros(tickPrice.Data.SpreadRaw),
-		BuyVolume:  int64(tickPrice.Data.AskVolume),
-		SellVolume: int64(tickPrice.Data.BidVolume),
+	return &protos.Tick{
+		Timestamp:  timestamp,
+		Broker:     protos.Broker_XTB_DEMO,
+		Symbol:     symbolName,
+		Price:      tickPrice.Data.Ask,
+		Spread:     tickPrice.Data.SpreadRaw,
+		BuyVolume:  float64(tickPrice.Data.AskVolume),
+		SellVolume: float64(tickPrice.Data.BidVolume),
 	}, nil
 }

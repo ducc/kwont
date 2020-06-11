@@ -177,6 +177,21 @@ func (s *server) AddCandlestick(ctx context.Context, req *protos.AddCandlestickR
 	return &protos.AddCandlestickResponse{}, nil
 }
 
+func (s *server) AddTick(ctx context.Context, req *protos.AddTickRequest) (*protos.AddTickResponse, error) {
+	t := req.Tick
+
+	ts, err := ptypes.Timestamp(t.Timestamp)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := s.db.InsertTick(ctx, ts, t.Broker.String(), t.Symbol.String(), t.Price, t.Spread, t.BuyVolume, t.SellVolume); err != nil {
+		return nil, err
+	}
+
+	return &protos.AddTickResponse{}, nil
+}
+
 func (s *server) CreateUser(ctx context.Context, req *protos.CreateUserRequest) (*protos.CreateUserResponse, error) {
 	userID, err := s.db.InsertUser(ctx, req.User.Name)
 	if err != nil {

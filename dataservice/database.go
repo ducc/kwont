@@ -74,6 +74,16 @@ func (d *database) InsertCandlestick(ctx context.Context, symbolName, symbolBrok
 	return nil
 }
 
+func (d *database) InsertTick(ctx context.Context, timestamp time.Time, broker, symbol string, price, spread, buyVolume, sellVolume float64) error {
+	const statement = `INSERT INTO ticks (timestamp, broker, symbol, price, spread, buy_volume, sell_volume) VALUES ($1, $2, $3, $4, $5, $6, $7) ON CONFLICT DO NOTHING;`
+
+	if _, err := d.db.ExecContext(ctx, statement, timestamp, broker, symbol, price, spread, buyVolume, sellVolume); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (d *database) InsertStrategy(ctx context.Context, entryRules, exitRules []byte, status, name, symbolName, symbolBroker string) (string, error) {
 	const statement = `INSERT INTO strategies (entry_rules, exit_rules, status, name, symbol_name, symbol_broker, last_evaluated) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING (strategy_id);`
 
