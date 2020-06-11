@@ -1,12 +1,4 @@
-# github.com/go-redis/redis v6.15.7+incompatible
-github.com/go-redis/redis
-github.com/go-redis/redis/internal
-github.com/go-redis/redis/internal/consistenthash
-github.com/go-redis/redis/internal/hashtag
-github.com/go-redis/redis/internal/pool
-github.com/go-redis/redis/internal/proto
-github.com/go-redis/redis/internal/util
-# github.com/golang/protobuf v1.3.4
+# github.com/golang/protobuf v1.4.2
 github.com/golang/protobuf/proto
 github.com/golang/protobuf/ptypes
 github.com/golang/protobuf/ptypes/timestamp
@@ -53,7 +45,7 @@ golang.org/x/text/secure/bidirule
 golang.org/x/text/unicode/bidi
 golang.org/x/text/unicode/norm
 golang.org/x/text/transform
-# google.golang.org/genproto v0.0.0-20190819201941-24fa4b261c55
+# google.golang.org/genproto v0.0.0-20200526211855-cb27e3aa2013
 google.golang.org/genproto/googleapis/rpc/status
 # google.golang.org/grpc v1.27.1
 google.golang.org/grpc
@@ -92,3 +84,34 @@ google.golang.org/grpc/credentials/internal
 google.golang.org/grpc/binarylog/grpc_binarylog_v1
 google.golang.org/grpc/internal/syscall
 google.golang.org/grpc/attributes
+# google.golang.org/protobuf v1.24.0
+google.golang.org/protobuf/reflect/protoreflect
+google.golang.org/protobuf/runtime/protoimpl
+google.golang.org/protobuf/encoding/prototext
+google.golang.org/protobuf/encoding/protowire
+google.golang.org/protobuf/proto
+google.golang.org/protobuf/reflect/protoregistry
+google.golang.org/protobuf/runtime/protoiface
+google.golang.org/protobuf/types/known/timestamppb
+google.golang.org/protobuf/internal/pragma
+google.golang.org/protobuf/internal/filedesc
+google.golang.org/protobuf/internal/filetype
+google.golang.org/protobuf/internal/impl
+google.golang.org/protobuf/internal/version
+google.golang.org/protobuf/internal/encoding/messageset
+google.golang.org/protobuf/internal/encoding/text
+google.golang.org/protobuf/internal/errors
+google.golang.org/protobuf/internal/fieldnum
+google.golang.org/protobuf/internal/flags
+google.golang.org/protobuf/internal/mapsort
+google.golang.org/protobuf/internal/set
+google.golang.org/protobuf/internal/strs
+google.golang.org/protobuf/internal/fieldsort
+google.golang.org/protobuf/types/known/anypb
+google.golang.org/protobuf/types/known/durationpb
+google.golang.org/protobuf/internal/descfmt
+google.golang.org/protobuf/internal/descopts
+google.golang.org/protobuf/internal/encoding/defval
+google.golang.org/protobuf/internal/encoding/tag
+google.golang.org/protobuf/internal/genname
+google.golang.org/protobuf/internal/detrand
