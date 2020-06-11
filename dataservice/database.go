@@ -116,7 +116,7 @@ sell_volume = case when TABLENAME.sell_volume < excluded.sell_volume then exclud
 	`
 	statement := strings.ReplaceAll(query, "TABLENAME", table) // todo BAD DOG BAD DOG BAD DOG BAD DOG BAD DOG
 
-	if _, err := d.db.ExecContext(ctx, statement, windowedTime, timestamp, broker, symbol, price, price, price, price, buyVolume, sellVolume); err != nil {
+	if _, err := d.db.ExecContext(ctx, statement, windowedTime, broker, symbol, timestamp, price, price, price, price, buyVolume, sellVolume); err != nil {
 		return err
 	}
 
