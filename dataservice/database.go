@@ -111,8 +111,8 @@ open_price = case when TABLENAME.updated > excluded.updated then excluded.open_p
 close_price = case when TABLENAME.updated < excluded.updated then excluded.close_price else TABLENAME.close_price end, 
 high_price = case when TABLENAME.high_price < excluded.high_price then excluded.high_price else TABLENAME.high_price end, 
 low_price = case when TABLENAME.low_price > excluded.low_price then excluded.low_price else TABLENAME.low_price end, 
-buy_volume = case when TABLENAME.buy_volume < excluded.buy_volume then excluded.buy_volume else TABLENAME.buy_volume end, 
-sell_volume = case when TABLENAME.sell_volume < excluded.sell_volume then excluded.sell_volume else TABLENAME.sell_volume end;
+buy_volume = TABLENAME.buy_volume + excluded.buy_volume, 
+sell_volume = TABLENAME.sell_volume + excluded.sell_volume;
 	`
 	statement := strings.ReplaceAll(query, "TABLENAME", table) // todo BAD DOG BAD DOG BAD DOG BAD DOG BAD DOG
 
