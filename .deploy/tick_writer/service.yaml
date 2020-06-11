@@ -1,0 +1,15 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: tick-writer
+  namespace: data
+  labels:
+    name: tick-writer
+spec:
+  type: NodePort
+  selector:
+    app: tick-writer
+  ports:
+    - targetPort: 8080
+      protocol: TCP
+      port: 8080

@@ -253,6 +253,8 @@ service DataService {
     rpc GetPriceHistory(GetPriceHistoryRequest) returns (GetPriceHistoryResponse);
     rpc AddCandlestick(AddCandlestickRequest) returns (AddCandlestickResponse);
 
+    rpc AddTick(AddTickRequest) returns (AddTickResponse);
+
     rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);
     rpc UpdateUser(UpdateUserRequest) returns (UpdateUserResponse);
     rpc ListUsers(ListUsersRequest) returns (ListUsersResponse);
@@ -327,6 +329,22 @@ message AddCandlestickRequest {
     Candlestick candlestick = 1;
 }
 message AddCandlestickResponse {}
+
+message Tick {
+    google.protobuf.Timestamp timestamp = 1;
+    Broker.Name broker = 2;
+    Symbol.Name symbol = 3;
+    double price = 4;
+    double spread = 5;
+    double buy_volume = 6;
+    double sell_volume = 7;
+}
+
+message AddTickRequest {
+    Tick tick = 1;
+}
+message AddTickResponse {}
+
 
 message User {
     message BrokerConnection {
@@ -430,6 +448,7 @@ message RegisterBrokerRequest {
     string address = 2;
 }
 message RegisterBrokerResponse {}
+
 
 
 

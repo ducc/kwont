@@ -28,7 +28,7 @@ func init() {
 	flag.StringVar(&natsAddress, "nats-address", "127.0.0.1:4150", "nats server address")
 	flag.StringVar(&natsUsername, "nats-username", "kwont", "nats username")
 	flag.StringVar(&natsPassword, "nats-password", "password", "nats password")
-	flag.StringVar(&topic, "topic", "candlesticks", "nats topic")
+	flag.StringVar(&topic, "topic", "ticks", "nats topic")
 	flag.StringVar(&serverAddress, "server-address", ":8080", "grpc server address")
 	flag.StringVar(&routerAddress, "router-address", "", "router service address")
 }
