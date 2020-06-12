@@ -22,6 +22,7 @@ func newDatabase(ctx context.Context, connectionString string) (*database, error
 	if err != nil {
 		return nil, err
 	}
+	db.SetMaxIdleConns(10)
 
 	if err := db.Ping(); err != nil {
 		return nil, err
