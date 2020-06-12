@@ -19,35 +19,6 @@ CREATE TABLE IF NOT EXISTS positions (
     close_time TIMESTAMPTZ NOT NULL
 ) INTERLEAVE IN PARENT (strategies);
 
-CREATE TABLE IF NOT EXISTS symbol_prices (
-    symbol_name STRING NOT NULL,
-    symbol_broker STRING NOT NULL,
-    timestamp TIMESTAMPTZ NOT NULL,
-    price INT NOT NULL
-);
-
--- todo can this be auto populated on insert to symbol_prices?
-CREATE TABLE IF NOT EXISTS candlesticks (
-    candlestick_id UUID NOT NULL DEFAULT gen_random_uuid(),
-    symbol_name STRING NOT NULL,
-    symbol_broker STRING NOT NULL,
-    timestamp TIMESTAMPTZ NOT NULL,
-    open INT NOT NULL,
-    close INT NOT NULL,
-    high INT NOT NULL,
-    low INT NOT NULL,
-    current INT NOT NULL,
-    spread INT NOT NULL,
-    buy_volume INT NOT NULL,
-    sell_volume INT NOT NULL
-);
-
-CREATE INDEX IF NOT EXISTS candlesticks_symbol_broker_name_idx ON candlesticks (
-    symbol_broker ASC,
-    symbol_name ASC,
-    timestamp ASC
-);
-
 CREATE TABLE IF NOT EXISTS users (
     user_id UUID NOT NULL DEFAULT gen_random_uuid(),
     name STRING NOT NULL
@@ -60,13 +31,6 @@ CREATE TABLE IF NOT EXISTS broker_connections (
     password STRING NOT NULL,
     session_id STRING NOT NULL
 );
-
-
-
-
-
-
-
 
 CREATE TABLE IF NOT EXISTS ticks (
     timestamp timestamp,
