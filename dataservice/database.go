@@ -80,6 +80,10 @@ func truncateTimestampForWindow(window protos.CandlestickWindow_Name, timestamp 
 	switch window {
 	case protos.CandlestickWindow_ONE_MINUTE:
 		return timestamp.Truncate(time.Minute)
+	case protos.CandlestickWindow_ONE_HOUR:
+		return timestamp.Truncate(time.Hour)
+	case protos.CandlestickWindow_ONE_DAY:
+		return timestamp.Truncate(time.Hour * 24)
 	default:
 		return time.Time{}
 	}
@@ -89,6 +93,10 @@ func getCandlestickTableFromWindow(window protos.CandlestickWindow_Name) string 
 	switch window {
 	case protos.CandlestickWindow_ONE_MINUTE:
 		return "candlesticks_1m"
+	case protos.CandlestickWindow_ONE_HOUR:
+		return "candlesticks_1h"
+	case protos.CandlestickWindow_ONE_DAY:
+		return "candlesticks_1d"
 	default:
 		return ""
 	}

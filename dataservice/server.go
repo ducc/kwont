@@ -178,6 +178,14 @@ func (s *server) AddTick(ctx context.Context, req *protos.AddTickRequest) (*prot
 		return nil, err
 	}
 
+	if err := s.db.InsertOrUpdateCandlestick(ctx, protos.CandlestickWindow_ONE_HOUR, ts, t.Broker.String(), t.Symbol.String(), t.Price, t.Spread, t.BuyVolume, t.SellVolume); err != nil {
+		return nil, err
+	}
+
+	if err := s.db.InsertOrUpdateCandlestick(ctx, protos.CandlestickWindow_ONE_DAY, ts, t.Broker.String(), t.Symbol.String(), t.Price, t.Spread, t.BuyVolume, t.SellVolume); err != nil {
+		return nil, err
+	}
+
 	return &protos.AddTickResponse{}, nil
 }
 
