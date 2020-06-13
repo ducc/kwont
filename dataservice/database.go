@@ -42,7 +42,7 @@ func (d *database) GetCandlesticks(ctx context.Context, window protos.Candlestic
 
 	statement := fmt.Sprintf("SELECT timestamp, open_price, close_price, high_price, low_price, buy_volume, sell_volume FROM %s WHERE timestamp >= $1 AND timestamp <= $2 and broker = $3 and symbol = $4 ORDER BY timestamp ASC;", table)
 
-	iter, err := d.db.QueryContext(ctx, statement, start, end, broker, symbol)
+	iter, err := d.db.QueryContext(ctx, statement, start, end, broker.String(), symbol.String())
 	if err != nil {
 		return nil, err
 	}
