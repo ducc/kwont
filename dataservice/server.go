@@ -5,8 +5,6 @@ import (
 	"github.com/ducc/kwɒnt/protos"
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes"
-	"sort"
-	"time"
 )
 
 type server struct {
@@ -81,84 +79,23 @@ func (s *server) ListStrategies(ctx context.Context, req *protos.ListStrategiesR
 }
 
 func (s *server) GetPriceHistory(ctx context.Context, req *protos.GetPriceHistoryRequest) (*protos.GetPriceHistoryResponse, error) {
-	partials, err := s.db.GetPartialCandlesticks(ctx, req.Symbol.Name.String(), req.Symbol.Broker.String(), time.Now().Add((time.Hour*12)*-1), time.Now())
+	start, err := ptypes.Timestamp(req.Start)
 	if err != nil {
 		return nil, err
 	}
 
-	windowDuration := time.Duration(req.WindowNanoseconds)
-
-	windows := make(map[time.Time][]*protos.Candlestick)
-
-	for _, partial := range partials {
-		timestamp, err := ptypes.Timestamp(partial.Timestamp)
-		if err != nil {
-			return nil, err
-		}
-
-		windowTime := timestamp.Truncate(windowDuration)
-		window, ok := windows[windowTime]
-		if !ok {
-			window = make([]*protos.Candlestick, 0)
-		}
-
-		window = append(window, partial)
-		windows[windowTime] = window
+	end, err := ptypes.Timestamp(req.End)
+	if err != nil {
+		return nil, err
 	}
 
-	aggregated := make([]*protos.Candlestick, 0, len(windows))
-
-	for windowTime, window := range windows {
-		var high, low, open, close int64
-
-		for i, partial := range window {
-			if i == 0 {
-				open = partial.Current
-			}
-
-			if i == len(window)-1 {
-				close = partial.Current
-			}
-
-			if partial.Current > high {
-				high = partial.Current
-			}
-
-			if partial.Current < low || low == 0 {
-				low = partial.Current
-			}
-		}
-
-		ts, err := ptypes.TimestampProto(windowTime)
-		if err != nil {
-			return nil, err
-		}
-
-		aggregated = append(aggregated, &protos.Candlestick{
-			Timestamp: ts,
-			Symbol:    req.Symbol,
-			High:      high,
-			Low:       low,
-			Open:      open,
-			Close:     close,
-		})
-	}
-
-	sort.Slice(aggregated, func(i, j int) bool {
-		var iTimestamp time.Time
-		var jTimestamp time.Time
-
-		iTimestamp, err = ptypes.Timestamp(aggregated[i].Timestamp)
-		jTimestamp, err = ptypes.Timestamp(aggregated[j].Timestamp)
-
-		return iTimestamp.Before(jTimestamp)
-	})
+	candlesticks, err := s.db.GetCandlesticks(ctx, req.Window, req.Broker, req.Symbol, start, end)
 	if err != nil {
 		return nil, err
 	}
 
 	return &protos.GetPriceHistoryResponse{
-		Candlesticks: aggregated,
+		Candlesticks: candlesticks,
 	}, nil
 }
 

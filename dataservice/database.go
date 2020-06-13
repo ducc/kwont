@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"fmt"
 	"github.com/ducc/kwɒnt/protos"
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes"
@@ -33,11 +34,15 @@ func newDatabase(ctx context.Context, connectionString string) (*database, error
 	}, nil
 }
 
-func (d *database) GetPartialCandlesticks(ctx context.Context, symbolName, symbolBroker string, start, end time.Time) ([]*protos.Candlestick, error) {
-	const statement = `SELECT timestamp, current FROM candlesticks WHERE symbol_name = $1 and symbol_broker = $2 ORDER BY timestamp ASC`
-	logrus.Debugf("getting partial candlesticks with symbol name %s symbol broker %s start %s end %s", symbolName, symbolBroker, start.String(), end.String())
+func (d *database) GetCandlesticks(ctx context.Context, window protos.CandlestickWindow_Name, broker protos.Broker_Name, symbol protos.Symbol_Name, start, end time.Time) ([]*protos.Candlestick, error) {
+	table := getCandlestickTableFromWindow(window)
+	if table == "" {
+		return nil, errors.New("unsupported window")
+	}
 
-	iter, err := d.db.QueryContext(ctx, statement, symbolName, symbolBroker)
+	statement := fmt.Sprintf("SELECT timestamp, open_price, close_price, high_price, low_price, buy_volume, sell_volume FROM %s WHERE timestamp >= $1 AND timestamp <= $2 and broker = $3 and symbol = $4 ORDER BY timestamp ASC;", table)
+
+	iter, err := d.db.QueryContext(ctx, statement, start, end, broker, symbol)
 	if err != nil {
 		return nil, err
 	}
@@ -47,21 +52,21 @@ func (d *database) GetPartialCandlesticks(ctx context.Context, symbolName, symbo
 
 	for iter.Next() {
 		var timestamp time.Time
-		var current int64
+		candlestick := &protos.Candlestick{
+			Broker: broker,
+			Symbol: symbol,
+		}
 
-		if err := iter.Scan(&timestamp, &current); err != nil {
+		if err := iter.Scan(&timestamp, &candlestick.OpenPrice, &candlestick.ClosePrice, &candlestick.HighPrice, &candlestick.LowPrice, &candlestick.BuyVolume, &candlestick.SellVolume); err != nil {
 			return nil, err
 		}
 
-		ts, err := ptypes.TimestampProto(timestamp)
+		candlestick.Timestamp, err = ptypes.TimestampProto(timestamp)
 		if err != nil {
 			return nil, err
 		}
 
-		output = append(output, &protos.Candlestick{
-			Timestamp: ts,
-			Current:   current,
-		})
+		output = append(output, candlestick)
 	}
 
 	return output, nil

@@ -34,15 +34,14 @@ message Broker {
 
 message Candlestick {
     google.protobuf.Timestamp timestamp = 1;
-    Symbol symbol = 2;
-    int64 current = 3;
-    int64 low = 4;
-    int64 high = 5;
-    int64 open = 6;
-    int64 close = 7;
-    int64 spread = 8;
-    int64 buy_volume = 9;
-    int64 sell_volume = 10;
+    Broker.Name broker = 2;
+    Symbol.Name symbol = 3;
+    double open_price = 4;
+    double close_price = 5;
+    double high_price = 6;
+    double low_price = 7;
+    double buy_volume = 8;
+    double sell_volume = 9;
 }
 
 message PriceType {
@@ -334,10 +333,11 @@ message CandlestickWindow {
 }
 
 message GetPriceHistoryRequest {
-    Symbol symbol = 1;
-    google.protobuf.Timestamp start = 2;
-    google.protobuf.Timestamp end = 3;
-    int64 window_nanoseconds = 4;
+    Broker.Name broker = 1;
+    Symbol.Name symbol = 2;
+    google.protobuf.Timestamp start = 3;
+    google.protobuf.Timestamp end = 4;
+    CandlestickWindow.Name window = 5;
 }
 message GetPriceHistoryResponse {
     repeated Candlestick candlesticks = 1;
