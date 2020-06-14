@@ -73,7 +73,7 @@ func (s *server) OpenPosition(ctx context.Context, req *protos.OpenPositionReque
 		return nil, err
 	}
 
-	return nil, nil
+	return &protos.OpenPositionResponse{}, nil
 }
 
 func (s *server) ClosePosition(ctx context.Context, req *protos.ClosePositionRequest) (*protos.ClosePositionResponse, error) {
