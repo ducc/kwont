@@ -200,3 +200,17 @@ func (s *server) ListUsers(ctx context.Context, req *protos.ListUsersRequest) (*
 		Users: users,
 	}, nil
 }
+
+func (s *server) AddOrder(ctx context.Context, req *protos.AddOrderRequest) (*protos.AddOrderResponse, error) {
+	ts, err := ptypes.Timestamp(req.Timestamp)
+	if err != nil {
+		return nil, err
+	}
+
+	orderID, err := s.db.InsertOrder(ctx, req.Broker.String(), req.Symbol.String(), req.Direction.String(), req.Price, req.Volume, ts)
+	if err != nil {
+		return nil, err
+	}
+
+	return &protos.AddOrderResponse{OrderId: orderID}, nil
+}

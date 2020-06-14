@@ -377,3 +377,15 @@ func (d *database) UpdateBrokerConnection(ctx context.Context, userID, brokerNam
 
 	return nil
 }
+
+func (d *database) InsertOrder(ctx context.Context, broker, symbol, direction string, price, volume float64, timestamp time.Time) (string, error) {
+	const stmt = `INSERT INTO orders (broker, symbol, direction, price, volume, timestamp) VALUES ($1, $2, $3, $4, $5, $7) RETURNING order_id;`
+	row := d.db.QueryRowContext(ctx, stmt, broker, symbol, direction, price, volume, timestamp)
+
+	var id string
+	if err := row.Scan(&id); err != nil {
+		return "", err
+	}
+
+	return id, nil
+}

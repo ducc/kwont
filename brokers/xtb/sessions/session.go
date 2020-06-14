@@ -7,8 +7,8 @@ import (
 	"github.com/ducc/kwɒnt/brokers/xtb/utils"
 	"github.com/ducc/kwɒnt/protos"
 	"github.com/golang/protobuf/proto"
-	"github.com/nats-io/nats.go"
 	"github.com/sirupsen/logrus"
+	"github.com/streadway/amqp"
 	"sync"
 	"time"
 )
@@ -16,8 +16,9 @@ import (
 type Session struct {
 	sync.Mutex
 
-	natsConn *nats.Conn
-	topic    string
+	amqpChan  *amqp.Channel
+	amqpQueue amqp.Queue
+	topic     string
 
 	SessionID string
 	username  string
@@ -32,7 +33,7 @@ type Session struct {
 	tickSubscriptions map[protos.Symbol_Name]bool
 }
 
-func newSession(ctx context.Context, natsConn *nats.Conn, topic, username, password, sessionID string) (*Session, error) {
+func newSession(ctx context.Context, amqpChan *amqp.Channel, amqpQueue amqp.Queue, topic, username, password, sessionID string) (*Session, error) {
 	tx, err := transactional.New(ctx)
 	if err != nil {
 		panic(err)
@@ -56,7 +57,8 @@ func newSession(ctx context.Context, natsConn *nats.Conn, topic, username, passw
 	}
 
 	s := &Session{
-		natsConn:          natsConn,
+		amqpChan:          amqpChan,
+		amqpQueue:         amqpQueue,
 		topic:             topic,
 		SessionID:         sessionID,
 		username:          username,
@@ -133,21 +135,46 @@ func (s *Session) GetTickSubscription() []protos.Symbol_Name {
 
 func (s *Session) transformTickPricesToProto() {
 	defer func() {
-		// todo other real time data needs to use this chan too
 		s.finished <- struct{}{}
 	}()
 
-	for tickPrice := range s.stream.GetTickPricesResponses() {
-		ctx := context.Background()
+	wg := &sync.WaitGroup{}
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
 
-		tick, err := utils.TickPriceToProto(tickPrice)
-		if err != nil {
-			logrus.WithError(err).Error("converting tick price to proto")
-			continue
+		for tickPrice := range s.stream.GetTickPricesResponses() {
+			ctx := context.Background()
+
+			tick, err := utils.TickPriceToProto(tickPrice)
+			if err != nil {
+				logrus.WithError(err).Error("converting tick price to proto")
+				continue
+			}
+
+			s.sendTickToQueue(ctx, tick)
 		}
+	}()
 
-		s.sendTickToQueue(ctx, tick)
-	}
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+
+		for trade := range s.stream.GetTradesResponses() {
+			_ = trade
+		}
+	}()
+
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+
+		for tradeStatus := range s.stream.GetTradeStatusResponses() {
+			_ = tradeStatus
+		}
+	}()
+
+	wg.Wait()
 }
 
 func (s *Session) sendTickToQueue(ctx context.Context, tick *protos.Tick) {
@@ -157,7 +184,15 @@ func (s *Session) sendTickToQueue(ctx context.Context, tick *protos.Tick) {
 		return
 	}
 
-	if err := s.natsConn.Publish(s.topic, bytes); err != nil {
-		logrus.WithError(err).Error("error publishing tick")
+	if err := s.amqpChan.Publish(
+		"",               // exchange
+		s.amqpQueue.Name, // routing key
+		false,            // mandatory
+		false,
+		amqp.Publishing{
+			DeliveryMode: amqp.Persistent,
+			Body:         bytes,
+		}); err != nil {
+		logrus.WithError(err).Error("publishing tick amqp message")
 	}
 }

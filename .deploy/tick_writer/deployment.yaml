@@ -22,7 +22,7 @@ spec:
           imagePullPolicy: Always
           args:
             - --level=debug
-            - --nats-address=nats-cluster.default.svc:4222
+            - --amqp-address=amqp://user:pass@rabbitmq.default:5672/
             - --topic=ticks
             - --dataservice-address=dataservice.data:8080
           resources:

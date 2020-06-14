@@ -256,6 +256,8 @@ service DataService {
     rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);
     rpc UpdateUser(UpdateUserRequest) returns (UpdateUserResponse);
     rpc ListUsers(ListUsersRequest) returns (ListUsersResponse);
+
+    rpc AddOrder(AddOrderRequest) returns (AddOrderResponse);
 }
 
 message CreateStrategyRequest {
@@ -389,6 +391,18 @@ message ListUsersRequest {
 }
 message ListUsersResponse {
     repeated User users = 1;
+}
+
+message AddOrderRequest {
+    Broker.Name broker = 1;
+    Symbol.Name symbol = 2;
+    Direction.Name direction = 3;
+    double price = 4;
+    double volume = 5;
+    google.protobuf.Timestamp timestamp = 6;
+}
+message AddOrderResponse {
+    string order_id = 1;
 }
 
 service BrokerService {

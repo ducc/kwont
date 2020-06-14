@@ -96,25 +96,25 @@ type GetTradesResponse struct {
 }
 
 type GetTradesResponseData struct {
-	ClosePrice    float64                  `json:"close_price"`
-	CloseTime     int64                    `json:"close_time"`
-	Closed        bool                     `json:"closed"`
-	Cmd           GetTradesResponseDataCmd `json:"cmd"`
-	Comment       string                   `json:"comment"`
-	Commission    float64                  `json:"commission"`
-	CustomComment string                   `json:"customComment"`
-	Digits        int64                    `json:"digits"`
-	Expiration    int64                    `json:"expiration"`
-	MarginRate    float64                  `json:"margin_rate"`
-	Offset        int64                    `json:"offset"`
-	OpenPrice     float64                  `json:"open_price"`
-	OpenTime      int64                    `json:"open_time"`
-	Order         int64                    `json:"order"`
-	Order2        int64                    `json:"order2"`
-	Position      int64                    `json:"position"`
-	Profit        float64                  `json:"profit"`
-	StopLoss      float64                  `json:"sl"`
-	State         GetTradesResponseDataCmd
+	ClosePrice    float64                   `json:"close_price"`
+	CloseTime     int64                     `json:"close_time"`
+	Closed        bool                      `json:"closed"`
+	Cmd           GetTradesResponseDataCmd  `json:"cmd"`
+	Comment       string                    `json:"comment"`
+	Commission    float64                   `json:"commission"`
+	CustomComment string                    `json:"customComment"`
+	Digits        int64                     `json:"digits"`
+	Expiration    int64                     `json:"expiration"`
+	MarginRate    float64                   `json:"margin_rate"`
+	Offset        int64                     `json:"offset"`
+	OpenPrice     float64                   `json:"open_price"`
+	OpenTime      int64                     `json:"open_time"`
+	Order         int64                     `json:"order"`
+	Order2        int64                     `json:"order2"`
+	Position      int64                     `json:"position"`
+	Profit        float64                   `json:"profit"`
+	StopLoss      float64                   `json:"sl"`
+	State         GetTradesResponseDataCmd  `json:"state"`
 	Storage       float64                   `json:"storage"`
 	Symbol        string                    `json:"symbol"`
 	TakeProfit    float64                   `json:"tp"`

@@ -4,8 +4,8 @@ import (
 	"context"
 	"github.com/ducc/kwɒnt/brokers/xtb/sessions"
 	"github.com/ducc/kwɒnt/protos"
-	"github.com/nats-io/nats.go"
 	"github.com/sirupsen/logrus"
+	"github.com/streadway/amqp"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"os"
@@ -18,15 +18,17 @@ type server struct {
 	protos.BrokerServiceServer
 	sessionsLock sync.Mutex
 	sessions     map[string]*sessions.SessionController
-	natsConn     *nats.Conn
+	amqpChan     *amqp.Channel
+	amqpQueue    amqp.Queue
 	topic        string
 }
 
-func New(natsConn *nats.Conn, topic string, router protos.BrokerServiceClient) *server {
+func New(amqpChan *amqp.Channel, amqpQueue amqp.Queue, topic string, router protos.BrokerServiceClient) *server {
 	s := &server{
-		sessions: make(map[string]*sessions.SessionController),
-		natsConn: natsConn,
-		topic:    topic,
+		sessions:  make(map[string]*sessions.SessionController),
+		amqpChan:  amqpChan,
+		amqpQueue: amqpQueue,
+		topic:     topic,
 	}
 	go s.registerWithRouter(router)
 
@@ -136,7 +138,7 @@ func (s *server) listSessionIDs() []string {
 }
 
 func (s *server) createSession(ctx context.Context, username, password string) (*sessions.SessionController, error) {
-	session, err := sessions.New(ctx, s.natsConn, s.topic, username, password)
+	session, err := sessions.New(ctx, s.amqpChan, s.amqpQueue, s.topic, username, password)
 	if err != nil {
 		return nil, err
 	}

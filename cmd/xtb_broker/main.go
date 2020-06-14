@@ -6,8 +6,8 @@ import (
 	"github.com/ducc/kwɒnt/brokers"
 	"github.com/ducc/kwɒnt/brokers/xtb"
 	"github.com/ducc/kwɒnt/protos"
-	"github.com/nats-io/nats.go"
 	"github.com/sirupsen/logrus"
+	"github.com/streadway/amqp"
 	"google.golang.org/grpc"
 	"net"
 	"os"
@@ -15,9 +15,7 @@ import (
 
 var (
 	level         string
-	natsAddress   string
-	natsUsername  string
-	natsPassword  string
+	amqpAddress   string
 	topic         string
 	serverAddress string
 	routerAddress string
@@ -25,9 +23,7 @@ var (
 
 func init() {
 	flag.StringVar(&level, "level", "debug", "logrus logging level")
-	flag.StringVar(&natsAddress, "nats-address", "127.0.0.1:4150", "nats server address")
-	flag.StringVar(&natsUsername, "nats-username", "kwont", "nats username")
-	flag.StringVar(&natsPassword, "nats-password", "password", "nats password")
+	flag.StringVar(&amqpAddress, "amqp-address", "", "amqp server connection address")
 	flag.StringVar(&topic, "topic", "ticks", "nats topic")
 	flag.StringVar(&serverAddress, "server-address", ":8080", "grpc server address")
 	flag.StringVar(&routerAddress, "router-address", "", "router service address")
@@ -43,9 +39,36 @@ func main() {
 
 	logrus.WithField("POD_IP", os.Getenv("POD_IP")).Debug("starting xtb broker")
 
-	natsConn, err := nats.Connect(natsAddress, nats.UserInfo(natsUsername, natsPassword))
+	amqpConn, err := amqp.Dial(amqpAddress)
 	if err != nil {
-		logrus.WithError(err).Fatal("connecting to nats")
+		logrus.WithError(err).Fatal("connecting to amqp server")
+	}
+	defer func() {
+		if err := amqpConn.Close(); err != nil {
+			logrus.WithError(err).Error("closing amqp conn")
+		}
+	}()
+
+	amqpChan, err := amqpConn.Channel()
+	if err != nil {
+		logrus.WithError(err).Fatal("creating amqp channel")
+	}
+	defer func() {
+		if err := amqpChan.Close(); err != nil {
+			logrus.WithError(err).Error("closing amqp chan")
+		}
+	}()
+
+	amqpQueue, err := amqpChan.QueueDeclare(
+		topic,
+		true,
+		false,
+		false,
+		false,
+		nil,
+	)
+	if err != nil {
+		logrus.WithError(err).Fatal("declaring amqp queue")
 	}
 
 	ctx := context.Background()
@@ -55,7 +78,7 @@ func main() {
 		logrus.WithError(err).Fatal("connecting to router")
 	}
 
-	server := xtb.New(natsConn, topic, routerConn)
+	server := xtb.New(amqpChan, amqpQueue, topic, routerConn)
 	grpcServer := grpc.NewServer()
 
 	protos.RegisterBrokerServiceServer(grpcServer, server)

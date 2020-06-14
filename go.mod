@@ -14,6 +14,7 @@ require (
 	github.com/onsi/ginkgo v1.12.0 // indirect
 	github.com/onsi/gomega v1.9.0 // indirect
 	github.com/sirupsen/logrus v1.4.2
+	github.com/streadway/amqp v1.0.0
 	google.golang.org/grpc v1.27.1
 	google.golang.org/protobuf v1.24.0
 )

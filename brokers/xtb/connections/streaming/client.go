@@ -13,7 +13,9 @@ type Client struct {
 	streamSessionID string
 	log             *logrus.Entry
 
-	getTickPricesResponses chan *GetTickPricesResponse
+	getTickPricesResponses  chan *GetTickPricesResponse
+	getTradesResponses      chan *GetTradesResponse
+	getTradeStatusResponses chan *GetTradeStatusResponse
 }
 
 func New(ctx context.Context, streamSessionID string) (*Client, error) {
@@ -24,10 +26,12 @@ func New(ctx context.Context, streamSessionID string) (*Client, error) {
 	}
 
 	c := &Client{
-		conn:                   conn,
-		streamSessionID:        streamSessionID,
-		log:                    logrus.WithField("client", "stream"),
-		getTickPricesResponses: make(chan *GetTickPricesResponse),
+		conn:                    conn,
+		streamSessionID:         streamSessionID,
+		log:                     logrus.WithField("client", "stream"),
+		getTickPricesResponses:  make(chan *GetTickPricesResponse),
+		getTradesResponses:      make(chan *GetTradesResponse),
+		getTradeStatusResponses: make(chan *GetTradeStatusResponse),
 	}
 
 	go c.PingLoop()
@@ -50,8 +54,19 @@ func (c *Client) GetTickPricesResponses() <-chan *GetTickPricesResponse {
 	return c.getTickPricesResponses
 }
 
+func (c *Client) GetTradesResponses() <-chan *GetTradesResponse {
+	return c.getTradesResponses
+}
+
+func (c *Client) GetTradeStatusResponses() <-chan *GetTradeStatusResponse {
+	return c.getTradeStatusResponses
+}
+
+// todo gross make a message bus or something
 func (c *Client) ProcessMessages() {
 	defer close(c.getTickPricesResponses)
+	defer close(c.getTradesResponses)
+	defer close(c.getTradeStatusResponses)
 
 	for data := range c.conn.ReadMessages() {
 		var dataMap map[string]interface{}
@@ -75,6 +90,24 @@ func (c *Client) ProcessMessages() {
 					continue
 				}
 				c.getTickPricesResponses <- &tickPrices
+			}
+		case "trade":
+			{
+				var trades GetTradesResponse
+				if err := json.Unmarshal(data, &trades); err != nil {
+					c.log.WithError(err).Error("unmarshalling data as GetTradesResponse")
+					continue
+				}
+				c.getTradesResponses <- &trades
+			}
+		case "tradeStatus":
+			{
+				var tradeStatus GetTradeStatusResponse
+				if err := json.Unmarshal(data, &tradeStatus); err != nil {
+					c.log.WithError(err).Error("unmarshalling data as GetTradeStatusResponse")
+					continue
+				}
+				c.getTradeStatusResponses <- &tradeStatus
 			}
 		default:
 			c.log.WithField("command", command).Debug("unhandled command")

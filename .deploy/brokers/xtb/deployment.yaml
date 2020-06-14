@@ -22,9 +22,8 @@ spec:
           imagePullPolicy: Always
           args:
             - --level=debug
-            - --nats-address=nats-cluster.default.svc:4222
+            - --amqp-address=amqp://user:pass@rabbitmq.default:5672/
             - --router-address=xtb-router.brokers:8080
-            # todo username and password
           resources:
             requests:
               cpu: 50m

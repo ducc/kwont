@@ -28,6 +28,8 @@ github.com/nats-io/nkeys
 github.com/nats-io/nuid
 # github.com/sirupsen/logrus v1.4.2
 github.com/sirupsen/logrus
+# github.com/streadway/amqp v1.0.0
+github.com/streadway/amqp
 # golang.org/x/crypto v0.0.0-20190701094942-4def268fd1a4
 golang.org/x/crypto/ed25519
 golang.org/x/crypto/ed25519/internal/edwards25519

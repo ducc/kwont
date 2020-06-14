@@ -4,8 +4,8 @@ import (
 	"context"
 	"github.com/google/uuid"
 	"github.com/jpillora/backoff"
-	"github.com/nats-io/nats.go"
 	"github.com/sirupsen/logrus"
+	"github.com/streadway/amqp"
 	"sync"
 	"time"
 )
@@ -15,14 +15,14 @@ type SessionController struct {
 	sync.Mutex
 }
 
-func New(ctx context.Context, natsConn *nats.Conn, topic, username, password string) (*SessionController, error) {
+func New(ctx context.Context, amqpChan *amqp.Channel, amqpQueue amqp.Queue, topic, username, password string) (*SessionController, error) {
 	s := &SessionController{}
 
 	sessionID := uuid.New().String()
 	log := logrus.WithField("session_id", sessionID)
 
 	createSession := func() error {
-		session, err := newSession(ctx, natsConn, topic, username, password, sessionID)
+		session, err := newSession(ctx, amqpChan, amqpQueue, topic, username, password, sessionID)
 		if err != nil {
 			return err
 		}

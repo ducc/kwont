@@ -5,24 +5,20 @@ import (
 	"flag"
 	"github.com/ducc/kwɒnt/dataservice"
 	"github.com/ducc/kwɒnt/tick_writer"
-	"github.com/nats-io/nats.go"
 	"github.com/sirupsen/logrus"
+	"github.com/streadway/amqp"
 )
 
 var (
-	level        string
-	natsAddress  string
-	natsUsername string
-	natsPassword string
-	topic        string
+	level       string
+	amqpAddress string
+	topic       string
 )
 
 func init() {
 	flag.StringVar(&level, "level", "debug", "")
-	flag.StringVar(&natsAddress, "nats-address", "127.0.0.1:4150", "nats server address")
-	flag.StringVar(&natsUsername, "nats-username", "kwont", "nats username")
-	flag.StringVar(&natsPassword, "nats-password", "password", "nats password")
-	flag.StringVar(&topic, "topic", "", "")
+	flag.StringVar(&amqpAddress, "amqp-address", "", "amqp server connection address")
+	flag.StringVar(&topic, "topic", "ticks", "")
 }
 
 func main() {
@@ -40,15 +36,50 @@ func main() {
 		logrus.WithError(err).Fatal("creating dataservice client")
 	}
 
-	natsConn, err := nats.Connect(natsAddress, nats.UserInfo(natsUsername, natsPassword))
+	amqpConn, err := amqp.Dial(amqpAddress)
 	if err != nil {
-		logrus.WithError(err).Fatal("connecting to nats")
+		logrus.WithError(err).Fatal("connecting to amqp server")
+	}
+	defer func() {
+		if err := amqpConn.Close(); err != nil {
+			logrus.WithError(err).Error("closing amqp conn")
+		}
+	}()
+
+	amqpChan, err := amqpConn.Channel()
+	if err != nil {
+		logrus.WithError(err).Fatal("creating amqp channel")
+	}
+	defer func() {
+		if err := amqpChan.Close(); err != nil {
+			logrus.WithError(err).Error("closing amqp chan")
+		}
+	}()
+
+	q, err := amqpChan.QueueDeclare(
+		topic,
+		true,
+		false,
+		false,
+		false,
+		nil,
+	)
+	if err != nil {
+		logrus.WithError(err).Fatal("declaring amqp queue")
 	}
 
-	subscription, err := natsConn.SubscribeSync(topic)
+	msgs, err := amqpChan.Consume(
+		q.Name,
+		"",
+		false,
+		false,
+		false,
+		false,
+		nil,
+	)
 	if err != nil {
-		logrus.WithError(err).Fatal("subscribing to topic")
+		logrus.WithError(err).Fatal("declaring amqp consumer")
 	}
 
-	tick_writer.Run(ctx, ds, subscription)
+	tick_writer.Run(ctx, ds, msgs)
 }

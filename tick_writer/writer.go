@@ -4,36 +4,26 @@ import (
 	"context"
 	"github.com/ducc/kwɒnt/protos"
 	"github.com/golang/protobuf/proto"
-	"github.com/nats-io/nats.go"
 	"github.com/sirupsen/logrus"
+	"github.com/streadway/amqp"
 )
 
 type writer struct {
 	ds protos.DataServiceClient
 }
 
-func Run(ctx context.Context, ds protos.DataServiceClient, subscription *nats.Subscription) {
+func Run(ctx context.Context, ds protos.DataServiceClient, messages <-chan amqp.Delivery) {
 	w := &writer{
 		ds: ds,
 	}
 
-	w.processMessages(ctx, subscription)
+	w.processMessages(ctx, messages)
 }
 
-func (w *writer) processMessages(ctx context.Context, subscription *nats.Subscription) {
-	for {
-		msg, err := subscription.NextMsgWithContext(ctx)
-		if err != nil {
-			logrus.WithError(err).Fatal("getting next message")
-		}
-
-		if msg == nil {
-			logrus.Debug("received nil message")
-			continue
-		}
-
-		if msg.Data == nil || len(msg.Data) == 0 {
-			logrus.Debug("data is nil or empty")
+func (w *writer) processMessages(ctx context.Context, messages <-chan amqp.Delivery) {
+	for msg := range messages {
+		if msg.Body == nil || len(msg.Body) == 0 {
+			logrus.Debug("body is nil or empty")
 			continue
 		}
 
@@ -41,23 +31,31 @@ func (w *writer) processMessages(ctx context.Context, subscription *nats.Subscri
 	}
 }
 
-func (w *writer) processMessage(ctx context.Context, msg *nats.Msg) {
+func (w *writer) processMessage(ctx context.Context, msg amqp.Delivery) {
 	var tick protos.Tick
-	if err := proto.Unmarshal(msg.Data, &tick); err != nil {
+	if err := proto.Unmarshal(msg.Body, &tick); err != nil {
 		logrus.WithError(err).Error("unmarshalling message to tick")
 		return
 	}
 
-	w.sendToDatabase(ctx, &tick)
+	if err := w.sendToDatabase(ctx, &tick); err != nil {
+		logrus.WithError(err).Error("sending tick to database")
+		return
+	}
+
+	if err := msg.Ack(false); err != nil {
+		logrus.WithError(err).Error("acking message")
+	}
 }
 
-func (w *writer) sendToDatabase(ctx context.Context, tick *protos.Tick) {
+func (w *writer) sendToDatabase(ctx context.Context, tick *protos.Tick) error {
 	logrus.WithField("tick", tick).Debug("sending tick to database")
 
 	if _, err := w.ds.AddTick(ctx, &protos.AddTickRequest{
 		Tick: tick,
 	}); err != nil {
-		logrus.WithError(err).Error("sending tick to database")
-		return
+		return err
 	}
+
+	return nil
 }

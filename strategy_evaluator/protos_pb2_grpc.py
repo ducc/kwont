@@ -58,6 +58,11 @@ class DataServiceStub(object):
                 request_serializer=protos__pb2.ListUsersRequest.SerializeToString,
                 response_deserializer=protos__pb2.ListUsersResponse.FromString,
                 )
+        self.AddOrder = channel.unary_unary(
+                '/protos.DataService/AddOrder',
+                request_serializer=protos__pb2.AddOrderRequest.SerializeToString,
+                response_deserializer=protos__pb2.AddOrderResponse.FromString,
+                )
 
 
 class DataServiceServicer(object):
@@ -117,6 +122,12 @@ class DataServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def AddOrder(self, request, context):
+        """Missing associated documentation comment in .proto file"""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_DataServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -164,6 +175,11 @@ def add_DataServiceServicer_to_server(servicer, server):
                     servicer.ListUsers,
                     request_deserializer=protos__pb2.ListUsersRequest.FromString,
                     response_serializer=protos__pb2.ListUsersResponse.SerializeToString,
+            ),
+            'AddOrder': grpc.unary_unary_rpc_method_handler(
+                    servicer.AddOrder,
+                    request_deserializer=protos__pb2.AddOrderRequest.FromString,
+                    response_serializer=protos__pb2.AddOrderResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -316,6 +332,22 @@ class DataService(object):
         return grpc.experimental.unary_unary(request, target, '/protos.DataService/ListUsers',
             protos__pb2.ListUsersRequest.SerializeToString,
             protos__pb2.ListUsersResponse.FromString,
+            options, channel_credentials,
+            call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def AddOrder(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/protos.DataService/AddOrder',
+            protos__pb2.AddOrderRequest.SerializeToString,
+            protos__pb2.AddOrderResponse.FromString,
             options, channel_credentials,
             call_credentials, compression, wait_for_ready, timeout, metadata)
 
