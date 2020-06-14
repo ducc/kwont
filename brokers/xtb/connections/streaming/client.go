@@ -33,6 +33,10 @@ func New(ctx context.Context, streamSessionID string) (*Client, error) {
 	go c.PingLoop()
 	go c.ProcessMessages()
 
+	if err := c.SendGetTradeStatus(ctx); err != nil {
+		return nil, err
+	}
+
 	return c, nil
 }
 
@@ -109,6 +113,13 @@ func (c *Client) SendGetTickPrices(ctx context.Context, symbol string) error {
 func (c *Client) SendGetNews(ctx context.Context) error {
 	return c.conn.WriteJSON(ctx, &GetNewsRequest{
 		Command:         "getNews",
+		StreamSessionID: c.streamSessionID,
+	})
+}
+
+func (c *Client) SendGetTradeStatus(ctx context.Context) error {
+	return c.conn.WriteJSON(ctx, &GetTradeStatusRequest{
+		Command:         "getTradeStatus",
 		StreamSessionID: c.streamSessionID,
 	})
 }
