@@ -9,6 +9,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"os"
+	"strconv"
 	"sync"
 	"time"
 )
@@ -69,7 +70,7 @@ func (s *server) OpenPosition(ctx context.Context, req *protos.OpenPositionReque
 		return nil, ErrSessionDoesNotExist
 	}
 
-	if err := session.SendTradeTransaction(ctx, req.Symbol, req.Direction, req.Price, req.Voliume, true); err != nil {
+	if err := session.OpenTradeTransaction(ctx, req.Symbol, req.Direction, req.Price, req.Voliume); err != nil {
 		return nil, err
 	}
 
@@ -82,9 +83,16 @@ func (s *server) ClosePosition(ctx context.Context, req *protos.ClosePositionReq
 		return nil, ErrSessionDoesNotExist
 	}
 
-	// todo
+	order, err := strconv.ParseInt(req.Id, 10, 64)
+	if err != nil {
+		return nil, err
+	}
 
-	return nil, nil
+	if err := session.CloseTradeTransaction(ctx, order); err != nil {
+		return nil, err
+	}
+
+	return &protos.ClosePositionResponse{}, nil
 }
 
 func (s *server) GetBrokerPriceHistory(ctx context.Context, req *protos.GetBrokerPriceHistoryRequest) (*protos.GetBrokerPriceHistoryResponse, error) {

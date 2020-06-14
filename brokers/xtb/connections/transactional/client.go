@@ -141,19 +141,14 @@ func (c *Client) SendLogin(ctx context.Context, username, password string) error
 	return c.conn.WriteJSON(ctx, msg)
 }
 
-func (c *Client) SendTradeTransaction(ctx context.Context, symbol string, direction protos.Direction_Name, price, volume float64, open bool /* true for open, false for close todo gross */) error {
-	c.log.Debug("sending trade transaction message")
+func (c *Client) OpenTradeTransaction(ctx context.Context, symbol string, direction protos.Direction_Name, price, volume float64) error {
+	c.log.Debug("sending open trade transaction message")
 
 	info := &TradeTransactionInfo{
 		Symbol: symbol,
 		Price:  price,
 		Volume: volume,
-	}
-
-	if open {
-		info.Type = TradeTransactionInfoType_OPEN
-	} else {
-		info.Type = TradeTransactionInfoType_CLOSE
+		Type:   TradeTransactionInfoType_OPEN,
 	}
 
 	switch direction {
@@ -169,6 +164,22 @@ func (c *Client) SendTradeTransaction(ctx context.Context, symbol string, direct
 		Command: "tradeTransaction",
 		Arguments: &TradeTransactionArguments{
 			TradeTransInfo: info,
+		},
+	}
+
+	return c.conn.WriteJSON(ctx, msg)
+}
+
+func (c *Client) CloseTradeTransaction(ctx context.Context, order int64) error {
+	c.log.Debug("sending clow trade transaction message")
+
+	msg := &TradeTransactionRequest{
+		Command: "tradeTransaction",
+		Arguments: &TradeTransactionArguments{
+			TradeTransInfo: &TradeTransactionInfo{
+				Order: order,
+				Type:  TradeTransactionInfoType_CLOSE,
+			},
 		},
 	}
 

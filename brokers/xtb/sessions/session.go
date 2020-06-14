@@ -101,13 +101,17 @@ func (s *Session) AddTickSubscription(ctx context.Context, symbol protos.Symbol_
 	return nil
 }
 
-func (s *Session) SendTradeTransaction(ctx context.Context, symbol protos.Symbol_Name, direction protos.Direction_Name, price, volume float64, open bool) error {
+func (s *Session) OpenTradeTransaction(ctx context.Context, symbol protos.Symbol_Name, direction protos.Direction_Name, price, volume float64) error {
 	symbolName := utils.SymbolFromProto(symbol)
 	if symbolName == "" {
 		return utils.ErrUnsupportedSymbol
 	}
 
-	return s.tx.SendTradeTransaction(ctx, symbolName, direction, price, volume, open)
+	return s.tx.OpenTradeTransaction(ctx, symbolName, direction, price, volume)
+}
+
+func (s *Session) CloseTradeTransaction(ctx context.Context, order int64) error {
+	return s.tx.CloseTradeTransaction(ctx, order)
 }
 
 func (s *Session) GetTickSubscription() []protos.Symbol_Name {
