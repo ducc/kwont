@@ -82,16 +82,7 @@ type MockBrokerServiceClient struct {
 }
 
 func (c *MockBrokerServiceClient) OpenPosition(ctx context.Context, in *protos.OpenPositionRequest, opts ...grpc.CallOption) (*protos.OpenPositionResponse, error) {
-	ts, err := ptypes.TimestampProto(time.Now())
-	if err != nil {
-		return nil, err
-	}
-
-	return &protos.OpenPositionResponse{
-		Id:             "1234",
-		ExecutionTime:  ts,
-		ExecutionPrice: 123,
-	}, nil
+	return &protos.OpenPositionResponse{}, nil
 }
 
 func (c *MockBrokerServiceClient) ClosePosition(ctx context.Context, in *protos.ClosePositionRequest, opts ...grpc.CallOption) (*protos.ClosePositionResponse, error) {

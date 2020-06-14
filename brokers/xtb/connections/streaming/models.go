@@ -57,3 +57,30 @@ type GetNewsRequest struct {
 	Command         string `json:"command"`
 	StreamSessionID string `json:"streamSessionId"`
 }
+
+type GetTradeStatusRequest struct {
+	Command         string `json:"command"`
+	StreamSessionID string `json:"streamSessionId"`
+}
+
+type GetTradeStatusResponse struct {
+	Command string                      `json:"command"`
+	Data    *GetTradeStatusResponseData `json:"data"`
+}
+
+type GetTradeStatusResponseData struct {
+	CustomComment string                      `json:"customComment"`
+	Message       string                      `json:"message"`
+	Order         int                         `json:"order"`
+	Price         float64                     `json:"price"`
+	RequestStatus GetTradeStatusRequestStatus `json:"requestStatus"`
+}
+
+type GetTradeStatusRequestStatus int
+
+const (
+	GetTradeStatusRequestStatus_ERROR    = 0
+	GetTradeStatusRequestStatus_PENDING  = 1
+	GetTradeStatusRequestStatus_ACCEPTED = 3
+	GetTradeStatusRequestStatus_REJECTED = 4
+)
