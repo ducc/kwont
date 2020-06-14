@@ -420,15 +420,11 @@ message OpenSessionResponse {
 message OpenPositionRequest {
     string session_id = 1;
     Direction.Name direction = 2;
-    int64 price = 3;
-    Symbol symbol = 4;
+    Symbol.Name symbol = 3;
+    double price = 4;
+    double voliume = 5;
 }
-
-message OpenPositionResponse {
-    string id = 1;
-    google.protobuf.Timestamp execution_time = 2;
-    int64 execution_price = 3;
-}
+message OpenPositionResponse {}
 
 message ClosePositionRequest {
     string session_id = 1;

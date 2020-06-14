@@ -113,18 +113,21 @@ func (r *runner) openPosition(ctx context.Context, strategy *protos.Strategy, op
 
 	res, err := r.broker.OpenPosition(ctx, &protos.OpenPositionRequest{
 		Direction: openPosition.Direction,
-		Price:     openPosition.Price,
+		// todo
+		//Price:     openPosition.Price,
 	})
 	if err != nil {
 		logrus.WithError(err).Error("opening position")
 		return
 	}
 
+	_ = res //todo
 	strategy.Positions = append(strategy.Positions, &protos.Position{
 		Direction: openPosition.Direction,
-		OpenPrice: res.ExecutionPrice,
-		OpenTime:  res.ExecutionTime,
-		Id:        res.Id,
+		// todo
+		//OpenPrice: res.ExecutionPrice,
+		//OpenTime:  res.ExecutionTime,
+		//Id:        res.Id,
 	})
 
 	if _, err := r.ds.UpdateStrategy(ctx, &protos.UpdateStrategyRequest{

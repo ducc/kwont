@@ -3,7 +3,9 @@ package transactional
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"github.com/ducc/kwɒnt/brokers/xtb/connections"
+	"github.com/ducc/kwɒnt/protos"
 	"github.com/sirupsen/logrus"
 	"strings"
 	"sync"
@@ -65,7 +67,6 @@ func (c *Client) processMessage(data []byte) {
 	}
 
 	_ = data // todo
-
 }
 
 func (c *Client) WaitForStreamSessionID(ctx context.Context, timeout time.Duration) (string, error) {
@@ -131,6 +132,39 @@ func (c *Client) SendLogin(ctx context.Context, username, password string) error
 			UserID:   username,
 			Password: password,
 			AppName:  appName,
+		},
+	}
+
+	return c.conn.WriteJSON(ctx, msg)
+}
+
+func (c *Client) SendTradeTransaction(ctx context.Context, symbol string, direction protos.Direction_Name, volume float64, open bool /* true for open, false for close todo gross */) error {
+	c.log.Debug("sending trade transaction message")
+
+	info := &TradeTransactionInfo{
+		Symbol: symbol,
+		Volume: volume,
+	}
+
+	if open {
+		info.Type = TradeTransactionInfoType_OPEN
+	} else {
+		info.Type = TradeTransactionInfoType_CLOSE
+	}
+
+	switch direction {
+	case protos.Direction_BUY:
+		info.Cmd = TradeTransactionInfoOperationCode_BUY
+	case protos.Direction_SELL:
+		info.Cmd = TradeTransactionInfoOperationCode_SELL
+	default:
+		return errors.New("unknown direction")
+	}
+
+	msg := &TradeTransactionRequest{
+		Command: "tradeTransaction",
+		Arguments: &TradeTransactionArguments{
+			TradeTransInfo: info,
 		},
 	}
 
