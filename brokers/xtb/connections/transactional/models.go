@@ -36,7 +36,7 @@ type TradeTransactionInfo struct {
 	Expiration    int                               `json:"expiration,omitempty"`
 	Offset        int                               `json:"offset,omitempty"`
 	Order         int                               `json:"order"`
-	Price         float64                           `json:"price,omitempty"`
+	Price         float64                           `json:"price"`
 	StopLoss      float64                           `json:"sl,omitempty"`
 	Symbol        string                            `json:"symbol"`
 	TakeProfit    float64                           `json:"tp,omitempty"`

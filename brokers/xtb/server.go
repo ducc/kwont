@@ -69,7 +69,7 @@ func (s *server) OpenPosition(ctx context.Context, req *protos.OpenPositionReque
 		return nil, ErrSessionDoesNotExist
 	}
 
-	if err := session.SendTradeTransaction(ctx, req.Symbol, req.Direction, req.Voliume, true); err != nil {
+	if err := session.SendTradeTransaction(ctx, req.Symbol, req.Direction, req.Price, req.Voliume, true); err != nil {
 		return nil, err
 	}
 

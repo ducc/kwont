@@ -141,11 +141,12 @@ func (c *Client) SendLogin(ctx context.Context, username, password string) error
 	return c.conn.WriteJSON(ctx, msg)
 }
 
-func (c *Client) SendTradeTransaction(ctx context.Context, symbol string, direction protos.Direction_Name, volume float64, open bool /* true for open, false for close todo gross */) error {
+func (c *Client) SendTradeTransaction(ctx context.Context, symbol string, direction protos.Direction_Name, price, volume float64, open bool /* true for open, false for close todo gross */) error {
 	c.log.Debug("sending trade transaction message")
 
 	info := &TradeTransactionInfo{
 		Symbol: symbol,
+		Price:  price,
 		Volume: volume,
 	}
 
