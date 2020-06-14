@@ -39,7 +39,7 @@ type TradeTransactionInfo struct {
 	Price         float64                           `json:"price"`
 	StopLoss      float64                           `json:"sl"`
 	Symbol        string                            `json:"symbol"`
-	TakeProfit    string                            `json:"tp"`
+	TakeProfit    float64                           `json:"tp"`
 	Type          TradeTransactionInfoType          `json:"type"`
 	Volume        float64                           `json:"volume"`
 }
