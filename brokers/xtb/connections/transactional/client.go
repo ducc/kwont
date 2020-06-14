@@ -67,6 +67,9 @@ func (c *Client) processMessage(data []byte) {
 	}
 
 	_ = data // todo
+	if data != nil {
+		c.log.Debugf("received data: %s", string(data))
+	}
 }
 
 func (c *Client) WaitForStreamSessionID(ctx context.Context, timeout time.Duration) (string, error) {
