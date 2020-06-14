@@ -170,15 +170,16 @@ func (c *Client) OpenTradeTransaction(ctx context.Context, symbol string, direct
 	return c.conn.WriteJSON(ctx, msg)
 }
 
-func (c *Client) CloseTradeTransaction(ctx context.Context, order int64) error {
-	c.log.Debug("sending clow trade transaction message")
+func (c *Client) CloseTradeTransaction(ctx context.Context, symbol string, order int64) error {
+	c.log.Debug("sending close trade transaction message")
 
 	msg := &TradeTransactionRequest{
 		Command: "tradeTransaction",
 		Arguments: &TradeTransactionArguments{
 			TradeTransInfo: &TradeTransactionInfo{
-				Order: order,
-				Type:  TradeTransactionInfoType_CLOSE,
+				Order:  order,
+				Type:   TradeTransactionInfoType_CLOSE,
+				Symbol: symbol,
 			},
 		},
 	}

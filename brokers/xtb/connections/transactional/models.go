@@ -31,17 +31,17 @@ type TradeTransactionArguments struct {
 }
 
 type TradeTransactionInfo struct {
-	Cmd           TradeTransactionInfoOperationCode `json:"cmd"`
+	Cmd           TradeTransactionInfoOperationCode `json:"cmd,omitempty"`
 	CustomComment string                            `json:"customCommand,omitempty"`
 	Expiration    int64                             `json:"expiration,omitempty"`
 	Offset        int64                             `json:"offset,omitempty"`
 	Order         int64                             `json:"order"`
-	Price         float64                           `json:"price"`
+	Price         float64                           `json:"price,omitempty"`
 	StopLoss      float64                           `json:"sl,omitempty"`
 	Symbol        string                            `json:"symbol"`
 	TakeProfit    float64                           `json:"tp,omitempty"`
 	Type          TradeTransactionInfoType          `json:"type"`
-	Volume        float64                           `json:"volume"`
+	Volume        float64                           `json:"volume,omitempty"`
 }
 
 type TradeTransactionInfoOperationCode int

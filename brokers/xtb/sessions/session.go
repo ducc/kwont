@@ -110,8 +110,13 @@ func (s *Session) OpenTradeTransaction(ctx context.Context, symbol protos.Symbol
 	return s.tx.OpenTradeTransaction(ctx, symbolName, direction, price, volume)
 }
 
-func (s *Session) CloseTradeTransaction(ctx context.Context, order int64) error {
-	return s.tx.CloseTradeTransaction(ctx, order)
+func (s *Session) CloseTradeTransaction(ctx context.Context, symbol protos.Symbol_Name, order int64) error {
+	symbolName := utils.SymbolFromProto(symbol)
+	if symbolName == "" {
+		return utils.ErrUnsupportedSymbol
+	}
+
+	return s.tx.CloseTradeTransaction(ctx, symbolName, order)
 }
 
 func (s *Session) GetTickSubscription() []protos.Symbol_Name {

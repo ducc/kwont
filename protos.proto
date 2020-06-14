@@ -429,8 +429,9 @@ message OpenPositionResponse {}
 message ClosePositionRequest {
     string session_id = 1;
     Broker.Name broker = 2;
-    string id = 3;
-    int64 price = 4;
+    Symbol.Name symbol = 3;
+    string id = 4;
+    int64 price = 5;
 }
 message ClosePositionResponse {
     google.protobuf.Timestamp execution_time = 1;
