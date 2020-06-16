@@ -379,7 +379,7 @@ func (d *database) UpdateBrokerConnection(ctx context.Context, userID, brokerNam
 }
 
 func (d *database) InsertOrder(ctx context.Context, broker, symbol, direction string, price, volume float64, timestamp time.Time) (string, error) {
-	const stmt = `INSERT INTO orders (broker, symbol, direction, price, volume, timestamp) VALUES ($1, $2, $3, $4, $5, $7) RETURNING order_id;`
+	const stmt = `INSERT INTO orders (broker, symbol, direction, price, volume, timestamp) VALUES ($1, $2, $3, $4, $5, $6) RETURNING order_id;`
 	row := d.db.QueryRowContext(ctx, stmt, broker, symbol, direction, price, volume, timestamp)
 
 	var id string
@@ -396,19 +396,12 @@ UPSERT INTO xtb_trades (session_id, "order", timestamp, close_price, close_time,
 						comment, commission, custom_comment, digits, expiration, margin_rate, 
 						"offset", open_price, open_time, order_2, position, profit, stop_loss, 
 						state, storage, symbol, take_profit, type, volume)
-VALUES ($1, $2, $3, $4, $5, $6::bool, $7, $8, $9, $10, 
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, 
 		$11, $12, $13, $14, $15, $16, $17, $18, $19, 
 		$20, $21, $22, $23, $24, $25, $26);
 `
 
-	var closedVal int
-	if closed {
-		closedVal = 1
-	} else {
-		closedVal = 0
-	}
-
-	if _, err := d.db.ExecContext(ctx, stmt, sessionID, order, timestamp, closePrice, closeTime, closedVal, cmd,
+	if _, err := d.db.ExecContext(ctx, stmt, sessionID, order, timestamp, closePrice, closeTime, closed, cmd,
 		comment, commission, customComment, digits, expiration, marginRate,
 		offset, openPrice, openTime, order2, position, profit, stopLoss,
 		state, storage, symbol, takeProfit, tradeType, volume); err != nil {
