@@ -69,7 +69,7 @@ func (c *Connection) WriteJSON(ctx context.Context, v interface{}) error {
 	}
 
 	data, err1 := json.Marshal(v)
-	c.log.WithField("data", string(data)).Debugf("writing %s", string(data))
+	c.log.WithField("data", string(data)).Tracef("writing %s", string(data))
 
 	_, err2 := w.Write(data)
 	err3 := w.Close()
@@ -108,7 +108,7 @@ func (c *Connection) ReadMessages() <-chan []byte {
 				break
 			}
 
-			c.log.WithField("message", string(data)).Debug("received message")
+			c.log.WithField("message", string(data)).Trace("received message")
 			messages <- data
 		}
 
