@@ -401,7 +401,7 @@ VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10,
 		$20, $21, $22, $23, $24, $25, $26);
 `
 
-	if _, err := d.db.ExecContext(ctx, stmt, sessionID, order, timestamp, closePrice, closeTime, closed, cmd,
+	if _, err := d.db.ExecContext(ctx, stmt, sessionID, order, timestamp, closePrice, closeTime, sql.NullBool{Bool: closed, Valid: true}, cmd,
 		comment, commission, customComment, digits, expiration, marginRate,
 		offset, openPrice, openTime, order2, position, profit, stopLoss,
 		state, storage, symbol, takeProfit, tradeType, volume); err != nil {
