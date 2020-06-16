@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orderservice
+  namespace: orders
+  labels:
+    app: orderservice
+    keel.sh/policy: force
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: orderservice
+  template:
+    metadata:
+      labels:
+        app: orderservice
+    spec:
+      containers:
+        - name: orderservice
+          image: joeburnardredbrain/kwont:orderservice-latest
+          imagePullPolicy: Always
+          args:
+            - --level=debug
+            - --brokerservice-address=xtb-router.brokers:8080
+            - --dataservice-address=dataservice.data:8080
+          resources:
+            requests:
+              cpu: 50m
+              memory: 100M
+            limits:
+              cpu: 100m
+              memory: 200M
+          volumeMounts:
+            - name: "cacerts"
+              mountPath: "/etc/ssl/cacerts"
+              readOnly: true
+      volumes:
+        - name: "cacerts"
+          hostPath:
+            path: "/etc/ssl/certs"

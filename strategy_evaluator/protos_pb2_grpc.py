@@ -695,3 +695,95 @@ class BrokerService(object):
             protos__pb2.RegisterBrokerResponse.FromString,
             options, channel_credentials,
             call_credentials, compression, wait_for_ready, timeout, metadata)
+
+
+class OrderServiceStub(object):
+    """Missing associated documentation comment in .proto file"""
+
+    def __init__(self, channel):
+        """Constructor.
+
+        Args:
+            channel: A grpc.Channel.
+        """
+        self.OpenPosition = channel.unary_unary(
+                '/protos.OrderService/OpenPosition',
+                request_serializer=protos__pb2.OpenPositionRequest.SerializeToString,
+                response_deserializer=protos__pb2.OpenPositionResponse.FromString,
+                )
+        self.ClosePosition = channel.unary_unary(
+                '/protos.OrderService/ClosePosition',
+                request_serializer=protos__pb2.ClosePositionRequest.SerializeToString,
+                response_deserializer=protos__pb2.ClosePositionResponse.FromString,
+                )
+
+
+class OrderServiceServicer(object):
+    """Missing associated documentation comment in .proto file"""
+
+    def OpenPosition(self, request, context):
+        """Missing associated documentation comment in .proto file"""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def ClosePosition(self, request, context):
+        """Missing associated documentation comment in .proto file"""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+
+def add_OrderServiceServicer_to_server(servicer, server):
+    rpc_method_handlers = {
+            'OpenPosition': grpc.unary_unary_rpc_method_handler(
+                    servicer.OpenPosition,
+                    request_deserializer=protos__pb2.OpenPositionRequest.FromString,
+                    response_serializer=protos__pb2.OpenPositionResponse.SerializeToString,
+            ),
+            'ClosePosition': grpc.unary_unary_rpc_method_handler(
+                    servicer.ClosePosition,
+                    request_deserializer=protos__pb2.ClosePositionRequest.FromString,
+                    response_serializer=protos__pb2.ClosePositionResponse.SerializeToString,
+            ),
+    }
+    generic_handler = grpc.method_handlers_generic_handler(
+            'protos.OrderService', rpc_method_handlers)
+    server.add_generic_rpc_handlers((generic_handler,))
+
+
+ # This class is part of an EXPERIMENTAL API.
+class OrderService(object):
+    """Missing associated documentation comment in .proto file"""
+
+    @staticmethod
+    def OpenPosition(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/protos.OrderService/OpenPosition',
+            protos__pb2.OpenPositionRequest.SerializeToString,
+            protos__pb2.OpenPositionResponse.FromString,
+            options, channel_credentials,
+            call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def ClosePosition(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/protos.OrderService/ClosePosition',
+            protos__pb2.ClosePositionRequest.SerializeToString,
+            protos__pb2.ClosePositionResponse.FromString,
+            options, channel_credentials,
+            call_credentials, compression, wait_for_ready, timeout, metadata)
