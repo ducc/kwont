@@ -93,6 +93,8 @@ func (c *Client) ProcessMessages() {
 			}
 		case "trade":
 			{
+				c.log.Debug("got trade msg")
+
 				var trades GetTradesResponse
 				if err := json.Unmarshal(data, &trades); err != nil {
 					c.log.WithError(err).Error("unmarshalling data as GetTradesResponse")

@@ -164,6 +164,7 @@ func (s *Session) transformTickPricesToProto() {
 		defer wg.Done()
 
 		for trade := range s.stream.GetTradesResponses() {
+			logrus.Debug("processing trade response")
 			ctx := context.Background()
 
 			trade, err := utils.TradeToProto(s.SessionID, trade)
@@ -209,6 +210,8 @@ func (s *Session) sendTickToQueue(ctx context.Context, tick *protos.Tick) {
 }
 
 func (s *Session) sendTradeToQueue(ctx context.Context, trade *protos.XTBTrade) {
+	logrus.Debug("sending trade to queue")
+
 	bytes, err := proto.Marshal(trade)
 	if err != nil {
 		logrus.WithError(err).Error("error marshalling trade")
