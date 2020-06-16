@@ -4,8 +4,10 @@ import (
 	"context"
 	"errors"
 	"github.com/ducc/kwɒnt/protos"
+	"github.com/golang/protobuf/ptypes"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"time"
 )
 
 type server struct {
@@ -22,12 +24,18 @@ func NewServer(ctx context.Context, data protos.DataServiceClient, broker protos
 }
 
 func (s *server) OpenPosition(ctx context.Context, req *protos.OpenPositionRequest) (*protos.OpenPositionResponse, error) {
+	ts, err := ptypes.TimestampProto(time.Now())
+	if err != nil {
+		return nil, err
+	}
+
 	dsResponse, err := s.data.AddOrder(ctx, &protos.AddOrderRequest{
 		Broker:    req.Broker,
 		Symbol:    req.Symbol,
 		Direction: req.Direction,
 		Price:     req.Price,
 		Volume:    req.Voliume,
+		Timestamp: ts,
 	})
 	if err != nil {
 		return nil, err
