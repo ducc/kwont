@@ -32,7 +32,7 @@ type TradeTransactionArguments struct {
 
 type TradeTransactionInfo struct {
 	Cmd           TradeTransactionInfoOperationCode `json:"cmd,omitempty"`
-	CustomComment string                            `json:"customCommand,omitempty"`
+	CustomComment string                            `json:"customComment,omitempty"`
 	Expiration    int64                             `json:"expiration,omitempty"`
 	Offset        int64                             `json:"offset,omitempty"`
 	Order         int64                             `json:"order"`
