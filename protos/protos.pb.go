@@ -3493,6 +3493,338 @@ func (*RegisterBrokerResponse) Descriptor() ([]byte, []int) {
 	return file_protos_proto_rawDescGZIP(), []int{50}
 }
 
+type XTBTrade struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Timestamp     *timestamp.Timestamp `protobuf:"bytes,1,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
+	SessionId     string               `protobuf:"bytes,2,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
+	Order         int64                `protobuf:"varint,3,opt,name=order,proto3" json:"order,omitempty"`
+	ClosePrice    float64              `protobuf:"fixed64,4,opt,name=close_price,json=closePrice,proto3" json:"close_price,omitempty"`
+	CloseTime     *timestamp.Timestamp `protobuf:"bytes,5,opt,name=close_time,json=closeTime,proto3" json:"close_time,omitempty"`
+	Closed        bool                 `protobuf:"varint,6,opt,name=closed,proto3" json:"closed,omitempty"`
+	Cmd           string               `protobuf:"bytes,7,opt,name=cmd,proto3" json:"cmd,omitempty"`
+	Comment       string               `protobuf:"bytes,8,opt,name=comment,proto3" json:"comment,omitempty"`
+	Commission    float64              `protobuf:"fixed64,9,opt,name=commission,proto3" json:"commission,omitempty"`
+	CustomComment string               `protobuf:"bytes,10,opt,name=custom_comment,json=customComment,proto3" json:"custom_comment,omitempty"`
+	Digits        int64                `protobuf:"varint,11,opt,name=digits,proto3" json:"digits,omitempty"`
+	Expiration    *timestamp.Timestamp `protobuf:"bytes,12,opt,name=expiration,proto3" json:"expiration,omitempty"`
+	MarginRate    float64              `protobuf:"fixed64,13,opt,name=margin_rate,json=marginRate,proto3" json:"margin_rate,omitempty"`
+	Offset        int64                `protobuf:"varint,14,opt,name=offset,proto3" json:"offset,omitempty"`
+	OpenPrice     float64              `protobuf:"fixed64,15,opt,name=open_price,json=openPrice,proto3" json:"open_price,omitempty"`
+	OpenTime      *timestamp.Timestamp `protobuf:"bytes,16,opt,name=open_time,json=openTime,proto3" json:"open_time,omitempty"`
+	Order2        int64                `protobuf:"varint,17,opt,name=order2,proto3" json:"order2,omitempty"`
+	Position      int64                `protobuf:"varint,18,opt,name=position,proto3" json:"position,omitempty"`
+	Profit        float64              `protobuf:"fixed64,19,opt,name=profit,proto3" json:"profit,omitempty"`
+	StopLoss      float64              `protobuf:"fixed64,20,opt,name=stop_loss,json=stopLoss,proto3" json:"stop_loss,omitempty"`
+	State         string               `protobuf:"bytes,21,opt,name=state,proto3" json:"state,omitempty"`
+	Storage       float64              `protobuf:"fixed64,22,opt,name=storage,proto3" json:"storage,omitempty"`
+	Symbol        Symbol_Name          `protobuf:"varint,23,opt,name=symbol,proto3,enum=protos.Symbol_Name" json:"symbol,omitempty"`
+	TakeProfit    float64              `protobuf:"fixed64,24,opt,name=take_profit,json=takeProfit,proto3" json:"take_profit,omitempty"`
+	Type          string               `protobuf:"bytes,25,opt,name=type,proto3" json:"type,omitempty"`
+	Volume        float64              `protobuf:"fixed64,26,opt,name=volume,proto3" json:"volume,omitempty"`
+}
+
+func (x *XTBTrade) Reset() {
+	*x = XTBTrade{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_protos_proto_msgTypes[51]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *XTBTrade) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*XTBTrade) ProtoMessage() {}
+
+func (x *XTBTrade) ProtoReflect() protoreflect.Message {
+	mi := &file_protos_proto_msgTypes[51]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use XTBTrade.ProtoReflect.Descriptor instead.
+func (*XTBTrade) Descriptor() ([]byte, []int) {
+	return file_protos_proto_rawDescGZIP(), []int{51}
+}
+
+func (x *XTBTrade) GetTimestamp() *timestamp.Timestamp {
+	if x != nil {
+		return x.Timestamp
+	}
+	return nil
+}
+
+func (x *XTBTrade) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
+func (x *XTBTrade) GetOrder() int64 {
+	if x != nil {
+		return x.Order
+	}
+	return 0
+}
+
+func (x *XTBTrade) GetClosePrice() float64 {
+	if x != nil {
+		return x.ClosePrice
+	}
+	return 0
+}
+
+func (x *XTBTrade) GetCloseTime() *timestamp.Timestamp {
+	if x != nil {
+		return x.CloseTime
+	}
+	return nil
+}
+
+func (x *XTBTrade) GetClosed() bool {
+	if x != nil {
+		return x.Closed
+	}
+	return false
+}
+
+func (x *XTBTrade) GetCmd() string {
+	if x != nil {
+		return x.Cmd
+	}
+	return ""
+}
+
+func (x *XTBTrade) GetComment() string {
+	if x != nil {
+		return x.Comment
+	}
+	return ""
+}
+
+func (x *XTBTrade) GetCommission() float64 {
+	if x != nil {
+		return x.Commission
+	}
+	return 0
+}
+
+func (x *XTBTrade) GetCustomComment() string {
+	if x != nil {
+		return x.CustomComment
+	}
+	return ""
+}
+
+func (x *XTBTrade) GetDigits() int64 {
+	if x != nil {
+		return x.Digits
+	}
+	return 0
+}
+
+func (x *XTBTrade) GetExpiration() *timestamp.Timestamp {
+	if x != nil {
+		return x.Expiration
+	}
+	return nil
+}
+
+func (x *XTBTrade) GetMarginRate() float64 {
+	if x != nil {
+		return x.MarginRate
+	}
+	return 0
+}
+
+func (x *XTBTrade) GetOffset() int64 {
+	if x != nil {
+		return x.Offset
+	}
+	return 0
+}
+
+func (x *XTBTrade) GetOpenPrice() float64 {
+	if x != nil {
+		return x.OpenPrice
+	}
+	return 0
+}
+
+func (x *XTBTrade) GetOpenTime() *timestamp.Timestamp {
+	if x != nil {
+		return x.OpenTime
+	}
+	return nil
+}
+
+func (x *XTBTrade) GetOrder2() int64 {
+	if x != nil {
+		return x.Order2
+	}
+	return 0
+}
+
+func (x *XTBTrade) GetPosition() int64 {
+	if x != nil {
+		return x.Position
+	}
+	return 0
+}
+
+func (x *XTBTrade) GetProfit() float64 {
+	if x != nil {
+		return x.Profit
+	}
+	return 0
+}
+
+func (x *XTBTrade) GetStopLoss() float64 {
+	if x != nil {
+		return x.StopLoss
+	}
+	return 0
+}
+
+func (x *XTBTrade) GetState() string {
+	if x != nil {
+		return x.State
+	}
+	return ""
+}
+
+func (x *XTBTrade) GetStorage() float64 {
+	if x != nil {
+		return x.Storage
+	}
+	return 0
+}
+
+func (x *XTBTrade) GetSymbol() Symbol_Name {
+	if x != nil {
+		return x.Symbol
+	}
+	return Symbol_UNKNOWN
+}
+
+func (x *XTBTrade) GetTakeProfit() float64 {
+	if x != nil {
+		return x.TakeProfit
+	}
+	return 0
+}
+
+func (x *XTBTrade) GetType() string {
+	if x != nil {
+		return x.Type
+	}
+	return ""
+}
+
+func (x *XTBTrade) GetVolume() float64 {
+	if x != nil {
+		return x.Volume
+	}
+	return 0
+}
+
+type AddXTBTradeRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Trade *XTBTrade `protobuf:"bytes,1,opt,name=trade,proto3" json:"trade,omitempty"`
+}
+
+func (x *AddXTBTradeRequest) Reset() {
+	*x = AddXTBTradeRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_protos_proto_msgTypes[52]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *AddXTBTradeRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AddXTBTradeRequest) ProtoMessage() {}
+
+func (x *AddXTBTradeRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_protos_proto_msgTypes[52]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AddXTBTradeRequest.ProtoReflect.Descriptor instead.
+func (*AddXTBTradeRequest) Descriptor() ([]byte, []int) {
+	return file_protos_proto_rawDescGZIP(), []int{52}
+}
+
+func (x *AddXTBTradeRequest) GetTrade() *XTBTrade {
+	if x != nil {
+		return x.Trade
+	}
+	return nil
+}
+
+type AddXTBTradeResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *AddXTBTradeResponse) Reset() {
+	*x = AddXTBTradeResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_protos_proto_msgTypes[53]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *AddXTBTradeResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AddXTBTradeResponse) ProtoMessage() {}
+
+func (x *AddXTBTradeResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_protos_proto_msgTypes[53]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AddXTBTradeResponse.ProtoReflect.Descriptor instead.
+func (*AddXTBTradeResponse) Descriptor() ([]byte, []int) {
+	return file_protos_proto_rawDescGZIP(), []int{53}
+}
+
 type Rule_Indicator struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -3513,7 +3845,7 @@ type Rule_Indicator struct {
 func (x *Rule_Indicator) Reset() {
 	*x = Rule_Indicator{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_protos_proto_msgTypes[51]
+		mi := &file_protos_proto_msgTypes[54]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -3526,7 +3858,7 @@ func (x *Rule_Indicator) String() string {
 func (*Rule_Indicator) ProtoMessage() {}
 
 func (x *Rule_Indicator) ProtoReflect() protoreflect.Message {
-	mi := &file_protos_proto_msgTypes[51]
+	mi := &file_protos_proto_msgTypes[54]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3669,7 +4001,7 @@ type Rule_Indicator_SimpleMovingAverage struct {
 func (x *Rule_Indicator_SimpleMovingAverage) Reset() {
 	*x = Rule_Indicator_SimpleMovingAverage{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_protos_proto_msgTypes[52]
+		mi := &file_protos_proto_msgTypes[55]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -3682,7 +4014,7 @@ func (x *Rule_Indicator_SimpleMovingAverage) String() string {
 func (*Rule_Indicator_SimpleMovingAverage) ProtoMessage() {}
 
 func (x *Rule_Indicator_SimpleMovingAverage) ProtoReflect() protoreflect.Message {
-	mi := &file_protos_proto_msgTypes[52]
+	mi := &file_protos_proto_msgTypes[55]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3726,7 +4058,7 @@ type Rule_Indicator_RelativeStrengthIndex struct {
 func (x *Rule_Indicator_RelativeStrengthIndex) Reset() {
 	*x = Rule_Indicator_RelativeStrengthIndex{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_protos_proto_msgTypes[53]
+		mi := &file_protos_proto_msgTypes[56]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -3739,7 +4071,7 @@ func (x *Rule_Indicator_RelativeStrengthIndex) String() string {
 func (*Rule_Indicator_RelativeStrengthIndex) ProtoMessage() {}
 
 func (x *Rule_Indicator_RelativeStrengthIndex) ProtoReflect() protoreflect.Message {
-	mi := &file_protos_proto_msgTypes[53]
+	mi := &file_protos_proto_msgTypes[56]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3797,7 +4129,7 @@ type Rule_Indicator_MACD struct {
 func (x *Rule_Indicator_MACD) Reset() {
 	*x = Rule_Indicator_MACD{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_protos_proto_msgTypes[54]
+		mi := &file_protos_proto_msgTypes[57]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -3810,7 +4142,7 @@ func (x *Rule_Indicator_MACD) String() string {
 func (*Rule_Indicator_MACD) ProtoMessage() {}
 
 func (x *Rule_Indicator_MACD) ProtoReflect() protoreflect.Message {
-	mi := &file_protos_proto_msgTypes[54]
+	mi := &file_protos_proto_msgTypes[57]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3867,7 +4199,7 @@ type Rule_Indicator_BollingerBands struct {
 func (x *Rule_Indicator_BollingerBands) Reset() {
 	*x = Rule_Indicator_BollingerBands{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_protos_proto_msgTypes[55]
+		mi := &file_protos_proto_msgTypes[58]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -3880,7 +4212,7 @@ func (x *Rule_Indicator_BollingerBands) String() string {
 func (*Rule_Indicator_BollingerBands) ProtoMessage() {}
 
 func (x *Rule_Indicator_BollingerBands) ProtoReflect() protoreflect.Message {
-	mi := &file_protos_proto_msgTypes[55]
+	mi := &file_protos_proto_msgTypes[58]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3928,7 +4260,7 @@ type Rule_Indicator_SimpleTakeProfit struct {
 func (x *Rule_Indicator_SimpleTakeProfit) Reset() {
 	*x = Rule_Indicator_SimpleTakeProfit{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_protos_proto_msgTypes[56]
+		mi := &file_protos_proto_msgTypes[59]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -3941,7 +4273,7 @@ func (x *Rule_Indicator_SimpleTakeProfit) String() string {
 func (*Rule_Indicator_SimpleTakeProfit) ProtoMessage() {}
 
 func (x *Rule_Indicator_SimpleTakeProfit) ProtoReflect() protoreflect.Message {
-	mi := &file_protos_proto_msgTypes[56]
+	mi := &file_protos_proto_msgTypes[59]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3973,7 +4305,7 @@ type Rule_Indicator_PivotTakeProfit struct {
 func (x *Rule_Indicator_PivotTakeProfit) Reset() {
 	*x = Rule_Indicator_PivotTakeProfit{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_protos_proto_msgTypes[57]
+		mi := &file_protos_proto_msgTypes[60]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -3986,7 +4318,7 @@ func (x *Rule_Indicator_PivotTakeProfit) String() string {
 func (*Rule_Indicator_PivotTakeProfit) ProtoMessage() {}
 
 func (x *Rule_Indicator_PivotTakeProfit) ProtoReflect() protoreflect.Message {
-	mi := &file_protos_proto_msgTypes[57]
+	mi := &file_protos_proto_msgTypes[60]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4013,7 +4345,7 @@ type Rule_Indicator_SimpleStopLoss struct {
 func (x *Rule_Indicator_SimpleStopLoss) Reset() {
 	*x = Rule_Indicator_SimpleStopLoss{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_protos_proto_msgTypes[58]
+		mi := &file_protos_proto_msgTypes[61]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -4026,7 +4358,7 @@ func (x *Rule_Indicator_SimpleStopLoss) String() string {
 func (*Rule_Indicator_SimpleStopLoss) ProtoMessage() {}
 
 func (x *Rule_Indicator_SimpleStopLoss) ProtoReflect() protoreflect.Message {
-	mi := &file_protos_proto_msgTypes[58]
+	mi := &file_protos_proto_msgTypes[61]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4058,7 +4390,7 @@ type Rule_Indicator_PivotStopLoss struct {
 func (x *Rule_Indicator_PivotStopLoss) Reset() {
 	*x = Rule_Indicator_PivotStopLoss{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_protos_proto_msgTypes[59]
+		mi := &file_protos_proto_msgTypes[62]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -4071,7 +4403,7 @@ func (x *Rule_Indicator_PivotStopLoss) String() string {
 func (*Rule_Indicator_PivotStopLoss) ProtoMessage() {}
 
 func (x *Rule_Indicator_PivotStopLoss) ProtoReflect() protoreflect.Message {
-	mi := &file_protos_proto_msgTypes[59]
+	mi := &file_protos_proto_msgTypes[62]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4101,7 +4433,7 @@ type EvaluateStrategyResponse_Action struct {
 func (x *EvaluateStrategyResponse_Action) Reset() {
 	*x = EvaluateStrategyResponse_Action{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_protos_proto_msgTypes[60]
+		mi := &file_protos_proto_msgTypes[63]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -4114,7 +4446,7 @@ func (x *EvaluateStrategyResponse_Action) String() string {
 func (*EvaluateStrategyResponse_Action) ProtoMessage() {}
 
 func (x *EvaluateStrategyResponse_Action) ProtoReflect() protoreflect.Message {
-	mi := &file_protos_proto_msgTypes[60]
+	mi := &file_protos_proto_msgTypes[63]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4179,7 +4511,7 @@ type EvaluateStrategyResponse_Action_OpenPosition struct {
 func (x *EvaluateStrategyResponse_Action_OpenPosition) Reset() {
 	*x = EvaluateStrategyResponse_Action_OpenPosition{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_protos_proto_msgTypes[61]
+		mi := &file_protos_proto_msgTypes[64]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -4192,7 +4524,7 @@ func (x *EvaluateStrategyResponse_Action_OpenPosition) String() string {
 func (*EvaluateStrategyResponse_Action_OpenPosition) ProtoMessage() {}
 
 func (x *EvaluateStrategyResponse_Action_OpenPosition) ProtoReflect() protoreflect.Message {
-	mi := &file_protos_proto_msgTypes[61]
+	mi := &file_protos_proto_msgTypes[64]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4233,7 +4565,7 @@ type EvaluateStrategyResponse_Action_ClosePosition struct {
 func (x *EvaluateStrategyResponse_Action_ClosePosition) Reset() {
 	*x = EvaluateStrategyResponse_Action_ClosePosition{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_protos_proto_msgTypes[62]
+		mi := &file_protos_proto_msgTypes[65]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -4246,7 +4578,7 @@ func (x *EvaluateStrategyResponse_Action_ClosePosition) String() string {
 func (*EvaluateStrategyResponse_Action_ClosePosition) ProtoMessage() {}
 
 func (x *EvaluateStrategyResponse_Action_ClosePosition) ProtoReflect() protoreflect.Message {
-	mi := &file_protos_proto_msgTypes[62]
+	mi := &file_protos_proto_msgTypes[65]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4283,7 +4615,7 @@ type User_BrokerConnection struct {
 func (x *User_BrokerConnection) Reset() {
 	*x = User_BrokerConnection{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_protos_proto_msgTypes[63]
+		mi := &file_protos_proto_msgTypes[66]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -4296,7 +4628,7 @@ func (x *User_BrokerConnection) String() string {
 func (*User_BrokerConnection) ProtoMessage() {}
 
 func (x *User_BrokerConnection) ProtoReflect() protoreflect.Message {
-	mi := &file_protos_proto_msgTypes[63]
+	mi := &file_protos_proto_msgTypes[66]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4859,7 +5191,66 @@ var file_protos_proto_rawDesc = []byte{
 	0x62, 0x72, 0x6f, 0x6b, 0x65, 0x72, 0x12, 0x18, 0x0a, 0x07, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73,
 	0x73, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73,
 	0x22, 0x18, 0x0a, 0x16, 0x52, 0x65, 0x67, 0x69, 0x73, 0x74, 0x65, 0x72, 0x42, 0x72, 0x6f, 0x6b,
-	0x65, 0x72, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x32, 0xec, 0x05, 0x0a, 0x0b, 0x44,
+	0x65, 0x72, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0xd8, 0x06, 0x0a, 0x08, 0x58,
+	0x54, 0x42, 0x54, 0x72, 0x61, 0x64, 0x65, 0x12, 0x38, 0x0a, 0x09, 0x74, 0x69, 0x6d, 0x65, 0x73,
+	0x74, 0x61, 0x6d, 0x70, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f,
+	0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54, 0x69, 0x6d,
+	0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x52, 0x09, 0x74, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d,
+	0x70, 0x12, 0x1d, 0x0a, 0x0a, 0x73, 0x65, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x5f, 0x69, 0x64, 0x18,
+	0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x73, 0x65, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x49, 0x64,
+	0x12, 0x14, 0x0a, 0x05, 0x6f, 0x72, 0x64, 0x65, 0x72, 0x18, 0x03, 0x20, 0x01, 0x28, 0x03, 0x52,
+	0x05, 0x6f, 0x72, 0x64, 0x65, 0x72, 0x12, 0x1f, 0x0a, 0x0b, 0x63, 0x6c, 0x6f, 0x73, 0x65, 0x5f,
+	0x70, 0x72, 0x69, 0x63, 0x65, 0x18, 0x04, 0x20, 0x01, 0x28, 0x01, 0x52, 0x0a, 0x63, 0x6c, 0x6f,
+	0x73, 0x65, 0x50, 0x72, 0x69, 0x63, 0x65, 0x12, 0x39, 0x0a, 0x0a, 0x63, 0x6c, 0x6f, 0x73, 0x65,
+	0x5f, 0x74, 0x69, 0x6d, 0x65, 0x18, 0x05, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f,
+	0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54, 0x69,
+	0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x52, 0x09, 0x63, 0x6c, 0x6f, 0x73, 0x65, 0x54, 0x69,
+	0x6d, 0x65, 0x12, 0x16, 0x0a, 0x06, 0x63, 0x6c, 0x6f, 0x73, 0x65, 0x64, 0x18, 0x06, 0x20, 0x01,
+	0x28, 0x08, 0x52, 0x06, 0x63, 0x6c, 0x6f, 0x73, 0x65, 0x64, 0x12, 0x10, 0x0a, 0x03, 0x63, 0x6d,
+	0x64, 0x18, 0x07, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x63, 0x6d, 0x64, 0x12, 0x18, 0x0a, 0x07,
+	0x63, 0x6f, 0x6d, 0x6d, 0x65, 0x6e, 0x74, 0x18, 0x08, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x63,
+	0x6f, 0x6d, 0x6d, 0x65, 0x6e, 0x74, 0x12, 0x1e, 0x0a, 0x0a, 0x63, 0x6f, 0x6d, 0x6d, 0x69, 0x73,
+	0x73, 0x69, 0x6f, 0x6e, 0x18, 0x09, 0x20, 0x01, 0x28, 0x01, 0x52, 0x0a, 0x63, 0x6f, 0x6d, 0x6d,
+	0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x12, 0x25, 0x0a, 0x0e, 0x63, 0x75, 0x73, 0x74, 0x6f, 0x6d,
+	0x5f, 0x63, 0x6f, 0x6d, 0x6d, 0x65, 0x6e, 0x74, 0x18, 0x0a, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0d,
+	0x63, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x43, 0x6f, 0x6d, 0x6d, 0x65, 0x6e, 0x74, 0x12, 0x16, 0x0a,
+	0x06, 0x64, 0x69, 0x67, 0x69, 0x74, 0x73, 0x18, 0x0b, 0x20, 0x01, 0x28, 0x03, 0x52, 0x06, 0x64,
+	0x69, 0x67, 0x69, 0x74, 0x73, 0x12, 0x3a, 0x0a, 0x0a, 0x65, 0x78, 0x70, 0x69, 0x72, 0x61, 0x74,
+	0x69, 0x6f, 0x6e, 0x18, 0x0c, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f, 0x67,
+	0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54, 0x69, 0x6d, 0x65,
+	0x73, 0x74, 0x61, 0x6d, 0x70, 0x52, 0x0a, 0x65, 0x78, 0x70, 0x69, 0x72, 0x61, 0x74, 0x69, 0x6f,
+	0x6e, 0x12, 0x1f, 0x0a, 0x0b, 0x6d, 0x61, 0x72, 0x67, 0x69, 0x6e, 0x5f, 0x72, 0x61, 0x74, 0x65,
+	0x18, 0x0d, 0x20, 0x01, 0x28, 0x01, 0x52, 0x0a, 0x6d, 0x61, 0x72, 0x67, 0x69, 0x6e, 0x52, 0x61,
+	0x74, 0x65, 0x12, 0x16, 0x0a, 0x06, 0x6f, 0x66, 0x66, 0x73, 0x65, 0x74, 0x18, 0x0e, 0x20, 0x01,
+	0x28, 0x03, 0x52, 0x06, 0x6f, 0x66, 0x66, 0x73, 0x65, 0x74, 0x12, 0x1d, 0x0a, 0x0a, 0x6f, 0x70,
+	0x65, 0x6e, 0x5f, 0x70, 0x72, 0x69, 0x63, 0x65, 0x18, 0x0f, 0x20, 0x01, 0x28, 0x01, 0x52, 0x09,
+	0x6f, 0x70, 0x65, 0x6e, 0x50, 0x72, 0x69, 0x63, 0x65, 0x12, 0x37, 0x0a, 0x09, 0x6f, 0x70, 0x65,
+	0x6e, 0x5f, 0x74, 0x69, 0x6d, 0x65, 0x18, 0x10, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67,
+	0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54,
+	0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x52, 0x08, 0x6f, 0x70, 0x65, 0x6e, 0x54, 0x69,
+	0x6d, 0x65, 0x12, 0x16, 0x0a, 0x06, 0x6f, 0x72, 0x64, 0x65, 0x72, 0x32, 0x18, 0x11, 0x20, 0x01,
+	0x28, 0x03, 0x52, 0x06, 0x6f, 0x72, 0x64, 0x65, 0x72, 0x32, 0x12, 0x1a, 0x0a, 0x08, 0x70, 0x6f,
+	0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x12, 0x20, 0x01, 0x28, 0x03, 0x52, 0x08, 0x70, 0x6f,
+	0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x16, 0x0a, 0x06, 0x70, 0x72, 0x6f, 0x66, 0x69, 0x74,
+	0x18, 0x13, 0x20, 0x01, 0x28, 0x01, 0x52, 0x06, 0x70, 0x72, 0x6f, 0x66, 0x69, 0x74, 0x12, 0x1b,
+	0x0a, 0x09, 0x73, 0x74, 0x6f, 0x70, 0x5f, 0x6c, 0x6f, 0x73, 0x73, 0x18, 0x14, 0x20, 0x01, 0x28,
+	0x01, 0x52, 0x08, 0x73, 0x74, 0x6f, 0x70, 0x4c, 0x6f, 0x73, 0x73, 0x12, 0x14, 0x0a, 0x05, 0x73,
+	0x74, 0x61, 0x74, 0x65, 0x18, 0x15, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x73, 0x74, 0x61, 0x74,
+	0x65, 0x12, 0x18, 0x0a, 0x07, 0x73, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x18, 0x16, 0x20, 0x01,
+	0x28, 0x01, 0x52, 0x07, 0x73, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x12, 0x2b, 0x0a, 0x06, 0x73,
+	0x79, 0x6d, 0x62, 0x6f, 0x6c, 0x18, 0x17, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x13, 0x2e, 0x70, 0x72,
+	0x6f, 0x74, 0x6f, 0x73, 0x2e, 0x53, 0x79, 0x6d, 0x62, 0x6f, 0x6c, 0x2e, 0x4e, 0x61, 0x6d, 0x65,
+	0x52, 0x06, 0x73, 0x79, 0x6d, 0x62, 0x6f, 0x6c, 0x12, 0x1f, 0x0a, 0x0b, 0x74, 0x61, 0x6b, 0x65,
+	0x5f, 0x70, 0x72, 0x6f, 0x66, 0x69, 0x74, 0x18, 0x18, 0x20, 0x01, 0x28, 0x01, 0x52, 0x0a, 0x74,
+	0x61, 0x6b, 0x65, 0x50, 0x72, 0x6f, 0x66, 0x69, 0x74, 0x12, 0x12, 0x0a, 0x04, 0x74, 0x79, 0x70,
+	0x65, 0x18, 0x19, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x74, 0x79, 0x70, 0x65, 0x12, 0x16, 0x0a,
+	0x06, 0x76, 0x6f, 0x6c, 0x75, 0x6d, 0x65, 0x18, 0x1a, 0x20, 0x01, 0x28, 0x01, 0x52, 0x06, 0x76,
+	0x6f, 0x6c, 0x75, 0x6d, 0x65, 0x22, 0x3c, 0x0a, 0x12, 0x41, 0x64, 0x64, 0x58, 0x54, 0x42, 0x54,
+	0x72, 0x61, 0x64, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x26, 0x0a, 0x05, 0x74,
+	0x72, 0x61, 0x64, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x10, 0x2e, 0x70, 0x72, 0x6f,
+	0x74, 0x6f, 0x73, 0x2e, 0x58, 0x54, 0x42, 0x54, 0x72, 0x61, 0x64, 0x65, 0x52, 0x05, 0x74, 0x72,
+	0x61, 0x64, 0x65, 0x22, 0x15, 0x0a, 0x13, 0x41, 0x64, 0x64, 0x58, 0x54, 0x42, 0x54, 0x72, 0x61,
+	0x64, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x32, 0xb4, 0x06, 0x0a, 0x0b, 0x44,
 	0x61, 0x74, 0x61, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x4f, 0x0a, 0x0e, 0x43, 0x72,
 	0x65, 0x61, 0x74, 0x65, 0x53, 0x74, 0x72, 0x61, 0x74, 0x65, 0x67, 0x79, 0x12, 0x1d, 0x2e, 0x70,
 	0x72, 0x6f, 0x74, 0x6f, 0x73, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x53, 0x74, 0x72, 0x61,
@@ -4906,55 +5297,60 @@ var file_protos_proto_rawDesc = []byte{
 	0x64, 0x4f, 0x72, 0x64, 0x65, 0x72, 0x12, 0x17, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x73, 0x2e,
 	0x41, 0x64, 0x64, 0x4f, 0x72, 0x64, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
 	0x18, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x73, 0x2e, 0x41, 0x64, 0x64, 0x4f, 0x72, 0x64, 0x65,
-	0x72, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x32, 0x62, 0x0a, 0x11, 0x53, 0x74, 0x72,
-	0x61, 0x74, 0x65, 0x67, 0x79, 0x45, 0x76, 0x61, 0x6c, 0x75, 0x61, 0x74, 0x6f, 0x72, 0x12, 0x4d,
-	0x0a, 0x08, 0x45, 0x76, 0x61, 0x6c, 0x75, 0x61, 0x74, 0x65, 0x12, 0x1f, 0x2e, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x73, 0x2e, 0x45, 0x76, 0x61, 0x75, 0x6c, 0x61, 0x74, 0x65, 0x53, 0x74, 0x72, 0x61,
-	0x74, 0x65, 0x67, 0x79, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x20, 0x2e, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x73, 0x2e, 0x45, 0x76, 0x61, 0x6c, 0x75, 0x61, 0x74, 0x65, 0x53, 0x74, 0x72,
-	0x61, 0x74, 0x65, 0x67, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x32, 0xf0, 0x04,
-	0x0a, 0x0d, 0x42, 0x72, 0x6f, 0x6b, 0x65, 0x72, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12,
-	0x5b, 0x0a, 0x12, 0x47, 0x65, 0x74, 0x43, 0x75, 0x72, 0x72, 0x65, 0x6e, 0x74, 0x53, 0x65, 0x73,
-	0x73, 0x69, 0x6f, 0x6e, 0x73, 0x12, 0x21, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x73, 0x2e, 0x47,
-	0x65, 0x74, 0x43, 0x75, 0x72, 0x72, 0x65, 0x6e, 0x74, 0x53, 0x65, 0x73, 0x73, 0x69, 0x6f, 0x6e,
-	0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x22, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x73, 0x2e, 0x47, 0x65, 0x74, 0x43, 0x75, 0x72, 0x72, 0x65, 0x6e, 0x74, 0x53, 0x65, 0x73, 0x73,
-	0x69, 0x6f, 0x6e, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x46, 0x0a, 0x0b,
-	0x4f, 0x70, 0x65, 0x6e, 0x53, 0x65, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x12, 0x1a, 0x2e, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x73, 0x2e, 0x4f, 0x70, 0x65, 0x6e, 0x53, 0x65, 0x73, 0x73, 0x69, 0x6f, 0x6e,
-	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x73,
-	0x2e, 0x4f, 0x70, 0x65, 0x6e, 0x53, 0x65, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70,
-	0x6f, 0x6e, 0x73, 0x65, 0x12, 0x49, 0x0a, 0x0c, 0x4f, 0x70, 0x65, 0x6e, 0x50, 0x6f, 0x73, 0x69,
-	0x74, 0x69, 0x6f, 0x6e, 0x12, 0x1b, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x73, 0x2e, 0x4f, 0x70,
-	0x65, 0x6e, 0x50, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
-	0x74, 0x1a, 0x1c, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x73, 0x2e, 0x4f, 0x70, 0x65, 0x6e, 0x50,
-	0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12,
-	0x4c, 0x0a, 0x0d, 0x43, 0x6c, 0x6f, 0x73, 0x65, 0x50, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e,
-	0x12, 0x1c, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x73, 0x2e, 0x43, 0x6c, 0x6f, 0x73, 0x65, 0x50,
-	0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1d,
-	0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x73, 0x2e, 0x43, 0x6c, 0x6f, 0x73, 0x65, 0x50, 0x6f, 0x73,
-	0x69, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x64, 0x0a,
-	0x15, 0x47, 0x65, 0x74, 0x42, 0x72, 0x6f, 0x6b, 0x65, 0x72, 0x50, 0x72, 0x69, 0x63, 0x65, 0x48,
-	0x69, 0x73, 0x74, 0x6f, 0x72, 0x79, 0x12, 0x24, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x73, 0x2e,
-	0x47, 0x65, 0x74, 0x42, 0x72, 0x6f, 0x6b, 0x65, 0x72, 0x50, 0x72, 0x69, 0x63, 0x65, 0x48, 0x69,
-	0x73, 0x74, 0x6f, 0x72, 0x79, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x25, 0x2e, 0x70,
-	0x72, 0x6f, 0x74, 0x6f, 0x73, 0x2e, 0x47, 0x65, 0x74, 0x42, 0x72, 0x6f, 0x6b, 0x65, 0x72, 0x50,
-	0x72, 0x69, 0x63, 0x65, 0x48, 0x69, 0x73, 0x74, 0x6f, 0x72, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f,
-	0x6e, 0x73, 0x65, 0x12, 0x6a, 0x0a, 0x17, 0x53, 0x75, 0x62, 0x73, 0x63, 0x72, 0x69, 0x62, 0x65,
-	0x54, 0x6f, 0x50, 0x72, 0x69, 0x63, 0x65, 0x43, 0x68, 0x61, 0x6e, 0x67, 0x65, 0x73, 0x12, 0x26,
+	0x72, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x46, 0x0a, 0x0b, 0x41, 0x64, 0x64,
+	0x58, 0x54, 0x42, 0x54, 0x72, 0x61, 0x64, 0x65, 0x12, 0x1a, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x73, 0x2e, 0x41, 0x64, 0x64, 0x58, 0x54, 0x42, 0x54, 0x72, 0x61, 0x64, 0x65, 0x52, 0x65, 0x71,
+	0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x73, 0x2e, 0x41, 0x64,
+	0x64, 0x58, 0x54, 0x42, 0x54, 0x72, 0x61, 0x64, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
+	0x65, 0x32, 0x62, 0x0a, 0x11, 0x53, 0x74, 0x72, 0x61, 0x74, 0x65, 0x67, 0x79, 0x45, 0x76, 0x61,
+	0x6c, 0x75, 0x61, 0x74, 0x6f, 0x72, 0x12, 0x4d, 0x0a, 0x08, 0x45, 0x76, 0x61, 0x6c, 0x75, 0x61,
+	0x74, 0x65, 0x12, 0x1f, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x73, 0x2e, 0x45, 0x76, 0x61, 0x75,
+	0x6c, 0x61, 0x74, 0x65, 0x53, 0x74, 0x72, 0x61, 0x74, 0x65, 0x67, 0x79, 0x52, 0x65, 0x71, 0x75,
+	0x65, 0x73, 0x74, 0x1a, 0x20, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x73, 0x2e, 0x45, 0x76, 0x61,
+	0x6c, 0x75, 0x61, 0x74, 0x65, 0x53, 0x74, 0x72, 0x61, 0x74, 0x65, 0x67, 0x79, 0x52, 0x65, 0x73,
+	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x32, 0xf0, 0x04, 0x0a, 0x0d, 0x42, 0x72, 0x6f, 0x6b, 0x65, 0x72,
+	0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x5b, 0x0a, 0x12, 0x47, 0x65, 0x74, 0x43, 0x75,
+	0x72, 0x72, 0x65, 0x6e, 0x74, 0x53, 0x65, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x73, 0x12, 0x21, 0x2e,
+	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x73, 0x2e, 0x47, 0x65, 0x74, 0x43, 0x75, 0x72, 0x72, 0x65, 0x6e,
+	0x74, 0x53, 0x65, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
+	0x1a, 0x22, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x73, 0x2e, 0x47, 0x65, 0x74, 0x43, 0x75, 0x72,
+	0x72, 0x65, 0x6e, 0x74, 0x53, 0x65, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x73, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x12, 0x46, 0x0a, 0x0b, 0x4f, 0x70, 0x65, 0x6e, 0x53, 0x65, 0x73, 0x73,
+	0x69, 0x6f, 0x6e, 0x12, 0x1a, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x73, 0x2e, 0x4f, 0x70, 0x65,
+	0x6e, 0x53, 0x65, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
+	0x1b, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x73, 0x2e, 0x4f, 0x70, 0x65, 0x6e, 0x53, 0x65, 0x73,
+	0x73, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x49, 0x0a, 0x0c,
+	0x4f, 0x70, 0x65, 0x6e, 0x50, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x1b, 0x2e, 0x70,
+	0x72, 0x6f, 0x74, 0x6f, 0x73, 0x2e, 0x4f, 0x70, 0x65, 0x6e, 0x50, 0x6f, 0x73, 0x69, 0x74, 0x69,
+	0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1c, 0x2e, 0x70, 0x72, 0x6f, 0x74,
+	0x6f, 0x73, 0x2e, 0x4f, 0x70, 0x65, 0x6e, 0x50, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x52,
+	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x4c, 0x0a, 0x0d, 0x43, 0x6c, 0x6f, 0x73, 0x65,
+	0x50, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x1c, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x73, 0x2e, 0x43, 0x6c, 0x6f, 0x73, 0x65, 0x50, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x52,
+	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1d, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x73, 0x2e,
+	0x43, 0x6c, 0x6f, 0x73, 0x65, 0x50, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73,
+	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x64, 0x0a, 0x15, 0x47, 0x65, 0x74, 0x42, 0x72, 0x6f, 0x6b,
+	0x65, 0x72, 0x50, 0x72, 0x69, 0x63, 0x65, 0x48, 0x69, 0x73, 0x74, 0x6f, 0x72, 0x79, 0x12, 0x24,
+	0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x73, 0x2e, 0x47, 0x65, 0x74, 0x42, 0x72, 0x6f, 0x6b, 0x65,
+	0x72, 0x50, 0x72, 0x69, 0x63, 0x65, 0x48, 0x69, 0x73, 0x74, 0x6f, 0x72, 0x79, 0x52, 0x65, 0x71,
+	0x75, 0x65, 0x73, 0x74, 0x1a, 0x25, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x73, 0x2e, 0x47, 0x65,
+	0x74, 0x42, 0x72, 0x6f, 0x6b, 0x65, 0x72, 0x50, 0x72, 0x69, 0x63, 0x65, 0x48, 0x69, 0x73, 0x74,
+	0x6f, 0x72, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x6a, 0x0a, 0x17, 0x53,
+	0x75, 0x62, 0x73, 0x63, 0x72, 0x69, 0x62, 0x65, 0x54, 0x6f, 0x50, 0x72, 0x69, 0x63, 0x65, 0x43,
+	0x68, 0x61, 0x6e, 0x67, 0x65, 0x73, 0x12, 0x26, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x73, 0x2e,
+	0x53, 0x75, 0x62, 0x73, 0x63, 0x72, 0x69, 0x62, 0x65, 0x54, 0x6f, 0x50, 0x72, 0x69, 0x63, 0x65,
+	0x43, 0x68, 0x61, 0x6e, 0x67, 0x65, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x27,
 	0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x73, 0x2e, 0x53, 0x75, 0x62, 0x73, 0x63, 0x72, 0x69, 0x62,
 	0x65, 0x54, 0x6f, 0x50, 0x72, 0x69, 0x63, 0x65, 0x43, 0x68, 0x61, 0x6e, 0x67, 0x65, 0x73, 0x52,
-	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x27, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x73, 0x2e,
-	0x53, 0x75, 0x62, 0x73, 0x63, 0x72, 0x69, 0x62, 0x65, 0x54, 0x6f, 0x50, 0x72, 0x69, 0x63, 0x65,
-	0x43, 0x68, 0x61, 0x6e, 0x67, 0x65, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12,
-	0x4f, 0x0a, 0x0e, 0x52, 0x65, 0x67, 0x69, 0x73, 0x74, 0x65, 0x72, 0x42, 0x72, 0x6f, 0x6b, 0x65,
-	0x72, 0x12, 0x1d, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x73, 0x2e, 0x52, 0x65, 0x67, 0x69, 0x73,
-	0x74, 0x65, 0x72, 0x42, 0x72, 0x6f, 0x6b, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
-	0x1a, 0x1e, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x73, 0x2e, 0x52, 0x65, 0x67, 0x69, 0x73, 0x74,
-	0x65, 0x72, 0x42, 0x72, 0x6f, 0x6b, 0x65, 0x72, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
-	0x42, 0x1f, 0x5a, 0x1d, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x64,
-	0x75, 0x63, 0x63, 0x2f, 0x6b, 0x77, 0xc9, 0x92, 0x6e, 0x74, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x73, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x4f, 0x0a, 0x0e, 0x52, 0x65, 0x67, 0x69, 0x73,
+	0x74, 0x65, 0x72, 0x42, 0x72, 0x6f, 0x6b, 0x65, 0x72, 0x12, 0x1d, 0x2e, 0x70, 0x72, 0x6f, 0x74,
+	0x6f, 0x73, 0x2e, 0x52, 0x65, 0x67, 0x69, 0x73, 0x74, 0x65, 0x72, 0x42, 0x72, 0x6f, 0x6b, 0x65,
+	0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1e, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x73, 0x2e, 0x52, 0x65, 0x67, 0x69, 0x73, 0x74, 0x65, 0x72, 0x42, 0x72, 0x6f, 0x6b, 0x65, 0x72,
+	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x42, 0x1f, 0x5a, 0x1d, 0x67, 0x69, 0x74, 0x68,
+	0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x64, 0x75, 0x63, 0x63, 0x2f, 0x6b, 0x77, 0xc9, 0x92,
+	0x6e, 0x74, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x73, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x33,
 }
 
 var (
@@ -4970,7 +5366,7 @@ func file_protos_proto_rawDescGZIP() []byte {
 }
 
 var file_protos_proto_enumTypes = make([]protoimpl.EnumInfo, 12)
-var file_protos_proto_msgTypes = make([]protoimpl.MessageInfo, 64)
+var file_protos_proto_msgTypes = make([]protoimpl.MessageInfo, 67)
 var file_protos_proto_goTypes = []interface{}{
 	(Broker_Name)(0),    // 0: protos.Broker.Name
 	(PriceType_Name)(0), // 1: protos.PriceType.Name
@@ -5035,37 +5431,40 @@ var file_protos_proto_goTypes = []interface{}{
 	(*SubscribeToPriceChangesResponse)(nil),               // 60: protos.SubscribeToPriceChangesResponse
 	(*RegisterBrokerRequest)(nil),                         // 61: protos.RegisterBrokerRequest
 	(*RegisterBrokerResponse)(nil),                        // 62: protos.RegisterBrokerResponse
-	(*Rule_Indicator)(nil),                                // 63: protos.Rule.Indicator
-	(*Rule_Indicator_SimpleMovingAverage)(nil),            // 64: protos.Rule.Indicator.SimpleMovingAverage
-	(*Rule_Indicator_RelativeStrengthIndex)(nil),          // 65: protos.Rule.Indicator.RelativeStrengthIndex
-	(*Rule_Indicator_MACD)(nil),                           // 66: protos.Rule.Indicator.MACD
-	(*Rule_Indicator_BollingerBands)(nil),                 // 67: protos.Rule.Indicator.BollingerBands
-	(*Rule_Indicator_SimpleTakeProfit)(nil),               // 68: protos.Rule.Indicator.SimpleTakeProfit
-	(*Rule_Indicator_PivotTakeProfit)(nil),                // 69: protos.Rule.Indicator.PivotTakeProfit
-	(*Rule_Indicator_SimpleStopLoss)(nil),                 // 70: protos.Rule.Indicator.SimpleStopLoss
-	(*Rule_Indicator_PivotStopLoss)(nil),                  // 71: protos.Rule.Indicator.PivotStopLoss
-	(*EvaluateStrategyResponse_Action)(nil),               // 72: protos.EvaluateStrategyResponse.Action
-	(*EvaluateStrategyResponse_Action_OpenPosition)(nil),  // 73: protos.EvaluateStrategyResponse.Action.OpenPosition
-	(*EvaluateStrategyResponse_Action_ClosePosition)(nil), // 74: protos.EvaluateStrategyResponse.Action.ClosePosition
-	(*User_BrokerConnection)(nil),                         // 75: protos.User.BrokerConnection
-	(*timestamp.Timestamp)(nil),                           // 76: google.protobuf.Timestamp
+	(*XTBTrade)(nil),                                      // 63: protos.XTBTrade
+	(*AddXTBTradeRequest)(nil),                            // 64: protos.AddXTBTradeRequest
+	(*AddXTBTradeResponse)(nil),                           // 65: protos.AddXTBTradeResponse
+	(*Rule_Indicator)(nil),                                // 66: protos.Rule.Indicator
+	(*Rule_Indicator_SimpleMovingAverage)(nil),            // 67: protos.Rule.Indicator.SimpleMovingAverage
+	(*Rule_Indicator_RelativeStrengthIndex)(nil),          // 68: protos.Rule.Indicator.RelativeStrengthIndex
+	(*Rule_Indicator_MACD)(nil),                           // 69: protos.Rule.Indicator.MACD
+	(*Rule_Indicator_BollingerBands)(nil),                 // 70: protos.Rule.Indicator.BollingerBands
+	(*Rule_Indicator_SimpleTakeProfit)(nil),               // 71: protos.Rule.Indicator.SimpleTakeProfit
+	(*Rule_Indicator_PivotTakeProfit)(nil),                // 72: protos.Rule.Indicator.PivotTakeProfit
+	(*Rule_Indicator_SimpleStopLoss)(nil),                 // 73: protos.Rule.Indicator.SimpleStopLoss
+	(*Rule_Indicator_PivotStopLoss)(nil),                  // 74: protos.Rule.Indicator.PivotStopLoss
+	(*EvaluateStrategyResponse_Action)(nil),               // 75: protos.EvaluateStrategyResponse.Action
+	(*EvaluateStrategyResponse_Action_OpenPosition)(nil),  // 76: protos.EvaluateStrategyResponse.Action.OpenPosition
+	(*EvaluateStrategyResponse_Action_ClosePosition)(nil), // 77: protos.EvaluateStrategyResponse.Action.ClosePosition
+	(*User_BrokerConnection)(nil),                         // 78: protos.User.BrokerConnection
+	(*timestamp.Timestamp)(nil),                           // 79: google.protobuf.Timestamp
 }
 var file_protos_proto_depIdxs = []int32{
 	0,  // 0: protos.SessionInfo.broker:type_name -> protos.Broker.Name
 	0,  // 1: protos.Broker.name:type_name -> protos.Broker.Name
-	76, // 2: protos.Candlestick.timestamp:type_name -> google.protobuf.Timestamp
+	79, // 2: protos.Candlestick.timestamp:type_name -> google.protobuf.Timestamp
 	0,  // 3: protos.Candlestick.broker:type_name -> protos.Broker.Name
 	10, // 4: protos.Candlestick.symbol:type_name -> protos.Symbol.Name
 	1,  // 5: protos.PriceType.name:type_name -> protos.PriceType.Name
 	2,  // 6: protos.OpenType.name:type_name -> protos.OpenType.Name
-	63, // 7: protos.Rule.indicator:type_name -> protos.Rule.Indicator
+	66, // 7: protos.Rule.indicator:type_name -> protos.Rule.Indicator
 	1,  // 8: protos.Rule.price_type:type_name -> protos.PriceType.Name
 	2,  // 9: protos.Rule.open_type:type_name -> protos.OpenType.Name
 	8,  // 10: protos.Status.name:type_name -> protos.Status.Name
 	9,  // 11: protos.Direction.name:type_name -> protos.Direction.Name
 	9,  // 12: protos.Position.direction:type_name -> protos.Direction.Name
-	76, // 13: protos.Position.open_time:type_name -> google.protobuf.Timestamp
-	76, // 14: protos.Position.close_time:type_name -> google.protobuf.Timestamp
+	79, // 13: protos.Position.open_time:type_name -> google.protobuf.Timestamp
+	79, // 14: protos.Position.close_time:type_name -> google.protobuf.Timestamp
 	10, // 15: protos.Symbol.name:type_name -> protos.Symbol.Name
 	0,  // 16: protos.Symbol.broker:type_name -> protos.Broker.Name
 	17, // 17: protos.RuleSet.rules:type_name -> protos.Rule
@@ -5074,97 +5473,105 @@ var file_protos_proto_depIdxs = []int32{
 	8,  // 20: protos.Strategy.status:type_name -> protos.Status.Name
 	21, // 21: protos.Strategy.symbol:type_name -> protos.Symbol
 	20, // 22: protos.Strategy.positions:type_name -> protos.Position
-	76, // 23: protos.Strategy.last_evaluated:type_name -> google.protobuf.Timestamp
+	79, // 23: protos.Strategy.last_evaluated:type_name -> google.protobuf.Timestamp
 	23, // 24: protos.CreateStrategyRequest.strategy:type_name -> protos.Strategy
 	23, // 25: protos.UpdateStrategyRequest.strategy:type_name -> protos.Strategy
 	23, // 26: protos.ListStrategiesResponse.strategies:type_name -> protos.Strategy
 	23, // 27: protos.EvaulateStrategyRequest.strategy:type_name -> protos.Strategy
 	14, // 28: protos.EvaulateStrategyRequest.candlesticks:type_name -> protos.Candlestick
-	72, // 29: protos.EvaluateStrategyResponse.action:type_name -> protos.EvaluateStrategyResponse.Action
+	75, // 29: protos.EvaluateStrategyResponse.action:type_name -> protos.EvaluateStrategyResponse.Action
 	0,  // 30: protos.GetPriceHistoryRequest.broker:type_name -> protos.Broker.Name
 	10, // 31: protos.GetPriceHistoryRequest.symbol:type_name -> protos.Symbol.Name
-	76, // 32: protos.GetPriceHistoryRequest.start:type_name -> google.protobuf.Timestamp
-	76, // 33: protos.GetPriceHistoryRequest.end:type_name -> google.protobuf.Timestamp
+	79, // 32: protos.GetPriceHistoryRequest.start:type_name -> google.protobuf.Timestamp
+	79, // 33: protos.GetPriceHistoryRequest.end:type_name -> google.protobuf.Timestamp
 	11, // 34: protos.GetPriceHistoryRequest.window:type_name -> protos.CandlestickWindow.Name
 	14, // 35: protos.GetPriceHistoryResponse.candlesticks:type_name -> protos.Candlestick
-	76, // 36: protos.Tick.timestamp:type_name -> google.protobuf.Timestamp
+	79, // 36: protos.Tick.timestamp:type_name -> google.protobuf.Timestamp
 	0,  // 37: protos.Tick.broker:type_name -> protos.Broker.Name
 	10, // 38: protos.Tick.symbol:type_name -> protos.Symbol.Name
 	37, // 39: protos.AddTickRequest.tick:type_name -> protos.Tick
-	75, // 40: protos.User.broker_connections:type_name -> protos.User.BrokerConnection
+	78, // 40: protos.User.broker_connections:type_name -> protos.User.BrokerConnection
 	40, // 41: protos.CreateUserRequest.user:type_name -> protos.User
 	40, // 42: protos.UpdateUserRequest.user:type_name -> protos.User
 	40, // 43: protos.ListUsersResponse.users:type_name -> protos.User
 	0,  // 44: protos.AddOrderRequest.broker:type_name -> protos.Broker.Name
 	10, // 45: protos.AddOrderRequest.symbol:type_name -> protos.Symbol.Name
 	9,  // 46: protos.AddOrderRequest.direction:type_name -> protos.Direction.Name
-	76, // 47: protos.AddOrderRequest.timestamp:type_name -> google.protobuf.Timestamp
+	79, // 47: protos.AddOrderRequest.timestamp:type_name -> google.protobuf.Timestamp
 	9,  // 48: protos.OpenPositionRequest.direction:type_name -> protos.Direction.Name
 	10, // 49: protos.OpenPositionRequest.symbol:type_name -> protos.Symbol.Name
 	0,  // 50: protos.ClosePositionRequest.broker:type_name -> protos.Broker.Name
 	10, // 51: protos.ClosePositionRequest.symbol:type_name -> protos.Symbol.Name
-	76, // 52: protos.ClosePositionResponse.execution_time:type_name -> google.protobuf.Timestamp
+	79, // 52: protos.ClosePositionResponse.execution_time:type_name -> google.protobuf.Timestamp
 	21, // 53: protos.GetBrokerPriceHistoryRequest.symbol:type_name -> protos.Symbol
 	14, // 54: protos.GetBrokerPriceHistoryResponse.candlesticks:type_name -> protos.Candlestick
 	10, // 55: protos.SubscribeToPriceChangesRequest.symbol:type_name -> protos.Symbol.Name
 	0,  // 56: protos.RegisterBrokerRequest.broker:type_name -> protos.Broker.Name
-	68, // 57: protos.Rule.Indicator.simple_take_profit:type_name -> protos.Rule.Indicator.SimpleTakeProfit
-	69, // 58: protos.Rule.Indicator.pivot_take_profit:type_name -> protos.Rule.Indicator.PivotTakeProfit
-	70, // 59: protos.Rule.Indicator.simple_stop_loss:type_name -> protos.Rule.Indicator.SimpleStopLoss
-	71, // 60: protos.Rule.Indicator.pivot_stop_loss:type_name -> protos.Rule.Indicator.PivotStopLoss
-	64, // 61: protos.Rule.Indicator.simple_moving_average:type_name -> protos.Rule.Indicator.SimpleMovingAverage
-	65, // 62: protos.Rule.Indicator.relative_strength_index:type_name -> protos.Rule.Indicator.RelativeStrengthIndex
-	66, // 63: protos.Rule.Indicator.macd:type_name -> protos.Rule.Indicator.MACD
-	67, // 64: protos.Rule.Indicator.bollinger_bands:type_name -> protos.Rule.Indicator.BollingerBands
-	3,  // 65: protos.Rule.Indicator.SimpleMovingAverage.condition:type_name -> protos.Rule.Indicator.SimpleMovingAverage.Condition
-	4,  // 66: protos.Rule.Indicator.RelativeStrengthIndex.condition:type_name -> protos.Rule.Indicator.RelativeStrengthIndex.Condition
-	5,  // 67: protos.Rule.Indicator.MACD.condition:type_name -> protos.Rule.Indicator.MACD.Condition
-	6,  // 68: protos.Rule.Indicator.BollingerBands.condition:type_name -> protos.Rule.Indicator.BollingerBands.Condition
-	73, // 69: protos.EvaluateStrategyResponse.Action.open_position:type_name -> protos.EvaluateStrategyResponse.Action.OpenPosition
-	74, // 70: protos.EvaluateStrategyResponse.Action.close_position:type_name -> protos.EvaluateStrategyResponse.Action.ClosePosition
-	9,  // 71: protos.EvaluateStrategyResponse.Action.OpenPosition.direction:type_name -> protos.Direction.Name
-	0,  // 72: protos.User.BrokerConnection.broker:type_name -> protos.Broker.Name
-	24, // 73: protos.DataService.CreateStrategy:input_type -> protos.CreateStrategyRequest
-	26, // 74: protos.DataService.UpdateStrategy:input_type -> protos.UpdateStrategyRequest
-	28, // 75: protos.DataService.DeleteStrategy:input_type -> protos.DeleteStrategyRequest
-	30, // 76: protos.DataService.ListStrategies:input_type -> protos.ListStrategiesRequest
-	35, // 77: protos.DataService.GetPriceHistory:input_type -> protos.GetPriceHistoryRequest
-	38, // 78: protos.DataService.AddTick:input_type -> protos.AddTickRequest
-	41, // 79: protos.DataService.CreateUser:input_type -> protos.CreateUserRequest
-	43, // 80: protos.DataService.UpdateUser:input_type -> protos.UpdateUserRequest
-	45, // 81: protos.DataService.ListUsers:input_type -> protos.ListUsersRequest
-	47, // 82: protos.DataService.AddOrder:input_type -> protos.AddOrderRequest
-	32, // 83: protos.StrategyEvaluator.Evaluate:input_type -> protos.EvaulateStrategyRequest
-	49, // 84: protos.BrokerService.GetCurrentSessions:input_type -> protos.GetCurrentSessionsRequest
-	51, // 85: protos.BrokerService.OpenSession:input_type -> protos.OpenSessionRequest
-	53, // 86: protos.BrokerService.OpenPosition:input_type -> protos.OpenPositionRequest
-	55, // 87: protos.BrokerService.ClosePosition:input_type -> protos.ClosePositionRequest
-	57, // 88: protos.BrokerService.GetBrokerPriceHistory:input_type -> protos.GetBrokerPriceHistoryRequest
-	59, // 89: protos.BrokerService.SubscribeToPriceChanges:input_type -> protos.SubscribeToPriceChangesRequest
-	61, // 90: protos.BrokerService.RegisterBroker:input_type -> protos.RegisterBrokerRequest
-	25, // 91: protos.DataService.CreateStrategy:output_type -> protos.CreateStrategyResponse
-	27, // 92: protos.DataService.UpdateStrategy:output_type -> protos.UpdateStrategyResponse
-	29, // 93: protos.DataService.DeleteStrategy:output_type -> protos.DeleteStrategyResponse
-	31, // 94: protos.DataService.ListStrategies:output_type -> protos.ListStrategiesResponse
-	36, // 95: protos.DataService.GetPriceHistory:output_type -> protos.GetPriceHistoryResponse
-	39, // 96: protos.DataService.AddTick:output_type -> protos.AddTickResponse
-	42, // 97: protos.DataService.CreateUser:output_type -> protos.CreateUserResponse
-	44, // 98: protos.DataService.UpdateUser:output_type -> protos.UpdateUserResponse
-	46, // 99: protos.DataService.ListUsers:output_type -> protos.ListUsersResponse
-	48, // 100: protos.DataService.AddOrder:output_type -> protos.AddOrderResponse
-	33, // 101: protos.StrategyEvaluator.Evaluate:output_type -> protos.EvaluateStrategyResponse
-	50, // 102: protos.BrokerService.GetCurrentSessions:output_type -> protos.GetCurrentSessionsResponse
-	52, // 103: protos.BrokerService.OpenSession:output_type -> protos.OpenSessionResponse
-	54, // 104: protos.BrokerService.OpenPosition:output_type -> protos.OpenPositionResponse
-	56, // 105: protos.BrokerService.ClosePosition:output_type -> protos.ClosePositionResponse
-	58, // 106: protos.BrokerService.GetBrokerPriceHistory:output_type -> protos.GetBrokerPriceHistoryResponse
-	60, // 107: protos.BrokerService.SubscribeToPriceChanges:output_type -> protos.SubscribeToPriceChangesResponse
-	62, // 108: protos.BrokerService.RegisterBroker:output_type -> protos.RegisterBrokerResponse
-	91, // [91:109] is the sub-list for method output_type
-	73, // [73:91] is the sub-list for method input_type
-	73, // [73:73] is the sub-list for extension type_name
-	73, // [73:73] is the sub-list for extension extendee
-	0,  // [0:73] is the sub-list for field type_name
+	79, // 57: protos.XTBTrade.timestamp:type_name -> google.protobuf.Timestamp
+	79, // 58: protos.XTBTrade.close_time:type_name -> google.protobuf.Timestamp
+	79, // 59: protos.XTBTrade.expiration:type_name -> google.protobuf.Timestamp
+	79, // 60: protos.XTBTrade.open_time:type_name -> google.protobuf.Timestamp
+	10, // 61: protos.XTBTrade.symbol:type_name -> protos.Symbol.Name
+	63, // 62: protos.AddXTBTradeRequest.trade:type_name -> protos.XTBTrade
+	71, // 63: protos.Rule.Indicator.simple_take_profit:type_name -> protos.Rule.Indicator.SimpleTakeProfit
+	72, // 64: protos.Rule.Indicator.pivot_take_profit:type_name -> protos.Rule.Indicator.PivotTakeProfit
+	73, // 65: protos.Rule.Indicator.simple_stop_loss:type_name -> protos.Rule.Indicator.SimpleStopLoss
+	74, // 66: protos.Rule.Indicator.pivot_stop_loss:type_name -> protos.Rule.Indicator.PivotStopLoss
+	67, // 67: protos.Rule.Indicator.simple_moving_average:type_name -> protos.Rule.Indicator.SimpleMovingAverage
+	68, // 68: protos.Rule.Indicator.relative_strength_index:type_name -> protos.Rule.Indicator.RelativeStrengthIndex
+	69, // 69: protos.Rule.Indicator.macd:type_name -> protos.Rule.Indicator.MACD
+	70, // 70: protos.Rule.Indicator.bollinger_bands:type_name -> protos.Rule.Indicator.BollingerBands
+	3,  // 71: protos.Rule.Indicator.SimpleMovingAverage.condition:type_name -> protos.Rule.Indicator.SimpleMovingAverage.Condition
+	4,  // 72: protos.Rule.Indicator.RelativeStrengthIndex.condition:type_name -> protos.Rule.Indicator.RelativeStrengthIndex.Condition
+	5,  // 73: protos.Rule.Indicator.MACD.condition:type_name -> protos.Rule.Indicator.MACD.Condition
+	6,  // 74: protos.Rule.Indicator.BollingerBands.condition:type_name -> protos.Rule.Indicator.BollingerBands.Condition
+	76, // 75: protos.EvaluateStrategyResponse.Action.open_position:type_name -> protos.EvaluateStrategyResponse.Action.OpenPosition
+	77, // 76: protos.EvaluateStrategyResponse.Action.close_position:type_name -> protos.EvaluateStrategyResponse.Action.ClosePosition
+	9,  // 77: protos.EvaluateStrategyResponse.Action.OpenPosition.direction:type_name -> protos.Direction.Name
+	0,  // 78: protos.User.BrokerConnection.broker:type_name -> protos.Broker.Name
+	24, // 79: protos.DataService.CreateStrategy:input_type -> protos.CreateStrategyRequest
+	26, // 80: protos.DataService.UpdateStrategy:input_type -> protos.UpdateStrategyRequest
+	28, // 81: protos.DataService.DeleteStrategy:input_type -> protos.DeleteStrategyRequest
+	30, // 82: protos.DataService.ListStrategies:input_type -> protos.ListStrategiesRequest
+	35, // 83: protos.DataService.GetPriceHistory:input_type -> protos.GetPriceHistoryRequest
+	38, // 84: protos.DataService.AddTick:input_type -> protos.AddTickRequest
+	41, // 85: protos.DataService.CreateUser:input_type -> protos.CreateUserRequest
+	43, // 86: protos.DataService.UpdateUser:input_type -> protos.UpdateUserRequest
+	45, // 87: protos.DataService.ListUsers:input_type -> protos.ListUsersRequest
+	47, // 88: protos.DataService.AddOrder:input_type -> protos.AddOrderRequest
+	64, // 89: protos.DataService.AddXTBTrade:input_type -> protos.AddXTBTradeRequest
+	32, // 90: protos.StrategyEvaluator.Evaluate:input_type -> protos.EvaulateStrategyRequest
+	49, // 91: protos.BrokerService.GetCurrentSessions:input_type -> protos.GetCurrentSessionsRequest
+	51, // 92: protos.BrokerService.OpenSession:input_type -> protos.OpenSessionRequest
+	53, // 93: protos.BrokerService.OpenPosition:input_type -> protos.OpenPositionRequest
+	55, // 94: protos.BrokerService.ClosePosition:input_type -> protos.ClosePositionRequest
+	57, // 95: protos.BrokerService.GetBrokerPriceHistory:input_type -> protos.GetBrokerPriceHistoryRequest
+	59, // 96: protos.BrokerService.SubscribeToPriceChanges:input_type -> protos.SubscribeToPriceChangesRequest
+	61, // 97: protos.BrokerService.RegisterBroker:input_type -> protos.RegisterBrokerRequest
+	25, // 98: protos.DataService.CreateStrategy:output_type -> protos.CreateStrategyResponse
+	27, // 99: protos.DataService.UpdateStrategy:output_type -> protos.UpdateStrategyResponse
+	29, // 100: protos.DataService.DeleteStrategy:output_type -> protos.DeleteStrategyResponse
+	31, // 101: protos.DataService.ListStrategies:output_type -> protos.ListStrategiesResponse
+	36, // 102: protos.DataService.GetPriceHistory:output_type -> protos.GetPriceHistoryResponse
+	39, // 103: protos.DataService.AddTick:output_type -> protos.AddTickResponse
+	42, // 104: protos.DataService.CreateUser:output_type -> protos.CreateUserResponse
+	44, // 105: protos.DataService.UpdateUser:output_type -> protos.UpdateUserResponse
+	46, // 106: protos.DataService.ListUsers:output_type -> protos.ListUsersResponse
+	48, // 107: protos.DataService.AddOrder:output_type -> protos.AddOrderResponse
+	65, // 108: protos.DataService.AddXTBTrade:output_type -> protos.AddXTBTradeResponse
+	33, // 109: protos.StrategyEvaluator.Evaluate:output_type -> protos.EvaluateStrategyResponse
+	50, // 110: protos.BrokerService.GetCurrentSessions:output_type -> protos.GetCurrentSessionsResponse
+	52, // 111: protos.BrokerService.OpenSession:output_type -> protos.OpenSessionResponse
+	54, // 112: protos.BrokerService.OpenPosition:output_type -> protos.OpenPositionResponse
+	56, // 113: protos.BrokerService.ClosePosition:output_type -> protos.ClosePositionResponse
+	58, // 114: protos.BrokerService.GetBrokerPriceHistory:output_type -> protos.GetBrokerPriceHistoryResponse
+	60, // 115: protos.BrokerService.SubscribeToPriceChanges:output_type -> protos.SubscribeToPriceChangesResponse
+	62, // 116: protos.BrokerService.RegisterBroker:output_type -> protos.RegisterBrokerResponse
+	98, // [98:117] is the sub-list for method output_type
+	79, // [79:98] is the sub-list for method input_type
+	79, // [79:79] is the sub-list for extension type_name
+	79, // [79:79] is the sub-list for extension extendee
+	0,  // [0:79] is the sub-list for field type_name
 }
 
 func init() { file_protos_proto_init() }
@@ -5786,7 +6193,7 @@ func file_protos_proto_init() {
 			}
 		}
 		file_protos_proto_msgTypes[51].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Rule_Indicator); i {
+			switch v := v.(*XTBTrade); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -5798,7 +6205,7 @@ func file_protos_proto_init() {
 			}
 		}
 		file_protos_proto_msgTypes[52].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Rule_Indicator_SimpleMovingAverage); i {
+			switch v := v.(*AddXTBTradeRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -5810,7 +6217,7 @@ func file_protos_proto_init() {
 			}
 		}
 		file_protos_proto_msgTypes[53].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Rule_Indicator_RelativeStrengthIndex); i {
+			switch v := v.(*AddXTBTradeResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -5822,7 +6229,7 @@ func file_protos_proto_init() {
 			}
 		}
 		file_protos_proto_msgTypes[54].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Rule_Indicator_MACD); i {
+			switch v := v.(*Rule_Indicator); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -5834,7 +6241,7 @@ func file_protos_proto_init() {
 			}
 		}
 		file_protos_proto_msgTypes[55].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Rule_Indicator_BollingerBands); i {
+			switch v := v.(*Rule_Indicator_SimpleMovingAverage); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -5846,7 +6253,7 @@ func file_protos_proto_init() {
 			}
 		}
 		file_protos_proto_msgTypes[56].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Rule_Indicator_SimpleTakeProfit); i {
+			switch v := v.(*Rule_Indicator_RelativeStrengthIndex); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -5858,7 +6265,7 @@ func file_protos_proto_init() {
 			}
 		}
 		file_protos_proto_msgTypes[57].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Rule_Indicator_PivotTakeProfit); i {
+			switch v := v.(*Rule_Indicator_MACD); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -5870,7 +6277,7 @@ func file_protos_proto_init() {
 			}
 		}
 		file_protos_proto_msgTypes[58].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Rule_Indicator_SimpleStopLoss); i {
+			switch v := v.(*Rule_Indicator_BollingerBands); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -5882,7 +6289,7 @@ func file_protos_proto_init() {
 			}
 		}
 		file_protos_proto_msgTypes[59].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Rule_Indicator_PivotStopLoss); i {
+			switch v := v.(*Rule_Indicator_SimpleTakeProfit); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -5894,7 +6301,7 @@ func file_protos_proto_init() {
 			}
 		}
 		file_protos_proto_msgTypes[60].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*EvaluateStrategyResponse_Action); i {
+			switch v := v.(*Rule_Indicator_PivotTakeProfit); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -5906,7 +6313,7 @@ func file_protos_proto_init() {
 			}
 		}
 		file_protos_proto_msgTypes[61].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*EvaluateStrategyResponse_Action_OpenPosition); i {
+			switch v := v.(*Rule_Indicator_SimpleStopLoss); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -5918,7 +6325,7 @@ func file_protos_proto_init() {
 			}
 		}
 		file_protos_proto_msgTypes[62].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*EvaluateStrategyResponse_Action_ClosePosition); i {
+			switch v := v.(*Rule_Indicator_PivotStopLoss); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -5930,6 +6337,42 @@ func file_protos_proto_init() {
 			}
 		}
 		file_protos_proto_msgTypes[63].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*EvaluateStrategyResponse_Action); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_protos_proto_msgTypes[64].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*EvaluateStrategyResponse_Action_OpenPosition); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_protos_proto_msgTypes[65].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*EvaluateStrategyResponse_Action_ClosePosition); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_protos_proto_msgTypes[66].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*User_BrokerConnection); i {
 			case 0:
 				return &v.state
@@ -5942,7 +6385,7 @@ func file_protos_proto_init() {
 			}
 		}
 	}
-	file_protos_proto_msgTypes[51].OneofWrappers = []interface{}{
+	file_protos_proto_msgTypes[54].OneofWrappers = []interface{}{
 		(*Rule_Indicator_SimpleTakeProfit_)(nil),
 		(*Rule_Indicator_PivotTakeProfit_)(nil),
 		(*Rule_Indicator_SimpleStopLoss_)(nil),
@@ -5952,7 +6395,7 @@ func file_protos_proto_init() {
 		(*Rule_Indicator_Macd)(nil),
 		(*Rule_Indicator_BollingerBands_)(nil),
 	}
-	file_protos_proto_msgTypes[60].OneofWrappers = []interface{}{
+	file_protos_proto_msgTypes[63].OneofWrappers = []interface{}{
 		(*EvaluateStrategyResponse_Action_OpenPosition_)(nil),
 		(*EvaluateStrategyResponse_Action_ClosePosition_)(nil),
 	}
@@ -5962,7 +6405,7 @@ func file_protos_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_protos_proto_rawDesc,
 			NumEnums:      12,
-			NumMessages:   64,
+			NumMessages:   67,
 			NumExtensions: 0,
 			NumServices:   3,
 		},
@@ -5999,6 +6442,7 @@ type DataServiceClient interface {
 	UpdateUser(ctx context.Context, in *UpdateUserRequest, opts ...grpc.CallOption) (*UpdateUserResponse, error)
 	ListUsers(ctx context.Context, in *ListUsersRequest, opts ...grpc.CallOption) (*ListUsersResponse, error)
 	AddOrder(ctx context.Context, in *AddOrderRequest, opts ...grpc.CallOption) (*AddOrderResponse, error)
+	AddXTBTrade(ctx context.Context, in *AddXTBTradeRequest, opts ...grpc.CallOption) (*AddXTBTradeResponse, error)
 }
 
 type dataServiceClient struct {
@@ -6099,6 +6543,15 @@ func (c *dataServiceClient) AddOrder(ctx context.Context, in *AddOrderRequest, o
 	return out, nil
 }
 
+func (c *dataServiceClient) AddXTBTrade(ctx context.Context, in *AddXTBTradeRequest, opts ...grpc.CallOption) (*AddXTBTradeResponse, error) {
+	out := new(AddXTBTradeResponse)
+	err := c.cc.Invoke(ctx, "/protos.DataService/AddXTBTrade", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // DataServiceServer is the server API for DataService service.
 type DataServiceServer interface {
 	CreateStrategy(context.Context, *CreateStrategyRequest) (*CreateStrategyResponse, error)
@@ -6111,6 +6564,7 @@ type DataServiceServer interface {
 	UpdateUser(context.Context, *UpdateUserRequest) (*UpdateUserResponse, error)
 	ListUsers(context.Context, *ListUsersRequest) (*ListUsersResponse, error)
 	AddOrder(context.Context, *AddOrderRequest) (*AddOrderResponse, error)
+	AddXTBTrade(context.Context, *AddXTBTradeRequest) (*AddXTBTradeResponse, error)
 }
 
 // UnimplementedDataServiceServer can be embedded to have forward compatible implementations.
@@ -6146,6 +6600,9 @@ func (*UnimplementedDataServiceServer) ListUsers(context.Context, *ListUsersRequ
 }
 func (*UnimplementedDataServiceServer) AddOrder(context.Context, *AddOrderRequest) (*AddOrderResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddOrder not implemented")
+}
+func (*UnimplementedDataServiceServer) AddXTBTrade(context.Context, *AddXTBTradeRequest) (*AddXTBTradeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddXTBTrade not implemented")
 }
 
 func RegisterDataServiceServer(s *grpc.Server, srv DataServiceServer) {
@@ -6332,6 +6789,24 @@ func _DataService_AddOrder_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _DataService_AddXTBTrade_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddXTBTradeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DataServiceServer).AddXTBTrade(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/protos.DataService/AddXTBTrade",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DataServiceServer).AddXTBTrade(ctx, req.(*AddXTBTradeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _DataService_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "protos.DataService",
 	HandlerType: (*DataServiceServer)(nil),
@@ -6375,6 +6850,10 @@ var _DataService_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "AddOrder",
 			Handler:    _DataService_AddOrder_Handler,
+		},
+		{
+			MethodName: "AddXTBTrade",
+			Handler:    _DataService_AddXTBTrade_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

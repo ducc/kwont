@@ -16,7 +16,8 @@ import (
 var (
 	level         string
 	amqpAddress   string
-	topic         string
+	tickTopic     string
+	tradeTopic    string
 	serverAddress string
 	routerAddress string
 )
@@ -24,7 +25,8 @@ var (
 func init() {
 	flag.StringVar(&level, "level", "debug", "logrus logging level")
 	flag.StringVar(&amqpAddress, "amqp-address", "", "amqp server connection address")
-	flag.StringVar(&topic, "topic", "ticks", "nats topic")
+	flag.StringVar(&tickTopic, "tick-topic", "ticks", "nats topic")
+	flag.StringVar(&tradeTopic, "trade-topic", "xtb-trades", "nats topic")
 	flag.StringVar(&serverAddress, "server-address", ":8080", "grpc server address")
 	flag.StringVar(&routerAddress, "router-address", "", "router service address")
 }
@@ -49,18 +51,40 @@ func main() {
 		}
 	}()
 
-	amqpChan, err := amqpConn.Channel()
+	tickChan, err := amqpConn.Channel()
 	if err != nil {
 		logrus.WithError(err).Fatal("creating amqp channel")
 	}
 	defer func() {
-		if err := amqpChan.Close(); err != nil {
+		if err := tickChan.Close(); err != nil {
 			logrus.WithError(err).Error("closing amqp chan")
 		}
 	}()
 
-	amqpQueue, err := amqpChan.QueueDeclare(
-		topic,
+	tradeChan, err := amqpConn.Channel()
+	if err != nil {
+		logrus.WithError(err).Fatal("creating amqp channel")
+	}
+	defer func() {
+		if err := tradeChan.Close(); err != nil {
+			logrus.WithError(err).Error("closing amqp chan")
+		}
+	}()
+
+	tickQueue, err := tickChan.QueueDeclare(
+		tickTopic,
+		true,
+		false,
+		false,
+		false,
+		nil,
+	)
+	if err != nil {
+		logrus.WithError(err).Fatal("declaring amqp queue")
+	}
+
+	tradeQueue, err := tickChan.QueueDeclare(
+		tradeTopic,
 		true,
 		false,
 		false,
@@ -78,7 +102,7 @@ func main() {
 		logrus.WithError(err).Fatal("connecting to router")
 	}
 
-	server := xtb.New(amqpChan, amqpQueue, topic, routerConn)
+	server := xtb.New(tickChan, tradeChan, tickQueue, tradeQueue, routerConn)
 	grpcServer := grpc.NewServer()
 
 	protos.RegisterBrokerServiceServer(grpcServer, server)

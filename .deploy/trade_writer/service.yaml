@@ -1,0 +1,15 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: trade-writer
+  namespace: data
+  labels:
+    name: trade-writer
+spec:
+  type: NodePort
+  selector:
+    app: trade-writer
+  ports:
+    - targetPort: 8080
+      protocol: TCP
+      port: 8080

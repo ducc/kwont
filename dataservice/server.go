@@ -214,3 +214,31 @@ func (s *server) AddOrder(ctx context.Context, req *protos.AddOrderRequest) (*pr
 
 	return &protos.AddOrderResponse{OrderId: orderID}, nil
 }
+
+func (s *server) AddXTBTrade(ctx context.Context, req *protos.AddXTBTradeRequest) (*protos.AddXTBTradeResponse, error) {
+	ts, err := ptypes.Timestamp(req.Trade.Timestamp)
+	if err != nil {
+		return nil, err
+	}
+
+	closeTime, err := ptypes.Timestamp(req.Trade.CloseTime)
+	if err != nil {
+		return nil, err
+	}
+
+	expiration, err := ptypes.Timestamp(req.Trade.Expiration)
+	if err != nil {
+		return nil, err
+	}
+
+	openTime, err := ptypes.Timestamp(req.Trade.OpenTime)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := s.db.InsertXTBTrade(ctx, ts, req.Trade.SessionId, req.Trade.Order, req.Trade.ClosePrice, closeTime, req.Trade.Closed, req.Trade.Cmd, req.Trade.Comment, req.Trade.Commission, req.Trade.CustomComment, req.Trade.Digits, expiration, req.Trade.MarginRate, req.Trade.Offset, req.Trade.OpenPrice, openTime, req.Trade.Order2, req.Trade.Position, req.Trade.Profit, req.Trade.StopLoss, req.Trade.State, req.Trade.Storage, req.Trade.Symbol.String(), req.Trade.TakeProfit, req.Trade.Type, req.Trade.Volume); err != nil {
+		return nil, err
+	}
+
+	return &protos.AddXTBTradeResponse{}, nil
+}

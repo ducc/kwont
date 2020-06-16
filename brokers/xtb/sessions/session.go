@@ -16,9 +16,11 @@ import (
 type Session struct {
 	sync.Mutex
 
-	amqpChan  *amqp.Channel
-	amqpQueue amqp.Queue
-	topic     string
+	tickChan  *amqp.Channel
+	tickQueue amqp.Queue
+
+	tradeChan  *amqp.Channel
+	tradeQueue amqp.Queue
 
 	SessionID string
 	username  string
@@ -33,7 +35,7 @@ type Session struct {
 	tickSubscriptions map[protos.Symbol_Name]bool
 }
 
-func newSession(ctx context.Context, amqpChan *amqp.Channel, amqpQueue amqp.Queue, topic, username, password, sessionID string) (*Session, error) {
+func newSession(ctx context.Context, tickChan, tradeChan *amqp.Channel, tickQueue, tradeQueue amqp.Queue, username, password, sessionID string) (*Session, error) {
 	tx, err := transactional.New(ctx)
 	if err != nil {
 		panic(err)
@@ -57,9 +59,10 @@ func newSession(ctx context.Context, amqpChan *amqp.Channel, amqpQueue amqp.Queu
 	}
 
 	s := &Session{
-		amqpChan:          amqpChan,
-		amqpQueue:         amqpQueue,
-		topic:             topic,
+		tickChan:          tickChan,
+		tickQueue:         tickQueue,
+		tradeChan:         tradeChan,
+		tradeQueue:        tradeQueue,
 		SessionID:         sessionID,
 		username:          username,
 		password:          password,
@@ -161,7 +164,15 @@ func (s *Session) transformTickPricesToProto() {
 		defer wg.Done()
 
 		for trade := range s.stream.GetTradesResponses() {
-			_ = trade
+			ctx := context.Background()
+
+			trade, err := utils.TradeToProto(s.SessionID, trade)
+			if err != nil {
+				logrus.WithError(err).Error("converting trade to proto")
+				continue
+			}
+
+			s.sendTradeToQueue(ctx, trade)
 		}
 	}()
 
@@ -184,9 +195,9 @@ func (s *Session) sendTickToQueue(ctx context.Context, tick *protos.Tick) {
 		return
 	}
 
-	if err := s.amqpChan.Publish(
+	if err := s.tickChan.Publish(
 		"",               // exchange
-		s.amqpQueue.Name, // routing key
+		s.tickQueue.Name, // routing key
 		false,            // mandatory
 		false,
 		amqp.Publishing{
@@ -194,5 +205,25 @@ func (s *Session) sendTickToQueue(ctx context.Context, tick *protos.Tick) {
 			Body:         bytes,
 		}); err != nil {
 		logrus.WithError(err).Error("publishing tick amqp message")
+	}
+}
+
+func (s *Session) sendTradeToQueue(ctx context.Context, trade *protos.XTBTrade) {
+	bytes, err := proto.Marshal(trade)
+	if err != nil {
+		logrus.WithError(err).Error("error marshalling trade")
+		return
+	}
+
+	if err := s.tickChan.Publish(
+		"",               // exchange
+		s.tickQueue.Name, // routing key
+		false,            // mandatory
+		false,
+		amqp.Publishing{
+			DeliveryMode: amqp.Persistent,
+			Body:         bytes,
+		}); err != nil {
+		logrus.WithError(err).Error("publishing trade amqp message")
 	}
 }

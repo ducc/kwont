@@ -70,8 +70,9 @@ CREATE TABLE IF NOT EXISTS orders (
 );
 
 CREATE TABLE IF NOT EXISTS xtb_trades (
+    session_id UUID,
+    "order" int,
     timestamp timestamp,
-    order int,
     close_price decimal not null,
     close_time timestamp not null,
     closed bool not null,
@@ -82,7 +83,7 @@ CREATE TABLE IF NOT EXISTS xtb_trades (
     digits int not null,
     expiration timestamp not null,
     margin_rate decimal not null,
-    offset int not null,
+    "offset" int not null,
     open_price decimal not null,
     open_time timestamp not null,
     order_2 int not null,
@@ -95,5 +96,5 @@ CREATE TABLE IF NOT EXISTS xtb_trades (
     take_profit decimal not null,
     type text not null,
     volume decimal not null,
-    PRIMARY KEY (timestamp, order)
+    PRIMARY KEY (session_id, "order")
 );

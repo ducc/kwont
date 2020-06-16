@@ -258,6 +258,8 @@ service DataService {
     rpc ListUsers(ListUsersRequest) returns (ListUsersResponse);
 
     rpc AddOrder(AddOrderRequest) returns (AddOrderResponse);
+
+    rpc AddXTBTrade(AddXTBTradeRequest) returns (AddXTBTradeResponse);
 }
 
 message CreateStrategyRequest {
@@ -473,7 +475,36 @@ message RegisterBrokerRequest {
 }
 message RegisterBrokerResponse {}
 
+message XTBTrade {
+    google.protobuf.Timestamp timestamp = 1;
+    string session_id = 2;
+    int64 order = 3;
+    double close_price = 4;
+    google.protobuf.Timestamp close_time = 5;
+    bool closed = 6;
+    string cmd = 7;
+    string comment = 8;
+    double commission = 9;
+    string custom_comment = 10;
+    int64 digits = 11;
+    google.protobuf.Timestamp expiration = 12;
+    double margin_rate = 13;
+    int64 offset = 14;
+    double open_price = 15;
+    google.protobuf.Timestamp open_time = 16;
+    int64 order2 = 17;
+    int64 position = 18;
+    double profit = 19;
+    double stop_loss = 20;
+    string state = 21;
+    double storage = 22;
+    Symbol.Name symbol = 23;
+    double take_profit = 24;
+    string type = 25;
+    double volume = 26;
+}
 
-
-
-
+message AddXTBTradeRequest {
+    XTBTrade trade = 1;
+}
+message AddXTBTradeResponse {}

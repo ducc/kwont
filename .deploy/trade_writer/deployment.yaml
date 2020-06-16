@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: trade-writer
+  namespace: data
+  labels:
+    app: trade-writer
+    keel.sh/policy: force
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: trade-writer
+  template:
+    metadata:
+      labels:
+        app: trade-writer
+    spec:
+      containers:
+        - name: trade-writer
+          image: joeburnardredbrain/kwont:trade_writer-latest
+          imagePullPolicy: Always
+          args:
+            - --level=debug
+            - --amqp-address=amqp://user:pass@rabbitmq.default:5672/
+            - --topic=xtb-trades
+            - --broker=XTB_DEMO
+            - --dataservice-address=dataservice.data:8080
+          resources:
+            requests:
+              cpu: 50m
+              memory: 100M
+            limits:
+              cpu: 100m
+              memory: 200M
+          volumeMounts:
+            - name: "cacerts"
+              mountPath: "/etc/ssl/cacerts"
+              readOnly: true
+      volumes:
+        - name: "cacerts"
+          hostPath:
+            path: "/etc/ssl/certs"

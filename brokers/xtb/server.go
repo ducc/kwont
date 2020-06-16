@@ -18,17 +18,19 @@ type server struct {
 	protos.BrokerServiceServer
 	sessionsLock sync.Mutex
 	sessions     map[string]*sessions.SessionController
-	amqpChan     *amqp.Channel
-	amqpQueue    amqp.Queue
-	topic        string
+	tickChan     *amqp.Channel
+	tradeChan    *amqp.Channel
+	tickQueue    amqp.Queue
+	tradeQueue   amqp.Queue
 }
 
-func New(amqpChan *amqp.Channel, amqpQueue amqp.Queue, topic string, router protos.BrokerServiceClient) *server {
+func New(tickChan, tradeChan *amqp.Channel, tickQueue, tradeQueue amqp.Queue, router protos.BrokerServiceClient) *server {
 	s := &server{
-		sessions:  make(map[string]*sessions.SessionController),
-		amqpChan:  amqpChan,
-		amqpQueue: amqpQueue,
-		topic:     topic,
+		sessions:   make(map[string]*sessions.SessionController),
+		tickChan:   tickChan,
+		tradeChan:  tradeChan,
+		tickQueue:  tickQueue,
+		tradeQueue: tradeQueue,
 	}
 	go s.registerWithRouter(router)
 
@@ -138,7 +140,7 @@ func (s *server) listSessionIDs() []string {
 }
 
 func (s *server) createSession(ctx context.Context, username, password string) (*sessions.SessionController, error) {
-	session, err := sessions.New(ctx, s.amqpChan, s.amqpQueue, s.topic, username, password)
+	session, err := sessions.New(ctx, s.tickChan, s.tradeChan, s.tickQueue, s.tradeQueue, username, password)
 	if err != nil {
 		return nil, err
 	}

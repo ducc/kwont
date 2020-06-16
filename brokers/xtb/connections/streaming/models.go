@@ -91,35 +91,35 @@ type GetTradesRequest struct {
 }
 
 type GetTradesResponse struct {
-	Command string                      `json:"command"`
-	Data    *GetTradeStatusResponseData `json:"data"`
+	Command string                 `json:"command"`
+	Data    *GetTradesResponseData `json:"data"`
 }
 
 type GetTradesResponseData struct {
-	ClosePrice    float64                   `json:"close_price"`
-	CloseTime     int64                     `json:"close_time"`
-	Closed        bool                      `json:"closed"`
-	Cmd           GetTradesResponseDataCmd  `json:"cmd"`
-	Comment       string                    `json:"comment"`
-	Commission    float64                   `json:"commission"`
-	CustomComment string                    `json:"customComment"`
-	Digits        int64                     `json:"digits"`
-	Expiration    int64                     `json:"expiration"`
-	MarginRate    float64                   `json:"margin_rate"`
-	Offset        int64                     `json:"offset"`
-	OpenPrice     float64                   `json:"open_price"`
-	OpenTime      int64                     `json:"open_time"`
-	Order         int64                     `json:"order"`
-	Order2        int64                     `json:"order2"`
-	Position      int64                     `json:"position"`
-	Profit        float64                   `json:"profit"`
-	StopLoss      float64                   `json:"sl"`
-	State         GetTradesResponseDataCmd  `json:"state"`
-	Storage       float64                   `json:"storage"`
-	Symbol        string                    `json:"symbol"`
-	TakeProfit    float64                   `json:"tp"`
-	Type          GetTradesResponseDataType `json:"type"`
-	Volume        float64                   `json:"volume"`
+	ClosePrice    float64                    `json:"close_price"`
+	CloseTime     int64                      `json:"close_time"`
+	Closed        bool                       `json:"closed"`
+	Cmd           GetTradesResponseDataCmd   `json:"cmd"`
+	Comment       string                     `json:"comment"`
+	Commission    float64                    `json:"commission"`
+	CustomComment string                     `json:"customComment"`
+	Digits        int64                      `json:"digits"`
+	Expiration    int64                      `json:"expiration"`
+	MarginRate    float64                    `json:"margin_rate"`
+	Offset        int64                      `json:"offset"`
+	OpenPrice     float64                    `json:"open_price"`
+	OpenTime      int64                      `json:"open_time"`
+	Order         int64                      `json:"order"`
+	Order2        int64                      `json:"order2"`
+	Position      int64                      `json:"position"`
+	Profit        float64                    `json:"profit"`
+	StopLoss      float64                    `json:"sl"`
+	State         GetTradesResponseDataState `json:"state"`
+	Storage       float64                    `json:"storage"`
+	Symbol        string                     `json:"symbol"`
+	TakeProfit    float64                    `json:"tp"`
+	Type          GetTradesResponseDataType  `json:"type"`
+	Volume        float64                    `json:"volume"`
 }
 
 type GetTradesResponseDataCmd int
@@ -135,12 +135,46 @@ const (
 	GetTradesResponseDataCmd_CREDIT     GetTradesResponseDataCmd = 7
 )
 
+func (c GetTradesResponseDataCmd) String() string {
+	switch c {
+	case GetTradesResponseDataCmd_BUY:
+		return "BUY"
+	case GetTradesResponseDataCmd_SELL:
+		return "SELL"
+	case GetTradesResponseDataCmd_BUY_LIMIT:
+		return "BUY_LIMIT"
+	case GetTradesResponseDataCmd_SELL_LIMIT:
+		return "SELL_LIMIT"
+	case GetTradesResponseDataCmd_BUY_STOP:
+		return "BUY_STOP"
+	case GetTradesResponseDataCmd_SELL_STOP:
+		return "SELL_STOP"
+	case GetTradesResponseDataCmd_BALANCE:
+		return "BALANCE"
+	case GetTradesResponseDataCmd_CREDIT:
+		return "CREDIT"
+	default:
+		return "UNKNOWN"
+	}
+}
+
 type GetTradesResponseDataState string
 
 const (
 	GetTradesResponseDataState_MODIFIED GetTradesResponseDataState = "Modified"
 	GetTradesResponseDataState_DELETED  GetTradesResponseDataState = "Deleted"
 )
+
+func (s GetTradesResponseDataState) String() string {
+	switch s {
+	case GetTradesResponseDataState_MODIFIED:
+		return "MODIFIED"
+	case GetTradesResponseDataState_DELETED:
+		return "DELETED"
+	default:
+		return "UNKNOWN"
+	}
+}
 
 type GetTradesResponseDataType int
 
@@ -151,3 +185,20 @@ const (
 	GetTradesResponseDataType_MODIFY  GetTradesResponseDataType = 3
 	GetTradesResponseDataType_DELETE  GetTradesResponseDataType = 4
 )
+
+func (t GetTradesResponseDataType) String() string {
+	switch t {
+	case GetTradesResponseDataType_OPEN:
+		return "OPEN"
+	case GetTradesResponseDataType_PENDING:
+		return "PENDING"
+	case GetTradesResponseDataType_CLOSE:
+		return "CLOSE"
+	case GetTradesResponseDataType_MODIFY:
+		return "MODIFY"
+	case GetTradesResponseDataType_DELETE:
+		return "DELETE"
+	default:
+		return "UNKNOWN"
+	}
+}

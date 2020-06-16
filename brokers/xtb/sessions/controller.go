@@ -15,14 +15,14 @@ type SessionController struct {
 	sync.Mutex
 }
 
-func New(ctx context.Context, amqpChan *amqp.Channel, amqpQueue amqp.Queue, topic, username, password string) (*SessionController, error) {
+func New(ctx context.Context, tickChan, tradeChan *amqp.Channel, tickQueue, tradeQueue amqp.Queue, username, password string) (*SessionController, error) {
 	s := &SessionController{}
 
 	sessionID := uuid.New().String()
 	log := logrus.WithField("session_id", sessionID)
 
 	createSession := func() error {
-		session, err := newSession(ctx, amqpChan, amqpQueue, topic, username, password, sessionID)
+		session, err := newSession(ctx, tickChan, tradeChan, tickQueue, tradeQueue, username, password, sessionID)
 		if err != nil {
 			return err
 		}
