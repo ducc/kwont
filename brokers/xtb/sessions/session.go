@@ -218,10 +218,10 @@ func (s *Session) sendTradeToQueue(ctx context.Context, trade *protos.XTBTrade) 
 		return
 	}
 
-	if err := s.tickChan.Publish(
-		"",               // exchange
-		s.tickQueue.Name, // routing key
-		false,            // mandatory
+	if err := s.tradeChan.Publish(
+		"",                // exchange
+		s.tradeQueue.Name, // routing key
+		false,             // mandatory
 		false,
 		amqp.Publishing{
 			DeliveryMode: amqp.Persistent,
