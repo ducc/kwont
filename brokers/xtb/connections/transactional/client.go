@@ -138,14 +138,15 @@ func (c *Client) SendLogin(ctx context.Context, username, password string) error
 	return c.conn.WriteJSON(ctx, msg)
 }
 
-func (c *Client) OpenTradeTransaction(ctx context.Context, symbol string, direction protos.Direction_Name, price, volume float64) error {
+func (c *Client) OpenTradeTransaction(ctx context.Context, symbol string, direction protos.Direction_Name, price, volume float64, orderID string) error {
 	c.log.Debug("sending open trade transaction message")
 
 	info := &TradeTransactionInfo{
-		Symbol: symbol,
-		Price:  price,
-		Volume: volume,
-		Type:   TradeTransactionInfoType_OPEN,
+		Symbol:        symbol,
+		Price:         price,
+		Volume:        volume,
+		Type:          TradeTransactionInfoType_OPEN,
+		CustomComment: orderID,
 	}
 
 	switch direction {
