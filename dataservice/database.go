@@ -401,7 +401,14 @@ VALUES ($1, $2, $3, $4, $5, $6::bool, $7, $8, $9, $10,
 		$20, $21, $22, $23, $24, $25, $26);
 `
 
-	if _, err := d.db.ExecContext(ctx, stmt, sessionID, order, timestamp, closePrice, closeTime, closed, cmd,
+	var closedVal int
+	if closed {
+		closedVal = 1
+	} else {
+		closedVal = 0
+	}
+
+	if _, err := d.db.ExecContext(ctx, stmt, sessionID, order, timestamp, closePrice, closeTime, closedVal, cmd,
 		comment, commission, customComment, digits, expiration, marginRate,
 		offset, openPrice, openTime, order2, position, profit, stopLoss,
 		state, storage, symbol, takeProfit, tradeType, volume); err != nil {
