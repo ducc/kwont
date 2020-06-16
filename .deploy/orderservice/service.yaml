@@ -1,0 +1,15 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: orderservice
+  namespace: orders
+  labels:
+    name: orderservice
+spec:
+  type: NodePort
+  selector:
+    app: orderservice
+  ports:
+    - targetPort: 8080
+      protocol: TCP
+      port: 8080

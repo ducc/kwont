@@ -439,8 +439,13 @@ message OpenPositionRequest {
     Symbol.Name symbol = 3;
     double price = 4;
     double voliume = 5;
+    string user_id = 6;
+    Broker.Name broker = 7;
+    string id = 8;
 }
-message OpenPositionResponse {}
+message OpenPositionResponse {
+    string id = 1; // if an id is not provided in the request it is given in the response
+}
 
 message ClosePositionRequest {
     string session_id = 1;
@@ -448,6 +453,7 @@ message ClosePositionRequest {
     Symbol.Name symbol = 3;
     string id = 4;
     int64 price = 5;
+    string user_id = 6;
 }
 message ClosePositionResponse {
     google.protobuf.Timestamp execution_time = 1;
@@ -508,3 +514,9 @@ message AddXTBTradeRequest {
     XTBTrade trade = 1;
 }
 message AddXTBTradeResponse {}
+
+service OrderService {
+    rpc OpenPosition(OpenPositionRequest) returns (OpenPositionResponse);
+    rpc ClosePosition(ClosePositionRequest) returns (ClosePositionResponse);
+}
+
