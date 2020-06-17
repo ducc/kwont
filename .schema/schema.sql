@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS positions (
     close_price INT NOT NULL,
     open_time TIMESTAMPTZ NOT NULL,
     close_time TIMESTAMPTZ NOT NULL
-) INTERLEAVE IN PARENT (strategies);
+);
 
 CREATE TABLE IF NOT EXISTS users (
     user_id UUID NOT NULL DEFAULT gen_random_uuid(),
@@ -69,8 +69,19 @@ CREATE TABLE IF NOT EXISTS orders (
     PRIMARY KEY (order_id)
 );
 
+CREATE TABLE IF NOT EXISTS xtb_trade_status (
+    session_id UUID, -- todo user id instead?
+    "order" int,
+    timestamp timestamp,
+    custom_comment text not null,
+    message text not null,
+    price decimal not null,
+    request_status text not null,
+    PRIMARY KEY (session_id, "order", timestamp)
+);
+
 CREATE TABLE IF NOT EXISTS xtb_trades (
-    session_id UUID,
+    session_id UUID, -- todo user id instead?
     "order" int,
     timestamp timestamp,
     close_price decimal not null,

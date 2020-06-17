@@ -14,12 +14,13 @@ import (
 )
 
 var (
-	level         string
-	amqpAddress   string
-	tickTopic     string
-	tradeTopic    string
-	serverAddress string
-	routerAddress string
+	level            string
+	amqpAddress      string
+	tickTopic        string
+	tradeTopic       string
+	tradeStatusTopic string
+	serverAddress    string
+	routerAddress    string
 )
 
 func init() {
@@ -27,6 +28,7 @@ func init() {
 	flag.StringVar(&amqpAddress, "amqp-address", "", "amqp server connection address")
 	flag.StringVar(&tickTopic, "tick-topic", "ticks", "nats topic")
 	flag.StringVar(&tradeTopic, "trade-topic", "xtb-trades", "nats topic")
+	flag.StringVar(&tradeStatusTopic, "trade-status-topic", "xtb-trade-status", "nats topic")
 	flag.StringVar(&serverAddress, "server-address", ":8080", "grpc server address")
 	flag.StringVar(&routerAddress, "router-address", "", "router service address")
 }
@@ -71,6 +73,16 @@ func main() {
 		}
 	}()
 
+	tradeStatusChan, err := amqpConn.Channel()
+	if err != nil {
+		logrus.WithError(err).Fatal("creating amqp channel")
+	}
+	defer func() {
+		if err := tradeStatusChan.Close(); err != nil {
+			logrus.WithError(err).Error("closing amqp chan")
+		}
+	}()
+
 	tickQueue, err := tickChan.QueueDeclare(
 		tickTopic,
 		true,
@@ -83,8 +95,20 @@ func main() {
 		logrus.WithError(err).Fatal("declaring amqp queue")
 	}
 
-	tradeQueue, err := tickChan.QueueDeclare(
+	tradeQueue, err := tradeChan.QueueDeclare(
 		tradeTopic,
+		true,
+		false,
+		false,
+		false,
+		nil,
+	)
+	if err != nil {
+		logrus.WithError(err).Fatal("declaring amqp queue")
+	}
+
+	tradeStatusQueue, err := tradeStatusChan.QueueDeclare(
+		tradeStatusTopic,
 		true,
 		false,
 		false,
@@ -102,7 +126,7 @@ func main() {
 		logrus.WithError(err).Fatal("connecting to router")
 	}
 
-	server := xtb.New(tickChan, tradeChan, tickQueue, tradeQueue, routerConn)
+	server := xtb.New(tickChan, tradeChan, tradeStatusChan, tickQueue, tradeQueue, tradeStatusQueue, routerConn)
 	grpcServer := grpc.NewServer()
 
 	protos.RegisterBrokerServiceServer(grpcServer, server)

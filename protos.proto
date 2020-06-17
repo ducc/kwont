@@ -260,6 +260,7 @@ service DataService {
     rpc AddOrder(AddOrderRequest) returns (AddOrderResponse);
 
     rpc AddXTBTrade(AddXTBTradeRequest) returns (AddXTBTradeResponse);
+    rpc AddXTBTradeStatus(AddXTBTradeStatusRequest) returns (AddXTBTradeStatusResponse);
 }
 
 message CreateStrategyRequest {
@@ -480,6 +481,21 @@ message RegisterBrokerRequest {
     string address = 2;
 }
 message RegisterBrokerResponse {}
+
+message XTBTradeStatus {
+    google.protobuf.Timestamp timestamp = 1;
+    string session_id = 2;
+    int64 order = 3;
+    string custom_comment = 4;
+    string message = 5;
+    double price = 6;
+    string request_status = 7;
+}
+
+message AddXTBTradeStatusRequest {
+    XTBTradeStatus status = 1;
+}
+message AddXTBTradeStatusResponse {}
 
 message XTBTrade {
     google.protobuf.Timestamp timestamp = 1;

@@ -242,3 +242,16 @@ func (s *server) AddXTBTrade(ctx context.Context, req *protos.AddXTBTradeRequest
 
 	return &protos.AddXTBTradeResponse{}, nil
 }
+
+func (s *server) AddXTBTradeStatus(ctx context.Context, req *protos.AddXTBTradeStatusRequest) (*protos.AddXTBTradeStatusResponse, error) {
+	ts, err := ptypes.Timestamp(req.Status.Timestamp)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := s.db.InsertXTBTradeStatus(ctx, ts, req.Status.SessionId, req.Status.Order, req.Status.CustomComment, req.Status.Message, req.Status.Price, req.Status.RequestStatus); err != nil {
+		return nil, err
+	}
+
+	return &protos.AddXTBTradeStatusResponse{}, nil
+}

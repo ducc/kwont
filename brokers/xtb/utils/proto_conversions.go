@@ -31,6 +31,23 @@ func TickPriceToProto(tickPrice *streaming.GetTickPricesResponse) (*protos.Tick,
 	}, nil
 }
 
+func TradeStatusToProto(sessionID string, trade *streaming.GetTradeStatusResponse) (*protos.XTBTradeStatus, error) {
+	timestamp, err := ptypes.TimestampProto(time.Now())
+	if err != nil {
+		return nil, err
+	}
+
+	return &protos.XTBTradeStatus{
+		Timestamp:     timestamp,
+		SessionId:     sessionID,
+		Order:         trade.Data.Order,
+		CustomComment: trade.Data.CustomComment,
+		Message:       trade.Data.Message,
+		Price:         trade.Data.Price,
+		RequestStatus: trade.Data.RequestStatus.String(),
+	}, nil
+}
+
 func TradeToProto(sessionID string, trade *streaming.GetTradesResponse) (*protos.XTBTrade, error) {
 	timestamp, err := ptypes.TimestampProto(time.Now())
 	if err != nil {

@@ -71,7 +71,7 @@ type GetTradeStatusResponse struct {
 type GetTradeStatusResponseData struct {
 	CustomComment string                      `json:"customComment"`
 	Message       string                      `json:"message"`
-	Order         int                         `json:"order"`
+	Order         int64                       `json:"order"`
 	Price         float64                     `json:"price"`
 	RequestStatus GetTradeStatusRequestStatus `json:"requestStatus"`
 }
@@ -84,6 +84,21 @@ const (
 	GetTradeStatusRequestStatus_ACCEPTED = 3
 	GetTradeStatusRequestStatus_REJECTED = 4
 )
+
+func (s GetTradeStatusRequestStatus) String() string {
+	switch s {
+	case GetTradeStatusRequestStatus_ERROR:
+		return "ERROR"
+	case GetTradeStatusRequestStatus_PENDING:
+		return "PENDING"
+	case GetTradeStatusRequestStatus_ACCEPTED:
+		return "ACCEPTED"
+	case GetTradeStatusRequestStatus_REJECTED:
+		return "REJECTED"
+	default:
+		return "UNKNOWN"
+	}
+}
 
 type GetTradesRequest struct {
 	Command         string `json:"command"`

@@ -22,6 +22,9 @@ type Session struct {
 	tradeChan  *amqp.Channel
 	tradeQueue amqp.Queue
 
+	tradeStatusChan  *amqp.Channel
+	tradeStatusQueue amqp.Queue
+
 	SessionID string
 	username  string
 	password  string
@@ -35,7 +38,7 @@ type Session struct {
 	tickSubscriptions map[protos.Symbol_Name]bool
 }
 
-func newSession(ctx context.Context, tickChan, tradeChan *amqp.Channel, tickQueue, tradeQueue amqp.Queue, username, password, sessionID string) (*Session, error) {
+func newSession(ctx context.Context, tickChan, tradeChan, tradeStatusChan *amqp.Channel, tickQueue, tradeQueue, tradeStatusQueue amqp.Queue, username, password, sessionID string) (*Session, error) {
 	tx, err := transactional.New(ctx)
 	if err != nil {
 		panic(err)
@@ -63,6 +66,8 @@ func newSession(ctx context.Context, tickChan, tradeChan *amqp.Channel, tickQueu
 		tickQueue:         tickQueue,
 		tradeChan:         tradeChan,
 		tradeQueue:        tradeQueue,
+		tradeStatusChan:   tradeStatusChan,
+		tradeStatusQueue:  tradeStatusQueue,
 		SessionID:         sessionID,
 		username:          username,
 		password:          password,
@@ -181,8 +186,17 @@ func (s *Session) transformTickPricesToProto() {
 	go func() {
 		defer wg.Done()
 
-		for tradeStatus := range s.stream.GetTradeStatusResponses() {
-			_ = tradeStatus
+		for status := range s.stream.GetTradeStatusResponses() {
+			logrus.Debug("processing trade status response")
+			ctx := context.Background()
+
+			status, err := utils.TradeStatusToProto(s.SessionID, status)
+			if err != nil {
+				logrus.WithError(err).Error("converting trade status to proto")
+				continue
+			}
+
+			s.sendTradeStatusToQueue(ctx, status)
 		}
 	}()
 
@@ -206,6 +220,28 @@ func (s *Session) sendTickToQueue(ctx context.Context, tick *protos.Tick) {
 			Body:         bytes,
 		}); err != nil {
 		logrus.WithError(err).Error("publishing tick amqp message")
+	}
+}
+
+func (s *Session) sendTradeStatusToQueue(ctx context.Context, status *protos.XTBTradeStatus) {
+	logrus.Debug("sending trade status to queue")
+
+	bytes, err := proto.Marshal(status)
+	if err != nil {
+		logrus.WithError(err).Error("error marshalling trade status")
+		return
+	}
+
+	if err := s.tradeStatusChan.Publish(
+		"",                      // exchange
+		s.tradeStatusQueue.Name, // routing key
+		false,                   // mandatory
+		false,
+		amqp.Publishing{
+			DeliveryMode: amqp.Persistent,
+			Body:         bytes,
+		}); err != nil {
+		logrus.WithError(err).Error("publishing trade status amqp message")
 	}
 }
 

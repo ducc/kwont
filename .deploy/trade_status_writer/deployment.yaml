@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: trade-status-writer
+  name: trade-writer
   namespace: data
   labels:
-    app: trade-status-writer
+    app: trade-writer
     keel.sh/policy: force
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: trade-status-writer
+      app: trade-writer
   template:
     metadata:
       labels:
@@ -18,12 +18,12 @@ spec:
     spec:
       containers:
         - name: trade-writer
-          image: joeburnardredbrain/kwont:trade_status_writer-latest
+          image: joeburnardredbrain/kwont:trade_writer-latest
           imagePullPolicy: Always
           args:
             - --level=debug
             - --amqp-address=amqp://user:pass@rabbitmq.default:5672/
-            - --topic=xtb-trade-status
+            - --topic=xtb-trades
             - --broker=XTB_DEMO
             - --dataservice-address=dataservice.data:8080
           resources:
