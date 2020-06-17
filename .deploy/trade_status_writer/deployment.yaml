@@ -14,10 +14,10 @@ spec:
   template:
     metadata:
       labels:
-        app: trade-writer
+        app: trade-status-writer
     spec:
       containers:
-        - name: trade-writer
+        - name: trade-status-writer
           image: joeburnardredbrain/kwont:trade_status_writer-latest
           imagePullPolicy: Always
           args:
