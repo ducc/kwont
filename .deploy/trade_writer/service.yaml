@@ -1,14 +1,14 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: trade-status-writer
+  name: trade-writer
   namespace: data
   labels:
-    name: trade-status-writer
+    name: trade-writer
 spec:
   type: NodePort
   selector:
-    app: trade-status-writer
+    app: trade-writer
   ports:
     - targetPort: 8080
       protocol: TCP
