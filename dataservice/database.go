@@ -410,3 +410,16 @@ VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10,
 
 	return nil
 }
+
+func (d *database) InsertXTBTradeStatus(ctx context.Context, timestamp time.Time, sessionID string, order int64, customComment, message string, price float64, requestStatus string) error {
+	const stmt = `
+INSERT INTO xtb_trade_status (session_id, "order", timestamp, custom_comment, message, price, request_status)
+VALUES ($1, $2, $3, $4, $5, $6, $7);
+`
+
+	if _, err := d.db.ExecContext(ctx, stmt, sessionID, order, timestamp, customComment, message, price, requestStatus); err != nil {
+		return err
+	}
+
+	return nil
+}

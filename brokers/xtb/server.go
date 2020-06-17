@@ -16,21 +16,25 @@ import (
 
 type server struct {
 	protos.BrokerServiceServer
-	sessionsLock sync.Mutex
-	sessions     map[string]*sessions.SessionController
-	tickChan     *amqp.Channel
-	tradeChan    *amqp.Channel
-	tickQueue    amqp.Queue
-	tradeQueue   amqp.Queue
+	sessionsLock     sync.Mutex
+	sessions         map[string]*sessions.SessionController
+	tickChan         *amqp.Channel
+	tradeChan        *amqp.Channel
+	tradeStatusChan  *amqp.Channel
+	tickQueue        amqp.Queue
+	tradeQueue       amqp.Queue
+	tradeStatusQueue amqp.Queue
 }
 
-func New(tickChan, tradeChan *amqp.Channel, tickQueue, tradeQueue amqp.Queue, router protos.BrokerServiceClient) *server {
+func New(tickChan, tradeChan, tradeStatusChan *amqp.Channel, tickQueue, tradeQueue, tradeStatusQueue amqp.Queue, router protos.BrokerServiceClient) *server {
 	s := &server{
-		sessions:   make(map[string]*sessions.SessionController),
-		tickChan:   tickChan,
-		tradeChan:  tradeChan,
-		tickQueue:  tickQueue,
-		tradeQueue: tradeQueue,
+		sessions:         make(map[string]*sessions.SessionController),
+		tickChan:         tickChan,
+		tradeChan:        tradeChan,
+		tradeStatusChan:  tradeStatusChan,
+		tickQueue:        tickQueue,
+		tradeQueue:       tradeQueue,
+		tradeStatusQueue: tradeStatusQueue,
 	}
 	go s.registerWithRouter(router)
 
@@ -140,7 +144,7 @@ func (s *server) listSessionIDs() []string {
 }
 
 func (s *server) createSession(ctx context.Context, username, password string) (*sessions.SessionController, error) {
-	session, err := sessions.New(ctx, s.tickChan, s.tradeChan, s.tickQueue, s.tradeQueue, username, password)
+	session, err := sessions.New(ctx, s.tickChan, s.tradeChan, s.tradeStatusChan, s.tickQueue, s.tradeQueue, s.tradeStatusQueue, username, password)
 	if err != nil {
 		return nil, err
 	}
