@@ -96,5 +96,5 @@ CREATE TABLE IF NOT EXISTS xtb_trades (
     take_profit decimal not null,
     type text not null,
     volume decimal not null,
-    PRIMARY KEY (session_id, "order")
+    PRIMARY KEY (session_id, "order", timestamp)
 );

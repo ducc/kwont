@@ -392,7 +392,7 @@ func (d *database) InsertOrder(ctx context.Context, broker, symbol, direction st
 
 func (d *database) InsertXTBTrade(ctx context.Context, timestamp time.Time, sessionID string, order int64, closePrice float64, closeTime time.Time, closed bool, cmd, comment string, commission float64, customComment string, digits int64, expiration time.Time, marginRate float64, offset int64, openPrice float64, openTime time.Time, order2, position int64, profit, stopLoss float64, state string, storage float64, symbol string, takeProfit float64, tradeType string, volume float64) error {
 	const stmt = `
-UPSERT INTO xtb_trades (session_id, "order", timestamp, close_price, close_time, closed, cmd, 
+INSERT INTO xtb_trades (session_id, "order", timestamp, close_price, close_time, closed, cmd, 
 						comment, commission, custom_comment, digits, expiration, margin_rate, 
 						"offset", open_price, open_time, order_2, position, profit, stop_loss, 
 						state, storage, symbol, take_profit, type, volume)
