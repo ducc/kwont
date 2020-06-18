@@ -168,17 +168,30 @@ func (c *Client) OpenTradeTransaction(ctx context.Context, symbol string, direct
 	return c.conn.WriteJSON(ctx, msg)
 }
 
-func (c *Client) CloseTradeTransaction(ctx context.Context, symbol string, order int64) error {
+func (c *Client) CloseTradeTransaction(ctx context.Context, symbol string, direction protos.Direction_Name, price, volume float64, order int64) error {
 	c.log.Debug("sending close trade transaction message")
+
+	info := &TradeTransactionInfo{
+		Order:  order,
+		Type:   TradeTransactionInfoType_CLOSE,
+		Price:  price,
+		Volume: volume,
+		Symbol: symbol,
+	}
+
+	switch direction {
+	case protos.Direction_BUY:
+		info.Cmd = TradeTransactionInfoOperationCode_BUY
+	case protos.Direction_SELL:
+		info.Cmd = TradeTransactionInfoOperationCode_SELL
+	default:
+		return errors.New("unknown direction")
+	}
 
 	msg := &TradeTransactionRequest{
 		Command: "tradeTransaction",
 		Arguments: &TradeTransactionArguments{
-			TradeTransInfo: &TradeTransactionInfo{
-				Order:  order,
-				Type:   TradeTransactionInfoType_CLOSE,
-				Symbol: symbol,
-			},
+			TradeTransInfo: info,
 		},
 	}
 

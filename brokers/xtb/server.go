@@ -90,7 +90,7 @@ func (s *server) ClosePosition(ctx context.Context, req *protos.ClosePositionReq
 		return nil, err
 	}
 
-	if err := session.CloseTradeTransaction(ctx, req.Symbol, order); err != nil {
+	if err := session.CloseTradeTransaction(ctx, req.Symbol, req.Direction, req.Price, req.Volume, order); err != nil {
 		return nil, err
 	}
 

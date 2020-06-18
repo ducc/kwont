@@ -302,11 +302,11 @@ message EvaluateStrategyResponse {
     message Action {
         message OpenPosition {
             Direction.Name direction = 1;
-            int64 price = 2;
+            double price = 2;
         }
 
         message ClosePosition {
-            int64 price = 1;
+            double price = 1;
         }
 
         oneof action {
@@ -453,8 +453,10 @@ message ClosePositionRequest {
     Broker.Name broker = 2;
     Symbol.Name symbol = 3;
     string id = 4;
-    int64 price = 5;
+    double price = 5;
     string user_id = 6;
+    Direction.Name direction = 7;
+    double volume = 8;
 }
 message ClosePositionResponse {
     google.protobuf.Timestamp execution_time = 1;
