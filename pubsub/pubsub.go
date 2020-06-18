@@ -24,11 +24,6 @@ func New() (*Client, error) {
 	if err != nil {
 		logrus.WithError(err).Fatal("connecting to amqp server")
 	}
-	defer func() {
-		if err := conn.Close(); err != nil {
-			logrus.WithError(err).Error("closing amqp conn")
-		}
-	}()
 
 	return &Client{
 		conn:   conn,
