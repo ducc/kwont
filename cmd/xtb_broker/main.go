@@ -6,8 +6,8 @@ import (
 	"github.com/ducc/kwɒnt/brokers"
 	"github.com/ducc/kwɒnt/brokers/xtb"
 	"github.com/ducc/kwɒnt/protos"
+	"github.com/ducc/kwɒnt/pubsub"
 	"github.com/sirupsen/logrus"
-	"github.com/streadway/amqp"
 	"google.golang.org/grpc"
 	"net"
 	"os"
@@ -43,80 +43,29 @@ func main() {
 
 	logrus.WithField("POD_IP", os.Getenv("POD_IP")).Debug("starting xtb broker")
 
-	amqpConn, err := amqp.Dial(amqpAddress)
+	psClient, err := pubsub.New()
 	if err != nil {
-		logrus.WithError(err).Fatal("connecting to amqp server")
+		logrus.WithError(err).Fatal("creating pubsub client")
 	}
 	defer func() {
-		if err := amqpConn.Close(); err != nil {
-			logrus.WithError(err).Error("closing amqp conn")
+		if err := psClient.Close(); err != nil {
+			logrus.WithError(err).Error("closing pubsub client")
 		}
 	}()
 
-	tickChan, err := amqpConn.Channel()
+	tickQueue, err := psClient.Queue(tickTopic)
 	if err != nil {
-		logrus.WithError(err).Fatal("creating amqp channel")
-	}
-	defer func() {
-		if err := tickChan.Close(); err != nil {
-			logrus.WithError(err).Error("closing amqp chan")
-		}
-	}()
-
-	tradeChan, err := amqpConn.Channel()
-	if err != nil {
-		logrus.WithError(err).Fatal("creating amqp channel")
-	}
-	defer func() {
-		if err := tradeChan.Close(); err != nil {
-			logrus.WithError(err).Error("closing amqp chan")
-		}
-	}()
-
-	tradeStatusChan, err := amqpConn.Channel()
-	if err != nil {
-		logrus.WithError(err).Fatal("creating amqp channel")
-	}
-	defer func() {
-		if err := tradeStatusChan.Close(); err != nil {
-			logrus.WithError(err).Error("closing amqp chan")
-		}
-	}()
-
-	tickQueue, err := tickChan.QueueDeclare(
-		tickTopic,
-		true,
-		false,
-		false,
-		false,
-		nil,
-	)
-	if err != nil {
-		logrus.WithError(err).Fatal("declaring amqp queue")
+		logrus.WithError(err).Fatal("creating pubsub queue")
 	}
 
-	tradeQueue, err := tradeChan.QueueDeclare(
-		tradeTopic,
-		true,
-		false,
-		false,
-		false,
-		nil,
-	)
+	tradeQueue, err := psClient.Queue(tradeTopic)
 	if err != nil {
-		logrus.WithError(err).Fatal("declaring amqp queue")
+		logrus.WithError(err).Fatal("creating pubsub queue")
 	}
 
-	tradeStatusQueue, err := tradeStatusChan.QueueDeclare(
-		tradeStatusTopic,
-		true,
-		false,
-		false,
-		false,
-		nil,
-	)
+	tradeStatusQueue, err := psClient.Queue(tradeStatusTopic)
 	if err != nil {
-		logrus.WithError(err).Fatal("declaring amqp queue")
+		logrus.WithError(err).Fatal("creating pubsub queue")
 	}
 
 	ctx := context.Background()
@@ -126,7 +75,7 @@ func main() {
 		logrus.WithError(err).Fatal("connecting to router")
 	}
 
-	server := xtb.New(tickChan, tradeChan, tradeStatusChan, tickQueue, tradeQueue, tradeStatusQueue, routerConn)
+	server := xtb.New(tickQueue, tradeQueue, tradeStatusQueue, routerConn)
 	grpcServer := grpc.NewServer()
 
 	protos.RegisterBrokerServiceServer(grpcServer, server)

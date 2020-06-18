@@ -6,9 +6,9 @@ import (
 	"github.com/ducc/kwɒnt/brokers/xtb/connections/transactional"
 	"github.com/ducc/kwɒnt/brokers/xtb/utils"
 	"github.com/ducc/kwɒnt/protos"
+	"github.com/ducc/kwɒnt/pubsub"
 	"github.com/golang/protobuf/proto"
 	"github.com/sirupsen/logrus"
-	"github.com/streadway/amqp"
 	"sync"
 	"time"
 )
@@ -16,14 +16,9 @@ import (
 type Session struct {
 	sync.Mutex
 
-	tickChan  *amqp.Channel
-	tickQueue amqp.Queue
-
-	tradeChan  *amqp.Channel
-	tradeQueue amqp.Queue
-
-	tradeStatusChan  *amqp.Channel
-	tradeStatusQueue amqp.Queue
+	tickQueue        *pubsub.Queue
+	tradeQueue       *pubsub.Queue
+	tradeStatusQueue *pubsub.Queue
 
 	SessionID string
 	username  string
@@ -38,7 +33,7 @@ type Session struct {
 	tickSubscriptions map[protos.Symbol_Name]bool
 }
 
-func newSession(ctx context.Context, tickChan, tradeChan, tradeStatusChan *amqp.Channel, tickQueue, tradeQueue, tradeStatusQueue amqp.Queue, username, password, sessionID string) (*Session, error) {
+func newSession(ctx context.Context, tickQueue, tradeQueue, tradeStatusQueue *pubsub.Queue, username, password, sessionID string) (*Session, error) {
 	tx, err := transactional.New(ctx)
 	if err != nil {
 		panic(err)
@@ -62,11 +57,8 @@ func newSession(ctx context.Context, tickChan, tradeChan, tradeStatusChan *amqp.
 	}
 
 	s := &Session{
-		tickChan:          tickChan,
 		tickQueue:         tickQueue,
-		tradeChan:         tradeChan,
 		tradeQueue:        tradeQueue,
-		tradeStatusChan:   tradeStatusChan,
 		tradeStatusQueue:  tradeStatusQueue,
 		SessionID:         sessionID,
 		username:          username,
@@ -210,15 +202,7 @@ func (s *Session) sendTickToQueue(ctx context.Context, tick *protos.Tick) {
 		return
 	}
 
-	if err := s.tickChan.Publish(
-		"",               // exchange
-		s.tickQueue.Name, // routing key
-		false,            // mandatory
-		false,
-		amqp.Publishing{
-			DeliveryMode: amqp.Persistent,
-			Body:         bytes,
-		}); err != nil {
+	if err := s.tickQueue.Publish(bytes); err != nil {
 		logrus.WithError(err).Error("publishing tick amqp message")
 	}
 }
@@ -232,15 +216,7 @@ func (s *Session) sendTradeStatusToQueue(ctx context.Context, status *protos.XTB
 		return
 	}
 
-	if err := s.tradeStatusChan.Publish(
-		"",                      // exchange
-		s.tradeStatusQueue.Name, // routing key
-		false,                   // mandatory
-		false,
-		amqp.Publishing{
-			DeliveryMode: amqp.Persistent,
-			Body:         bytes,
-		}); err != nil {
+	if err := s.tradeStatusQueue.Publish(bytes); err != nil {
 		logrus.WithError(err).Error("publishing trade status amqp message")
 	}
 }
@@ -254,15 +230,7 @@ func (s *Session) sendTradeToQueue(ctx context.Context, trade *protos.XTBTrade) 
 		return
 	}
 
-	if err := s.tradeChan.Publish(
-		"",                // exchange
-		s.tradeQueue.Name, // routing key
-		false,             // mandatory
-		false,
-		amqp.Publishing{
-			DeliveryMode: amqp.Persistent,
-			Body:         bytes,
-		}); err != nil {
+	if err := s.tradeQueue.Publish(bytes); err != nil {
 		logrus.WithError(err).Error("publishing trade amqp message")
 	}
 }

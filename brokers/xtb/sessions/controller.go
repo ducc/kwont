@@ -2,10 +2,10 @@ package sessions
 
 import (
 	"context"
+	"github.com/ducc/kwɒnt/pubsub"
 	"github.com/google/uuid"
 	"github.com/jpillora/backoff"
 	"github.com/sirupsen/logrus"
-	"github.com/streadway/amqp"
 	"sync"
 	"time"
 )
@@ -15,14 +15,14 @@ type SessionController struct {
 	sync.Mutex
 }
 
-func New(ctx context.Context, tickChan, tradeChan, tradeStatusChan *amqp.Channel, tickQueue, tradeQueue, tradeStatusQueue amqp.Queue, username, password string) (*SessionController, error) {
+func New(ctx context.Context, tickQueue, tradeQueue, tradeStatusQueue *pubsub.Queue, username, password string) (*SessionController, error) {
 	s := &SessionController{}
 
 	sessionID := uuid.New().String()
 	log := logrus.WithField("session_id", sessionID)
 
 	createSession := func() error {
-		session, err := newSession(ctx, tickChan, tradeChan, tradeStatusChan, tickQueue, tradeQueue, tradeStatusQueue, username, password, sessionID)
+		session, err := newSession(ctx, tickQueue, tradeQueue, tradeStatusQueue, username, password, sessionID)
 		if err != nil {
 			return err
 		}
