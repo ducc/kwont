@@ -267,3 +267,12 @@ func (s *server) AddXTBTradeStatus(ctx context.Context, req *protos.AddXTBTradeS
 
 	return &protos.AddXTBTradeStatusResponse{}, nil
 }
+
+func (s *server) GetXTBTrades(ctx context.Context, req *protos.GetXTBTradesRequest) (*protos.GetXTBTradesResponse, error) {
+	trades, err := s.db.SelectXTBTrades(ctx, req.OrderId, req.SessionId)
+	if err != nil {
+		return nil, err
+	}
+
+	return &protos.GetXTBTradesResponse{Trades: trades}, nil
+}

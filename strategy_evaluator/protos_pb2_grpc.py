@@ -78,6 +78,11 @@ class DataServiceStub(object):
                 request_serializer=protos__pb2.AddXTBTradeStatusRequest.SerializeToString,
                 response_deserializer=protos__pb2.AddXTBTradeStatusResponse.FromString,
                 )
+        self.GetXTBTrades = channel.unary_unary(
+                '/protos.DataService/GetXTBTrades',
+                request_serializer=protos__pb2.GetXTBTradesRequest.SerializeToString,
+                response_deserializer=protos__pb2.GetXTBTradesResponse.FromString,
+                )
 
 
 class DataServiceServicer(object):
@@ -161,6 +166,12 @@ class DataServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def GetXTBTrades(self, request, context):
+        """Missing associated documentation comment in .proto file"""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_DataServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -228,6 +239,11 @@ def add_DataServiceServicer_to_server(servicer, server):
                     servicer.AddXTBTradeStatus,
                     request_deserializer=protos__pb2.AddXTBTradeStatusRequest.FromString,
                     response_serializer=protos__pb2.AddXTBTradeStatusResponse.SerializeToString,
+            ),
+            'GetXTBTrades': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetXTBTrades,
+                    request_deserializer=protos__pb2.GetXTBTradesRequest.FromString,
+                    response_serializer=protos__pb2.GetXTBTradesResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -444,6 +460,22 @@ class DataService(object):
         return grpc.experimental.unary_unary(request, target, '/protos.DataService/AddXTBTradeStatus',
             protos__pb2.AddXTBTradeStatusRequest.SerializeToString,
             protos__pb2.AddXTBTradeStatusResponse.FromString,
+            options, channel_credentials,
+            call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def GetXTBTrades(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/protos.DataService/GetXTBTrades',
+            protos__pb2.GetXTBTradesRequest.SerializeToString,
+            protos__pb2.GetXTBTradesResponse.FromString,
             options, channel_credentials,
             call_credentials, compression, wait_for_ready, timeout, metadata)
 

@@ -447,3 +447,65 @@ VALUES ($1, $2, $3, $4, $5, $6, $7);
 
 	return nil
 }
+
+func (d *database) SelectXTBTrades(ctx context.Context, orderID string, sessionID string) ([]*protos.XTBTrade, error) {
+	const stmt = `SELECT "order", timestamp, closePrice, closeTime, closed, cmd, comment, commission, digits, 
+                         expiration, marginRate, offset, openPrice, openTime, order2, position, profit, stopLoss,
+                         state, storage, symbol, takeProfit, tradeType, volume
+                  WHERE custom_comment = $1 AND session_id = $2 
+				  ORDER BY timestamp asc`
+
+	rows, err := d.db.QueryContext(ctx, stmt, orderID, sessionID)
+	if err != nil {
+		return nil, err
+	}
+	defer func() {
+		if err := rows.Close(); err != nil {
+			logrus.WithError(err).Error("closing query rows")
+		}
+	}()
+
+	trades := make([]*protos.XTBTrade, 0)
+
+	for rows.Next() {
+		trade := &protos.XTBTrade{}
+		var (
+			timestamp, closeTime, expiration, openTime time.Time
+			symbol                                     string
+		)
+
+		err := rows.Scan(&trade.Order, &timestamp, &trade.ClosePrice, &closeTime, &trade.Closed, &trade.Cmd, &trade.Comment,
+			&trade.Commission, &trade.Digits, &expiration, &trade.MarginRate, &trade.Offset, &trade.OpenPrice, openTime,
+			&trade.Order2, &trade.Position, &trade.Profit, &trade.StopLoss, &trade.State, &trade.Storage, symbol,
+			&trade.TakeProfit, &trade.Type, &trade.Volume)
+		if err != nil {
+			return nil, err
+		}
+
+		trade.Timestamp, err = ptypes.TimestampProto(timestamp)
+		if err != nil {
+			return nil, err
+		}
+
+		trade.CloseTime, err = ptypes.TimestampProto(closeTime)
+		if err != nil {
+			return nil, err
+		}
+
+		trade.Expiration, err = ptypes.TimestampProto(expiration)
+		if err != nil {
+			return nil, err
+		}
+
+		trade.OpenTime, err = ptypes.TimestampProto(openTime)
+		if err != nil {
+			return nil, err
+		}
+
+		trade.Symbol = protos.Symbol_Name(protos.Symbol_Name_value[symbol])
+
+		trades = append(trades, trade)
+	}
+
+	return trades, nil
+}

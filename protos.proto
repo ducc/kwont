@@ -262,6 +262,7 @@ service DataService {
 
     rpc AddXTBTrade(AddXTBTradeRequest) returns (AddXTBTradeResponse);
     rpc AddXTBTradeStatus(AddXTBTradeStatusRequest) returns (AddXTBTradeStatusResponse);
+    rpc GetXTBTrades(GetXTBTradesRequest) returns (GetXTBTradesResponse);
 }
 
 message CreateStrategyRequest {
@@ -544,6 +545,14 @@ message AddXTBTradeRequest {
     XTBTrade trade = 1;
 }
 message AddXTBTradeResponse {}
+
+message GetXTBTradesRequest {
+    string order_id = 1;
+    string session_id = 2;
+}
+message GetXTBTradesResponse {
+    repeated XTBTrade trades = 1;
+}
 
 service OrderService {
     rpc OpenPosition(OpenPositionRequest) returns (OpenPositionResponse);
