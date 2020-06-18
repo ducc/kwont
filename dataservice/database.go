@@ -452,6 +452,7 @@ func (d *database) SelectXTBTrades(ctx context.Context, orderID string, sessionI
 	const stmt = `SELECT "order", timestamp, closePrice, closeTime, closed, cmd, comment, commission, digits, 
                          expiration, marginRate, "offset", openPrice, openTime, order2, position, profit, stopLoss,
                          state, storage, symbol, takeProfit, tradeType, volume
+                  FROM xtb_trades
                   WHERE custom_comment = $1 AND session_id = $2 
 				  ORDER BY timestamp asc`
 
