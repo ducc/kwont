@@ -3,16 +3,16 @@ package tick_writer
 import (
 	"context"
 	"github.com/ducc/kwɒnt/protos"
+	"github.com/ducc/kwɒnt/pubsub"
 	"github.com/golang/protobuf/proto"
 	"github.com/sirupsen/logrus"
-	"github.com/streadway/amqp"
 )
 
 type writer struct {
 	ds protos.DataServiceClient
 }
 
-func Run(ctx context.Context, ds protos.DataServiceClient, messages <-chan amqp.Delivery) {
+func Run(ctx context.Context, ds protos.DataServiceClient, messages <-chan *pubsub.Message) {
 	w := &writer{
 		ds: ds,
 	}
@@ -20,9 +20,9 @@ func Run(ctx context.Context, ds protos.DataServiceClient, messages <-chan amqp.
 	w.processMessages(ctx, messages)
 }
 
-func (w *writer) processMessages(ctx context.Context, messages <-chan amqp.Delivery) {
+func (w *writer) processMessages(ctx context.Context, messages <-chan *pubsub.Message) {
 	for msg := range messages {
-		if msg.Body == nil || len(msg.Body) == 0 {
+		if msg.Body() == nil || len(msg.Body()) == 0 {
 			logrus.Debug("body is nil or empty")
 			continue
 		}
@@ -31,9 +31,9 @@ func (w *writer) processMessages(ctx context.Context, messages <-chan amqp.Deliv
 	}
 }
 
-func (w *writer) processMessage(ctx context.Context, msg amqp.Delivery) {
+func (w *writer) processMessage(ctx context.Context, msg *pubsub.Message) {
 	var tick protos.Tick
-	if err := proto.Unmarshal(msg.Body, &tick); err != nil {
+	if err := proto.Unmarshal(msg.Body(), &tick); err != nil {
 		logrus.WithError(err).Error("unmarshalling message to tick")
 		return
 	}
@@ -43,7 +43,7 @@ func (w *writer) processMessage(ctx context.Context, msg amqp.Delivery) {
 		return
 	}
 
-	if err := msg.Ack(false); err != nil {
+	if err := msg.Ack(); err != nil {
 		logrus.WithError(err).Error("acking message")
 	}
 }

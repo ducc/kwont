@@ -3,9 +3,9 @@ package trade_status_writer
 import (
 	"context"
 	"github.com/ducc/kwɒnt/protos"
+	"github.com/ducc/kwɒnt/pubsub"
 	"github.com/golang/protobuf/proto"
 	"github.com/sirupsen/logrus"
-	"github.com/streadway/amqp"
 )
 
 type writer struct {
@@ -13,7 +13,7 @@ type writer struct {
 	broker protos.Broker_Name
 }
 
-func Run(ctx context.Context, ds protos.DataServiceClient, broker protos.Broker_Name, messages <-chan amqp.Delivery) {
+func Run(ctx context.Context, ds protos.DataServiceClient, broker protos.Broker_Name, messages <-chan *pubsub.Message) {
 	w := &writer{
 		ds:     ds,
 		broker: broker,
@@ -22,9 +22,9 @@ func Run(ctx context.Context, ds protos.DataServiceClient, broker protos.Broker_
 	w.processMessages(ctx, messages)
 }
 
-func (w *writer) processMessages(ctx context.Context, messages <-chan amqp.Delivery) {
+func (w *writer) processMessages(ctx context.Context, messages <-chan *pubsub.Message) {
 	for msg := range messages {
-		if msg.Body == nil || len(msg.Body) == 0 {
+		if msg.Body() == nil || len(msg.Body()) == 0 {
 			logrus.Debug("body is nil or empty")
 			continue
 		}
@@ -33,11 +33,11 @@ func (w *writer) processMessages(ctx context.Context, messages <-chan amqp.Deliv
 	}
 }
 
-func (w *writer) processMessage(ctx context.Context, msg amqp.Delivery) {
+func (w *writer) processMessage(ctx context.Context, msg *pubsub.Message) {
 	switch w.broker {
 	case protos.Broker_XTB_DEMO:
 		var xtbTradeStatus protos.XTBTradeStatus
-		if err := proto.Unmarshal(msg.Body, &xtbTradeStatus); err != nil {
+		if err := proto.Unmarshal(msg.Body(), &xtbTradeStatus); err != nil {
 			logrus.WithError(err).Error("unmarshalling message to xtb trade")
 			return
 		}
@@ -50,7 +50,7 @@ func (w *writer) processMessage(ctx context.Context, msg amqp.Delivery) {
 		logrus.Fatal("unsupported broker")
 	}
 
-	if err := msg.Ack(false); err != nil {
+	if err := msg.Ack(); err != nil {
 		logrus.WithError(err).Error("acking message")
 	}
 }
