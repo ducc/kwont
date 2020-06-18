@@ -450,7 +450,7 @@ VALUES ($1, $2, $3, $4, $5, $6, $7);
 
 func (d *database) SelectXTBTrades(ctx context.Context, orderID string, sessionID string) ([]*protos.XTBTrade, error) {
 	const stmt = `SELECT "order", timestamp, closePrice, closeTime, closed, cmd, comment, commission, digits, 
-                         expiration, marginRate, offset, openPrice, openTime, order2, position, profit, stopLoss,
+                         expiration, marginRate, "offset", openPrice, openTime, order2, position, profit, stopLoss,
                          state, storage, symbol, takeProfit, tradeType, volume
                   WHERE custom_comment = $1 AND session_id = $2 
 				  ORDER BY timestamp asc`
