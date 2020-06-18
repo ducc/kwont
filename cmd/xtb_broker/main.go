@@ -15,7 +15,6 @@ import (
 
 var (
 	level            string
-	amqpAddress      string
 	tickTopic        string
 	tradeTopic       string
 	tradeStatusTopic string
@@ -25,7 +24,6 @@ var (
 
 func init() {
 	flag.StringVar(&level, "level", "debug", "logrus logging level")
-	flag.StringVar(&amqpAddress, "amqp-address", "", "amqp server connection address")
 	flag.StringVar(&tickTopic, "tick-topic", "ticks", "nats topic")
 	flag.StringVar(&tradeTopic, "trade-topic", "xtb-trades", "nats topic")
 	flag.StringVar(&tradeStatusTopic, "trade-status-topic", "xtb-trade-status", "nats topic")
