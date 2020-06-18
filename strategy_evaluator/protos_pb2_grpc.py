@@ -63,6 +63,11 @@ class DataServiceStub(object):
                 request_serializer=protos__pb2.AddOrderRequest.SerializeToString,
                 response_deserializer=protos__pb2.AddOrderResponse.FromString,
                 )
+        self.GetOrder = channel.unary_unary(
+                '/protos.DataService/GetOrder',
+                request_serializer=protos__pb2.GetOrderRequest.SerializeToString,
+                response_deserializer=protos__pb2.GetOrderResponse.FromString,
+                )
         self.AddXTBTrade = channel.unary_unary(
                 '/protos.DataService/AddXTBTrade',
                 request_serializer=protos__pb2.AddXTBTradeRequest.SerializeToString,
@@ -138,6 +143,12 @@ class DataServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def GetOrder(self, request, context):
+        """Missing associated documentation comment in .proto file"""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
     def AddXTBTrade(self, request, context):
         """Missing associated documentation comment in .proto file"""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -202,6 +213,11 @@ def add_DataServiceServicer_to_server(servicer, server):
                     servicer.AddOrder,
                     request_deserializer=protos__pb2.AddOrderRequest.FromString,
                     response_serializer=protos__pb2.AddOrderResponse.SerializeToString,
+            ),
+            'GetOrder': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetOrder,
+                    request_deserializer=protos__pb2.GetOrderRequest.FromString,
+                    response_serializer=protos__pb2.GetOrderResponse.SerializeToString,
             ),
             'AddXTBTrade': grpc.unary_unary_rpc_method_handler(
                     servicer.AddXTBTrade,
@@ -380,6 +396,22 @@ class DataService(object):
         return grpc.experimental.unary_unary(request, target, '/protos.DataService/AddOrder',
             protos__pb2.AddOrderRequest.SerializeToString,
             protos__pb2.AddOrderResponse.FromString,
+            options, channel_credentials,
+            call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def GetOrder(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/protos.DataService/GetOrder',
+            protos__pb2.GetOrderRequest.SerializeToString,
+            protos__pb2.GetOrderResponse.FromString,
             options, channel_credentials,
             call_credentials, compression, wait_for_ready, timeout, metadata)
 

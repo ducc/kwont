@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='protos',
   syntax='proto3',
   serialized_options=b'Z\035github.com/ducc/kw\311\222nt/protos',
-  serialized_pb=b'\n\x0cprotos.proto\x12\x06protos\x1a\x1fgoogle/protobuf/timestamp.proto\"_\n\x0bSessionInfo\x12\x12\n\nsession_id\x18\x01 \x01(\t\x12#\n\x06\x62roker\x18\x02 \x01(\x0e\x32\x13.protos.Broker.Name\x12\x17\n\x0fservice_address\x18\x03 \x01(\t\"k\n\x06\x42roker\x12!\n\x04name\x18\x01 \x01(\x0e\x32\x13.protos.Broker.Name\">\n\x04Name\x12\x0b\n\x07UNKNOWN\x10\x00\x12\x0c\n\x08XTB_DEMO\x10\x01\x12\x0e\n\nXTB_RETAIL\x10\x02\x12\x0b\n\x07XTB_PRO\x10\x03\"\xff\x01\n\x0b\x43\x61ndlestick\x12-\n\ttimestamp\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12#\n\x06\x62roker\x18\x02 \x01(\x0e\x32\x13.protos.Broker.Name\x12#\n\x06symbol\x18\x03 \x01(\x0e\x32\x13.protos.Symbol.Name\x12\x12\n\nopen_price\x18\x04 \x01(\x01\x12\x13\n\x0b\x63lose_price\x18\x05 \x01(\x01\x12\x12\n\nhigh_price\x18\x06 \x01(\x01\x12\x11\n\tlow_price\x18\x07 \x01(\x01\x12\x12\n\nbuy_volume\x18\x08 \x01(\x01\x12\x13\n\x0bsell_volume\x18\t \x01(\x01\"[\n\tPriceType\x12$\n\x04name\x18\x01 \x01(\x0e\x32\x16.protos.PriceType.Name\"(\n\x04Name\x12\x0b\n\x07UNKNOWN\x10\x00\x12\x08\n\x04OPEN\x10\x01\x12\t\n\x05\x43LOSE\x10\x02\"]\n\x08OpenType\x12#\n\x04name\x18\x01 \x01(\x0e\x32\x15.protos.OpenType.Name\",\n\x04Name\x12\x0b\n\x07UNKNOWN\x10\x00\x12\n\n\x06NORMAL\x10\x01\x12\x0b\n\x07REVERSE\x10\x02\"\xcf\x0e\n\x04Rule\x12)\n\tindicator\x18\x01 \x01(\x0b\x32\x16.protos.Rule.Indicator\x12*\n\nprice_type\x18\x02 \x01(\x0e\x32\x16.protos.PriceType.Name\x12(\n\topen_type\x18\x03 \x01(\x0e\x32\x15.protos.OpenType.Name\x12\x1a\n\x12period_nanoseconds\x18\x04 \x01(\x03\x1a\xa9\r\n\tIndicator\x12\x45\n\x12simple_take_profit\x18\x64 \x01(\x0b\x32\'.protos.Rule.Indicator.SimpleTakeProfitH\x00\x12\x43\n\x11pivot_take_profit\x18\x65 \x01(\x0b\x32&.protos.Rule.Indicator.PivotTakeProfitH\x00\x12\x42\n\x10simple_stop_loss\x18\xc8\x01 \x01(\x0b\x32%.protos.Rule.Indicator.SimpleStopLossH\x00\x12@\n\x0fpivot_stop_loss\x18\xc9\x01 \x01(\x0b\x32$.protos.Rule.Indicator.PivotStopLossH\x00\x12L\n\x15simple_moving_average\x18\xac\x02 \x01(\x0b\x32*.protos.Rule.Indicator.SimpleMovingAverageH\x00\x12P\n\x17relative_strength_index\x18\xad\x02 \x01(\x0b\x32,.protos.Rule.Indicator.RelativeStrengthIndexH\x00\x12,\n\x04macd\x18\xae\x02 \x01(\x0b\x32\x1b.protos.Rule.Indicator.MACDH\x00\x12\x41\n\x0f\x62ollinger_bands\x18\xaf\x02 \x01(\x0b\x32%.protos.Rule.Indicator.BollingerBandsH\x00\x1a\xb6\x01\n\x13SimpleMovingAverage\x12G\n\tcondition\x18\x01 \x01(\x0e\x32\x34.protos.Rule.Indicator.SimpleMovingAverage.Condition\x12\x0e\n\x06period\x18\x02 \x01(\x03\"F\n\tCondition\x12\x0b\n\x07UNKNOWN\x10\x00\x12\x15\n\x11\x41\x42OVE_SIGNAL_LINE\x10\x01\x12\x15\n\x11\x42\x45LOW_SIGNAL_LINE\x10\x02\x1a\xa1\x02\n\x15RelativeStrengthIndex\x12I\n\tcondition\x18\x01 \x01(\x0e\x32\x36.protos.Rule.Indicator.RelativeStrengthIndex.Condition\x12\x0e\n\x06period\x18\x02 \x01(\x03\x12\x13\n\x0bover_bought\x18\x03 \x01(\x03\x12\x11\n\tover_sold\x18\x04 \x01(\x03\"\x84\x01\n\tCondition\x12\x0b\n\x07UNKNOWN\x10\x00\x12\x1a\n\x16\x41\x42OVE_OVER_BOUGHT_LINE\x10\x01\x12\x1a\n\x16\x42\x45LOW_OVER_BOUGHT_LINE\x10\x02\x12\x18\n\x14\x41\x42OVE_OVER_SOLD_LINE\x10\x03\x12\x18\n\x14\x42\x45LOW_OVER_SOLD_LINE\x10\x04\x1a\xc9\x01\n\x04MACD\x12\x38\n\tcondition\x18\x01 \x01(\x0e\x32%.protos.Rule.Indicator.MACD.Condition\x12\x12\n\nshort_term\x18\x02 \x01(\x03\x12\x11\n\tlong_term\x18\x03 \x01(\x03\x12\x0e\n\x06length\x18\x04 \x01(\x03\"P\n\tCondition\x12\x0b\n\x07UNKNOWN\x10\x00\x12\x1a\n\x16SIGNAL_LINE_ABOVE_MACD\x10\x01\x12\x1a\n\x16SIGNAL_LINE_BELOW_MACD\x10\x02\x1a\xaa\x02\n\x0e\x42ollingerBands\x12\x42\n\tcondition\x18\x01 \x01(\x0e\x32/.protos.Rule.Indicator.BollingerBands.Condition\x12\x0e\n\x06period\x18\x02 \x01(\x03\x12\x11\n\tdeviation\x18\x03 \x01(\x01\"\xb0\x01\n\tCondition\x12\x0b\n\x07UNKNOWN\x10\x00\x12\x1a\n\x16PRICE_ABOVE_UPPER_BAND\x10\x01\x12\x1a\n\x16PRICE_BELOW_UPPER_BAND\x10\x02\x12\x1a\n\x16PRICE_ABOVE_LOWER_BAND\x10\x03\x12\x1a\n\x16PRICE_BELOW_LOWER_BAND\x10\x04\x12\x12\n\x0ePRICE_ABOVE_MA\x10\x05\x12\x12\n\x0ePRICE_BELOW_MA\x10\x06\x1a \n\x10SimpleTakeProfit\x12\x0c\n\x04pips\x18\x01 \x01(\x03\x1a\x11\n\x0fPivotTakeProfit\x1aP\n\x0eSimpleStopLoss\x12\x0c\n\x04pips\x18\x01 \x01(\x03\"0\n\x04Type\x12\x0b\n\x07UNKNOWN\x10\x00\x12\t\n\x05\x46IXED\x10\x01\x12\x10\n\x0c\x42\x41R_TRAILING\x10\x02\x1a\x0f\n\rPivotStopLossB\x0b\n\tcondition\"Y\n\x06Status\x12!\n\x04name\x18\x01 \x01(\x0e\x32\x13.protos.Status.Name\",\n\x04Name\x12\x0b\n\x07UNKNOWN\x10\x00\x12\x0b\n\x07\x45NABLED\x10\x01\x12\n\n\x06PAUSED\x10\x02\"Y\n\tDirection\x12$\n\x04name\x18\x01 \x01(\x0e\x32\x16.protos.Direction.Name\"&\n\x04Name\x12\x0b\n\x07UNKNOWN\x10\x00\x12\x07\n\x03\x42UY\x10\x01\x12\x08\n\x04SELL\x10\x02\"\xc9\x01\n\x08Position\x12)\n\tdirection\x18\x01 \x01(\x0e\x32\x16.protos.Direction.Name\x12\x12\n\nopen_price\x18\x02 \x01(\x03\x12\x13\n\x0b\x63lose_price\x18\x03 \x01(\x03\x12-\n\topen_time\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12.\n\nclose_time\x18\x05 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\n\n\x02id\x18\x06 \x01(\t\"\xb7\x02\n\x06Symbol\x12!\n\x04name\x18\x01 \x01(\x0e\x32\x13.protos.Symbol.Name\x12#\n\x06\x62roker\x18\x02 \x01(\x0e\x32\x13.protos.Broker.Name\"\xe4\x01\n\x04Name\x12\x0b\n\x07UNKNOWN\x10\x00\x12\x0b\n\x07\x41UD_USD\x10\x64\x12\x0b\n\x07\x45UR_USD\x10\x65\x12\x0b\n\x07\x45UR_CHF\x10\x66\x12\x0b\n\x07GBP_JPY\x10g\x12\x0b\n\x07USD_CHF\x10h\x12\x0b\n\x07USD_GBP\x10i\x12\x0b\n\x07USD_CAD\x10j\x12\x0b\n\x07USD_JPY\x10k\x12\x0c\n\x07\x42ITCOIN\x10\xc8\x01\x12\r\n\x08LITECOIN\x10\xc9\x01\x12\r\n\x08\x45THEREUM\x10\xca\x01\x12\n\n\x05US_30\x10\xac\x02\x12\x0b\n\x06UK_100\x10\xad\x02\x12\n\n\x05\x44\x45_30\x10\xae\x02\x12\x0b\n\x06SILVER\x10\x90\x03\x12\t\n\x04GOLD\x10\x91\x03\"&\n\x07RuleSet\x12\x1b\n\x05rules\x18\x01 \x03(\x0b\x32\x0c.protos.Rule\"\xc9\x02\n\x08Strategy\x12\x0c\n\x04name\x18\x01 \x01(\t\x12$\n\x0b\x65ntry_rules\x18\x02 \x01(\x0b\x32\x0f.protos.RuleSet\x12#\n\nexit_rules\x18\x03 \x01(\x0b\x32\x0f.protos.RuleSet\x12\x12\n\ntrade_size\x18\x04 \x01(\x03\x12\x13\n\x0btake_profit\x18\x05 \x01(\x03\x12\x11\n\tstop_loss\x18\x06 \x01(\x03\x12#\n\x06status\x18\x07 \x01(\x0e\x32\x13.protos.Status.Name\x12\n\n\x02id\x18\x08 \x01(\t\x12\x1e\n\x06symbol\x18\t \x01(\x0b\x32\x0e.protos.Symbol\x12#\n\tpositions\x18\n \x03(\x0b\x32\x10.protos.Position\x12\x32\n\x0elast_evaluated\x18\x0b \x01(\x0b\x32\x1a.google.protobuf.Timestamp\";\n\x15\x43reateStrategyRequest\x12\"\n\x08strategy\x18\x01 \x01(\x0b\x32\x10.protos.Strategy\"$\n\x16\x43reateStrategyResponse\x12\n\n\x02id\x18\x01 \x01(\t\";\n\x15UpdateStrategyRequest\x12\"\n\x08strategy\x18\x01 \x01(\x0b\x32\x10.protos.Strategy\"\x18\n\x16UpdateStrategyResponse\"#\n\x15\x44\x65leteStrategyRequest\x12\n\n\x02id\x18\x01 \x01(\t\"\x18\n\x16\x44\x65leteStrategyResponse\"\x17\n\x15ListStrategiesRequest\">\n\x16ListStrategiesResponse\x12$\n\nstrategies\x18\x01 \x03(\x0b\x32\x10.protos.Strategy\"\x83\x01\n\x17\x45vaulateStrategyRequest\x12\"\n\x08strategy\x18\x01 \x01(\x0b\x32\x10.protos.Strategy\x12)\n\x0c\x63\x61ndlesticks\x18\x02 \x03(\x0b\x32\x13.protos.Candlestick\x12\x19\n\x11has_open_position\x18\x03 \x01(\x08\"\xf2\x02\n\x18\x45valuateStrategyResponse\x12\x37\n\x06\x61\x63tion\x18\x01 \x01(\x0b\x32\'.protos.EvaluateStrategyResponse.Action\x1a\x9c\x02\n\x06\x41\x63tion\x12M\n\ropen_position\x18\x01 \x01(\x0b\x32\x34.protos.EvaluateStrategyResponse.Action.OpenPositionH\x00\x12O\n\x0e\x63lose_position\x18\x02 \x01(\x0b\x32\x35.protos.EvaluateStrategyResponse.Action.ClosePositionH\x00\x1aH\n\x0cOpenPosition\x12)\n\tdirection\x18\x01 \x01(\x0e\x32\x16.protos.Direction.Name\x12\r\n\x05price\x18\x02 \x01(\x01\x1a\x1e\n\rClosePosition\x12\r\n\x05price\x18\x01 \x01(\x01\x42\x08\n\x06\x61\x63tion\"\xc2\x01\n\x11\x43\x61ndlestickWindow\"\xac\x01\n\x04Name\x12\x0b\n\x07UNKNOWN\x10\x00\x12\x0e\n\nONE_MINUTE\x10<\x12\x10\n\x0b\x46IVE_MINUTE\x10\xac\x02\x12\x0f\n\nTEN_MINUTE\x10\xd8\x04\x12\x12\n\rTHIRTY_MINUTE\x10\x88\x0e\x12\r\n\x08ONE_HOUR\x10\x90\x1c\x12\x0f\n\nTHREE_HOUR\x10\xb0T\x12\x0e\n\x08SIX_HOUR\x10\xe0\xa8\x01\x12\x11\n\x0bTWELVE_HOUR\x10\xc0\xd1\x02\x12\r\n\x07ONE_DAY\x10\x80\xa3\x05\"\xe6\x01\n\x16GetPriceHistoryRequest\x12#\n\x06\x62roker\x18\x01 \x01(\x0e\x32\x13.protos.Broker.Name\x12#\n\x06symbol\x18\x02 \x01(\x0e\x32\x13.protos.Symbol.Name\x12)\n\x05start\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\'\n\x03\x65nd\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12.\n\x06window\x18\x05 \x01(\x0e\x32\x1e.protos.CandlestickWindow.Name\"D\n\x17GetPriceHistoryResponse\x12)\n\x0c\x63\x61ndlesticks\x18\x01 \x03(\x0b\x32\x13.protos.Candlestick\"\xc7\x01\n\x04Tick\x12-\n\ttimestamp\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12#\n\x06\x62roker\x18\x02 \x01(\x0e\x32\x13.protos.Broker.Name\x12#\n\x06symbol\x18\x03 \x01(\x0e\x32\x13.protos.Symbol.Name\x12\r\n\x05price\x18\x04 \x01(\x01\x12\x0e\n\x06spread\x18\x05 \x01(\x01\x12\x12\n\nbuy_volume\x18\x06 \x01(\x01\x12\x13\n\x0bsell_volume\x18\x07 \x01(\x01\",\n\x0e\x41\x64\x64TickRequest\x12\x1a\n\x04tick\x18\x01 \x01(\x0b\x32\x0c.protos.Tick\"\x11\n\x0f\x41\x64\x64TickResponse\"\xcc\x01\n\x04User\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x39\n\x12\x62roker_connections\x18\x03 \x03(\x0b\x32\x1d.protos.User.BrokerConnection\x1ao\n\x10\x42rokerConnection\x12#\n\x06\x62roker\x18\x01 \x01(\x0e\x32\x13.protos.Broker.Name\x12\x10\n\x08username\x18\x02 \x01(\t\x12\x10\n\x08password\x18\x03 \x01(\t\x12\x12\n\nsession_id\x18\x04 \x01(\t\"/\n\x11\x43reateUserRequest\x12\x1a\n\x04user\x18\x01 \x01(\x0b\x32\x0c.protos.User\" \n\x12\x43reateUserResponse\x12\n\n\x02id\x18\x01 \x01(\t\"/\n\x11UpdateUserRequest\x12\x1a\n\x04user\x18\x01 \x01(\x0b\x32\x0c.protos.User\"\x14\n\x12UpdateUserResponse\"\x12\n\x10ListUsersRequest\"0\n\x11ListUsersResponse\x12\x1b\n\x05users\x18\x01 \x03(\x0b\x32\x0c.protos.User\"\xd4\x01\n\x0f\x41\x64\x64OrderRequest\x12#\n\x06\x62roker\x18\x01 \x01(\x0e\x32\x13.protos.Broker.Name\x12#\n\x06symbol\x18\x02 \x01(\x0e\x32\x13.protos.Symbol.Name\x12)\n\tdirection\x18\x03 \x01(\x0e\x32\x16.protos.Direction.Name\x12\r\n\x05price\x18\x04 \x01(\x01\x12\x0e\n\x06volume\x18\x05 \x01(\x01\x12-\n\ttimestamp\x18\x06 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\"$\n\x10\x41\x64\x64OrderResponse\x12\x10\n\x08order_id\x18\x01 \x01(\t\"\x1b\n\x19GetCurrentSessionsRequest\"0\n\x1aGetCurrentSessionsResponse\x12\x12\n\nsession_id\x18\x01 \x03(\t\"8\n\x12OpenSessionRequest\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\")\n\x13OpenSessionResponse\x12\x12\n\nsession_id\x18\x01 \x01(\t\"\xdb\x01\n\x13OpenPositionRequest\x12\x12\n\nsession_id\x18\x01 \x01(\t\x12)\n\tdirection\x18\x02 \x01(\x0e\x32\x16.protos.Direction.Name\x12#\n\x06symbol\x18\x03 \x01(\x0e\x32\x13.protos.Symbol.Name\x12\r\n\x05price\x18\x04 \x01(\x01\x12\x0f\n\x07voliume\x18\x05 \x01(\x01\x12\x0f\n\x07user_id\x18\x06 \x01(\t\x12#\n\x06\x62roker\x18\x07 \x01(\x0e\x32\x13.protos.Broker.Name\x12\n\n\x02id\x18\x08 \x01(\t\"\"\n\x14OpenPositionResponse\x12\n\n\x02id\x18\x01 \x01(\t\"\xdb\x01\n\x14\x43losePositionRequest\x12\x12\n\nsession_id\x18\x01 \x01(\t\x12#\n\x06\x62roker\x18\x02 \x01(\x0e\x32\x13.protos.Broker.Name\x12#\n\x06symbol\x18\x03 \x01(\x0e\x32\x13.protos.Symbol.Name\x12\n\n\x02id\x18\x04 \x01(\t\x12\r\n\x05price\x18\x05 \x01(\x01\x12\x0f\n\x07user_id\x18\x06 \x01(\t\x12)\n\tdirection\x18\x07 \x01(\x0e\x32\x16.protos.Direction.Name\x12\x0e\n\x06volume\x18\x08 \x01(\x01\"d\n\x15\x43losePositionResponse\x12\x32\n\x0e\x65xecution_time\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x17\n\x0f\x65xecution_price\x18\x02 \x01(\x03\"R\n\x1cGetBrokerPriceHistoryRequest\x12\x12\n\nsession_id\x18\x01 \x01(\t\x12\x1e\n\x06symbol\x18\x02 \x01(\x0b\x32\x0e.protos.Symbol\"J\n\x1dGetBrokerPriceHistoryResponse\x12)\n\x0c\x63\x61ndlesticks\x18\x01 \x03(\x0b\x32\x13.protos.Candlestick\"Y\n\x1eSubscribeToPriceChangesRequest\x12\x12\n\nsession_id\x18\x01 \x01(\t\x12#\n\x06symbol\x18\x02 \x01(\x0e\x32\x13.protos.Symbol.Name\"!\n\x1fSubscribeToPriceChangesResponse\"M\n\x15RegisterBrokerRequest\x12#\n\x06\x62roker\x18\x01 \x01(\x0e\x32\x13.protos.Broker.Name\x12\x0f\n\x07\x61\x64\x64ress\x18\x02 \x01(\t\"\x18\n\x16RegisterBrokerResponse\"\xb2\x01\n\x0eXTBTradeStatus\x12-\n\ttimestamp\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x12\n\nsession_id\x18\x02 \x01(\t\x12\r\n\x05order\x18\x03 \x01(\x03\x12\x16\n\x0e\x63ustom_comment\x18\x04 \x01(\t\x12\x0f\n\x07message\x18\x05 \x01(\t\x12\r\n\x05price\x18\x06 \x01(\x01\x12\x16\n\x0erequest_status\x18\x07 \x01(\t\"B\n\x18\x41\x64\x64XTBTradeStatusRequest\x12&\n\x06status\x18\x01 \x01(\x0b\x32\x16.protos.XTBTradeStatus\"\x1b\n\x19\x41\x64\x64XTBTradeStatusResponse\"\xe0\x04\n\x08XTBTrade\x12-\n\ttimestamp\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x12\n\nsession_id\x18\x02 \x01(\t\x12\r\n\x05order\x18\x03 \x01(\x03\x12\x13\n\x0b\x63lose_price\x18\x04 \x01(\x01\x12.\n\nclose_time\x18\x05 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x0e\n\x06\x63losed\x18\x06 \x01(\x08\x12\x0b\n\x03\x63md\x18\x07 \x01(\t\x12\x0f\n\x07\x63omment\x18\x08 \x01(\t\x12\x12\n\ncommission\x18\t \x01(\x01\x12\x16\n\x0e\x63ustom_comment\x18\n \x01(\t\x12\x0e\n\x06\x64igits\x18\x0b \x01(\x03\x12.\n\nexpiration\x18\x0c \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x13\n\x0bmargin_rate\x18\r \x01(\x01\x12\x0e\n\x06offset\x18\x0e \x01(\x03\x12\x12\n\nopen_price\x18\x0f \x01(\x01\x12-\n\topen_time\x18\x10 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x0e\n\x06order2\x18\x11 \x01(\x03\x12\x10\n\x08position\x18\x12 \x01(\x03\x12\x0e\n\x06profit\x18\x13 \x01(\x01\x12\x11\n\tstop_loss\x18\x14 \x01(\x01\x12\r\n\x05state\x18\x15 \x01(\t\x12\x0f\n\x07storage\x18\x16 \x01(\x01\x12#\n\x06symbol\x18\x17 \x01(\x0e\x32\x13.protos.Symbol.Name\x12\x13\n\x0btake_profit\x18\x18 \x01(\x01\x12\x0c\n\x04type\x18\x19 \x01(\t\x12\x0e\n\x06volume\x18\x1a \x01(\x01\"5\n\x12\x41\x64\x64XTBTradeRequest\x12\x1f\n\x05trade\x18\x01 \x01(\x0b\x32\x10.protos.XTBTrade\"\x15\n\x13\x41\x64\x64XTBTradeResponse2\x8e\x07\n\x0b\x44\x61taService\x12O\n\x0e\x43reateStrategy\x12\x1d.protos.CreateStrategyRequest\x1a\x1e.protos.CreateStrategyResponse\x12O\n\x0eUpdateStrategy\x12\x1d.protos.UpdateStrategyRequest\x1a\x1e.protos.UpdateStrategyResponse\x12O\n\x0e\x44\x65leteStrategy\x12\x1d.protos.DeleteStrategyRequest\x1a\x1e.protos.DeleteStrategyResponse\x12O\n\x0eListStrategies\x12\x1d.protos.ListStrategiesRequest\x1a\x1e.protos.ListStrategiesResponse\x12R\n\x0fGetPriceHistory\x12\x1e.protos.GetPriceHistoryRequest\x1a\x1f.protos.GetPriceHistoryResponse\x12:\n\x07\x41\x64\x64Tick\x12\x16.protos.AddTickRequest\x1a\x17.protos.AddTickResponse\x12\x43\n\nCreateUser\x12\x19.protos.CreateUserRequest\x1a\x1a.protos.CreateUserResponse\x12\x43\n\nUpdateUser\x12\x19.protos.UpdateUserRequest\x1a\x1a.protos.UpdateUserResponse\x12@\n\tListUsers\x12\x18.protos.ListUsersRequest\x1a\x19.protos.ListUsersResponse\x12=\n\x08\x41\x64\x64Order\x12\x17.protos.AddOrderRequest\x1a\x18.protos.AddOrderResponse\x12\x46\n\x0b\x41\x64\x64XTBTrade\x12\x1a.protos.AddXTBTradeRequest\x1a\x1b.protos.AddXTBTradeResponse\x12X\n\x11\x41\x64\x64XTBTradeStatus\x12 .protos.AddXTBTradeStatusRequest\x1a!.protos.AddXTBTradeStatusResponse2b\n\x11StrategyEvaluator\x12M\n\x08\x45valuate\x12\x1f.protos.EvaulateStrategyRequest\x1a .protos.EvaluateStrategyResponse2\xf0\x04\n\rBrokerService\x12[\n\x12GetCurrentSessions\x12!.protos.GetCurrentSessionsRequest\x1a\".protos.GetCurrentSessionsResponse\x12\x46\n\x0bOpenSession\x12\x1a.protos.OpenSessionRequest\x1a\x1b.protos.OpenSessionResponse\x12I\n\x0cOpenPosition\x12\x1b.protos.OpenPositionRequest\x1a\x1c.protos.OpenPositionResponse\x12L\n\rClosePosition\x12\x1c.protos.ClosePositionRequest\x1a\x1d.protos.ClosePositionResponse\x12\x64\n\x15GetBrokerPriceHistory\x12$.protos.GetBrokerPriceHistoryRequest\x1a%.protos.GetBrokerPriceHistoryResponse\x12j\n\x17SubscribeToPriceChanges\x12&.protos.SubscribeToPriceChangesRequest\x1a\'.protos.SubscribeToPriceChangesResponse\x12O\n\x0eRegisterBroker\x12\x1d.protos.RegisterBrokerRequest\x1a\x1e.protos.RegisterBrokerResponse2\xa7\x01\n\x0cOrderService\x12I\n\x0cOpenPosition\x12\x1b.protos.OpenPositionRequest\x1a\x1c.protos.OpenPositionResponse\x12L\n\rClosePosition\x12\x1c.protos.ClosePositionRequest\x1a\x1d.protos.ClosePositionResponseB\x1fZ\x1dgithub.com/ducc/kw\xc9\x92nt/protosb\x06proto3'
+  serialized_pb=b'\n\x0cprotos.proto\x12\x06protos\x1a\x1fgoogle/protobuf/timestamp.proto\"_\n\x0bSessionInfo\x12\x12\n\nsession_id\x18\x01 \x01(\t\x12#\n\x06\x62roker\x18\x02 \x01(\x0e\x32\x13.protos.Broker.Name\x12\x17\n\x0fservice_address\x18\x03 \x01(\t\"k\n\x06\x42roker\x12!\n\x04name\x18\x01 \x01(\x0e\x32\x13.protos.Broker.Name\">\n\x04Name\x12\x0b\n\x07UNKNOWN\x10\x00\x12\x0c\n\x08XTB_DEMO\x10\x01\x12\x0e\n\nXTB_RETAIL\x10\x02\x12\x0b\n\x07XTB_PRO\x10\x03\"\xff\x01\n\x0b\x43\x61ndlestick\x12-\n\ttimestamp\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12#\n\x06\x62roker\x18\x02 \x01(\x0e\x32\x13.protos.Broker.Name\x12#\n\x06symbol\x18\x03 \x01(\x0e\x32\x13.protos.Symbol.Name\x12\x12\n\nopen_price\x18\x04 \x01(\x01\x12\x13\n\x0b\x63lose_price\x18\x05 \x01(\x01\x12\x12\n\nhigh_price\x18\x06 \x01(\x01\x12\x11\n\tlow_price\x18\x07 \x01(\x01\x12\x12\n\nbuy_volume\x18\x08 \x01(\x01\x12\x13\n\x0bsell_volume\x18\t \x01(\x01\"[\n\tPriceType\x12$\n\x04name\x18\x01 \x01(\x0e\x32\x16.protos.PriceType.Name\"(\n\x04Name\x12\x0b\n\x07UNKNOWN\x10\x00\x12\x08\n\x04OPEN\x10\x01\x12\t\n\x05\x43LOSE\x10\x02\"]\n\x08OpenType\x12#\n\x04name\x18\x01 \x01(\x0e\x32\x15.protos.OpenType.Name\",\n\x04Name\x12\x0b\n\x07UNKNOWN\x10\x00\x12\n\n\x06NORMAL\x10\x01\x12\x0b\n\x07REVERSE\x10\x02\"\xcf\x0e\n\x04Rule\x12)\n\tindicator\x18\x01 \x01(\x0b\x32\x16.protos.Rule.Indicator\x12*\n\nprice_type\x18\x02 \x01(\x0e\x32\x16.protos.PriceType.Name\x12(\n\topen_type\x18\x03 \x01(\x0e\x32\x15.protos.OpenType.Name\x12\x1a\n\x12period_nanoseconds\x18\x04 \x01(\x03\x1a\xa9\r\n\tIndicator\x12\x45\n\x12simple_take_profit\x18\x64 \x01(\x0b\x32\'.protos.Rule.Indicator.SimpleTakeProfitH\x00\x12\x43\n\x11pivot_take_profit\x18\x65 \x01(\x0b\x32&.protos.Rule.Indicator.PivotTakeProfitH\x00\x12\x42\n\x10simple_stop_loss\x18\xc8\x01 \x01(\x0b\x32%.protos.Rule.Indicator.SimpleStopLossH\x00\x12@\n\x0fpivot_stop_loss\x18\xc9\x01 \x01(\x0b\x32$.protos.Rule.Indicator.PivotStopLossH\x00\x12L\n\x15simple_moving_average\x18\xac\x02 \x01(\x0b\x32*.protos.Rule.Indicator.SimpleMovingAverageH\x00\x12P\n\x17relative_strength_index\x18\xad\x02 \x01(\x0b\x32,.protos.Rule.Indicator.RelativeStrengthIndexH\x00\x12,\n\x04macd\x18\xae\x02 \x01(\x0b\x32\x1b.protos.Rule.Indicator.MACDH\x00\x12\x41\n\x0f\x62ollinger_bands\x18\xaf\x02 \x01(\x0b\x32%.protos.Rule.Indicator.BollingerBandsH\x00\x1a\xb6\x01\n\x13SimpleMovingAverage\x12G\n\tcondition\x18\x01 \x01(\x0e\x32\x34.protos.Rule.Indicator.SimpleMovingAverage.Condition\x12\x0e\n\x06period\x18\x02 \x01(\x03\"F\n\tCondition\x12\x0b\n\x07UNKNOWN\x10\x00\x12\x15\n\x11\x41\x42OVE_SIGNAL_LINE\x10\x01\x12\x15\n\x11\x42\x45LOW_SIGNAL_LINE\x10\x02\x1a\xa1\x02\n\x15RelativeStrengthIndex\x12I\n\tcondition\x18\x01 \x01(\x0e\x32\x36.protos.Rule.Indicator.RelativeStrengthIndex.Condition\x12\x0e\n\x06period\x18\x02 \x01(\x03\x12\x13\n\x0bover_bought\x18\x03 \x01(\x03\x12\x11\n\tover_sold\x18\x04 \x01(\x03\"\x84\x01\n\tCondition\x12\x0b\n\x07UNKNOWN\x10\x00\x12\x1a\n\x16\x41\x42OVE_OVER_BOUGHT_LINE\x10\x01\x12\x1a\n\x16\x42\x45LOW_OVER_BOUGHT_LINE\x10\x02\x12\x18\n\x14\x41\x42OVE_OVER_SOLD_LINE\x10\x03\x12\x18\n\x14\x42\x45LOW_OVER_SOLD_LINE\x10\x04\x1a\xc9\x01\n\x04MACD\x12\x38\n\tcondition\x18\x01 \x01(\x0e\x32%.protos.Rule.Indicator.MACD.Condition\x12\x12\n\nshort_term\x18\x02 \x01(\x03\x12\x11\n\tlong_term\x18\x03 \x01(\x03\x12\x0e\n\x06length\x18\x04 \x01(\x03\"P\n\tCondition\x12\x0b\n\x07UNKNOWN\x10\x00\x12\x1a\n\x16SIGNAL_LINE_ABOVE_MACD\x10\x01\x12\x1a\n\x16SIGNAL_LINE_BELOW_MACD\x10\x02\x1a\xaa\x02\n\x0e\x42ollingerBands\x12\x42\n\tcondition\x18\x01 \x01(\x0e\x32/.protos.Rule.Indicator.BollingerBands.Condition\x12\x0e\n\x06period\x18\x02 \x01(\x03\x12\x11\n\tdeviation\x18\x03 \x01(\x01\"\xb0\x01\n\tCondition\x12\x0b\n\x07UNKNOWN\x10\x00\x12\x1a\n\x16PRICE_ABOVE_UPPER_BAND\x10\x01\x12\x1a\n\x16PRICE_BELOW_UPPER_BAND\x10\x02\x12\x1a\n\x16PRICE_ABOVE_LOWER_BAND\x10\x03\x12\x1a\n\x16PRICE_BELOW_LOWER_BAND\x10\x04\x12\x12\n\x0ePRICE_ABOVE_MA\x10\x05\x12\x12\n\x0ePRICE_BELOW_MA\x10\x06\x1a \n\x10SimpleTakeProfit\x12\x0c\n\x04pips\x18\x01 \x01(\x03\x1a\x11\n\x0fPivotTakeProfit\x1aP\n\x0eSimpleStopLoss\x12\x0c\n\x04pips\x18\x01 \x01(\x03\"0\n\x04Type\x12\x0b\n\x07UNKNOWN\x10\x00\x12\t\n\x05\x46IXED\x10\x01\x12\x10\n\x0c\x42\x41R_TRAILING\x10\x02\x1a\x0f\n\rPivotStopLossB\x0b\n\tcondition\"Y\n\x06Status\x12!\n\x04name\x18\x01 \x01(\x0e\x32\x13.protos.Status.Name\",\n\x04Name\x12\x0b\n\x07UNKNOWN\x10\x00\x12\x0b\n\x07\x45NABLED\x10\x01\x12\n\n\x06PAUSED\x10\x02\"Y\n\tDirection\x12$\n\x04name\x18\x01 \x01(\x0e\x32\x16.protos.Direction.Name\"&\n\x04Name\x12\x0b\n\x07UNKNOWN\x10\x00\x12\x07\n\x03\x42UY\x10\x01\x12\x08\n\x04SELL\x10\x02\"\xc9\x01\n\x08Position\x12)\n\tdirection\x18\x01 \x01(\x0e\x32\x16.protos.Direction.Name\x12\x12\n\nopen_price\x18\x02 \x01(\x03\x12\x13\n\x0b\x63lose_price\x18\x03 \x01(\x03\x12-\n\topen_time\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12.\n\nclose_time\x18\x05 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\n\n\x02id\x18\x06 \x01(\t\"\xb7\x02\n\x06Symbol\x12!\n\x04name\x18\x01 \x01(\x0e\x32\x13.protos.Symbol.Name\x12#\n\x06\x62roker\x18\x02 \x01(\x0e\x32\x13.protos.Broker.Name\"\xe4\x01\n\x04Name\x12\x0b\n\x07UNKNOWN\x10\x00\x12\x0b\n\x07\x41UD_USD\x10\x64\x12\x0b\n\x07\x45UR_USD\x10\x65\x12\x0b\n\x07\x45UR_CHF\x10\x66\x12\x0b\n\x07GBP_JPY\x10g\x12\x0b\n\x07USD_CHF\x10h\x12\x0b\n\x07USD_GBP\x10i\x12\x0b\n\x07USD_CAD\x10j\x12\x0b\n\x07USD_JPY\x10k\x12\x0c\n\x07\x42ITCOIN\x10\xc8\x01\x12\r\n\x08LITECOIN\x10\xc9\x01\x12\r\n\x08\x45THEREUM\x10\xca\x01\x12\n\n\x05US_30\x10\xac\x02\x12\x0b\n\x06UK_100\x10\xad\x02\x12\n\n\x05\x44\x45_30\x10\xae\x02\x12\x0b\n\x06SILVER\x10\x90\x03\x12\t\n\x04GOLD\x10\x91\x03\"&\n\x07RuleSet\x12\x1b\n\x05rules\x18\x01 \x03(\x0b\x32\x0c.protos.Rule\"\xc9\x02\n\x08Strategy\x12\x0c\n\x04name\x18\x01 \x01(\t\x12$\n\x0b\x65ntry_rules\x18\x02 \x01(\x0b\x32\x0f.protos.RuleSet\x12#\n\nexit_rules\x18\x03 \x01(\x0b\x32\x0f.protos.RuleSet\x12\x12\n\ntrade_size\x18\x04 \x01(\x03\x12\x13\n\x0btake_profit\x18\x05 \x01(\x03\x12\x11\n\tstop_loss\x18\x06 \x01(\x03\x12#\n\x06status\x18\x07 \x01(\x0e\x32\x13.protos.Status.Name\x12\n\n\x02id\x18\x08 \x01(\t\x12\x1e\n\x06symbol\x18\t \x01(\x0b\x32\x0e.protos.Symbol\x12#\n\tpositions\x18\n \x03(\x0b\x32\x10.protos.Position\x12\x32\n\x0elast_evaluated\x18\x0b \x01(\x0b\x32\x1a.google.protobuf.Timestamp\";\n\x15\x43reateStrategyRequest\x12\"\n\x08strategy\x18\x01 \x01(\x0b\x32\x10.protos.Strategy\"$\n\x16\x43reateStrategyResponse\x12\n\n\x02id\x18\x01 \x01(\t\";\n\x15UpdateStrategyRequest\x12\"\n\x08strategy\x18\x01 \x01(\x0b\x32\x10.protos.Strategy\"\x18\n\x16UpdateStrategyResponse\"#\n\x15\x44\x65leteStrategyRequest\x12\n\n\x02id\x18\x01 \x01(\t\"\x18\n\x16\x44\x65leteStrategyResponse\"\x17\n\x15ListStrategiesRequest\">\n\x16ListStrategiesResponse\x12$\n\nstrategies\x18\x01 \x03(\x0b\x32\x10.protos.Strategy\"\x83\x01\n\x17\x45vaulateStrategyRequest\x12\"\n\x08strategy\x18\x01 \x01(\x0b\x32\x10.protos.Strategy\x12)\n\x0c\x63\x61ndlesticks\x18\x02 \x03(\x0b\x32\x13.protos.Candlestick\x12\x19\n\x11has_open_position\x18\x03 \x01(\x08\"\xf2\x02\n\x18\x45valuateStrategyResponse\x12\x37\n\x06\x61\x63tion\x18\x01 \x01(\x0b\x32\'.protos.EvaluateStrategyResponse.Action\x1a\x9c\x02\n\x06\x41\x63tion\x12M\n\ropen_position\x18\x01 \x01(\x0b\x32\x34.protos.EvaluateStrategyResponse.Action.OpenPositionH\x00\x12O\n\x0e\x63lose_position\x18\x02 \x01(\x0b\x32\x35.protos.EvaluateStrategyResponse.Action.ClosePositionH\x00\x1aH\n\x0cOpenPosition\x12)\n\tdirection\x18\x01 \x01(\x0e\x32\x16.protos.Direction.Name\x12\r\n\x05price\x18\x02 \x01(\x01\x1a\x1e\n\rClosePosition\x12\r\n\x05price\x18\x01 \x01(\x01\x42\x08\n\x06\x61\x63tion\"\xc2\x01\n\x11\x43\x61ndlestickWindow\"\xac\x01\n\x04Name\x12\x0b\n\x07UNKNOWN\x10\x00\x12\x0e\n\nONE_MINUTE\x10<\x12\x10\n\x0b\x46IVE_MINUTE\x10\xac\x02\x12\x0f\n\nTEN_MINUTE\x10\xd8\x04\x12\x12\n\rTHIRTY_MINUTE\x10\x88\x0e\x12\r\n\x08ONE_HOUR\x10\x90\x1c\x12\x0f\n\nTHREE_HOUR\x10\xb0T\x12\x0e\n\x08SIX_HOUR\x10\xe0\xa8\x01\x12\x11\n\x0bTWELVE_HOUR\x10\xc0\xd1\x02\x12\r\n\x07ONE_DAY\x10\x80\xa3\x05\"\xe6\x01\n\x16GetPriceHistoryRequest\x12#\n\x06\x62roker\x18\x01 \x01(\x0e\x32\x13.protos.Broker.Name\x12#\n\x06symbol\x18\x02 \x01(\x0e\x32\x13.protos.Symbol.Name\x12)\n\x05start\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\'\n\x03\x65nd\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12.\n\x06window\x18\x05 \x01(\x0e\x32\x1e.protos.CandlestickWindow.Name\"D\n\x17GetPriceHistoryResponse\x12)\n\x0c\x63\x61ndlesticks\x18\x01 \x03(\x0b\x32\x13.protos.Candlestick\"\xc7\x01\n\x04Tick\x12-\n\ttimestamp\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12#\n\x06\x62roker\x18\x02 \x01(\x0e\x32\x13.protos.Broker.Name\x12#\n\x06symbol\x18\x03 \x01(\x0e\x32\x13.protos.Symbol.Name\x12\r\n\x05price\x18\x04 \x01(\x01\x12\x0e\n\x06spread\x18\x05 \x01(\x01\x12\x12\n\nbuy_volume\x18\x06 \x01(\x01\x12\x13\n\x0bsell_volume\x18\x07 \x01(\x01\",\n\x0e\x41\x64\x64TickRequest\x12\x1a\n\x04tick\x18\x01 \x01(\x0b\x32\x0c.protos.Tick\"\x11\n\x0f\x41\x64\x64TickResponse\"\xcc\x01\n\x04User\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x39\n\x12\x62roker_connections\x18\x03 \x03(\x0b\x32\x1d.protos.User.BrokerConnection\x1ao\n\x10\x42rokerConnection\x12#\n\x06\x62roker\x18\x01 \x01(\x0e\x32\x13.protos.Broker.Name\x12\x10\n\x08username\x18\x02 \x01(\t\x12\x10\n\x08password\x18\x03 \x01(\t\x12\x12\n\nsession_id\x18\x04 \x01(\t\"/\n\x11\x43reateUserRequest\x12\x1a\n\x04user\x18\x01 \x01(\x0b\x32\x0c.protos.User\" \n\x12\x43reateUserResponse\x12\n\n\x02id\x18\x01 \x01(\t\"/\n\x11UpdateUserRequest\x12\x1a\n\x04user\x18\x01 \x01(\x0b\x32\x0c.protos.User\"\x14\n\x12UpdateUserResponse\"\x12\n\x10ListUsersRequest\"0\n\x11ListUsersResponse\x12\x1b\n\x05users\x18\x01 \x03(\x0b\x32\x0c.protos.User\"\xca\x01\n\x05Order\x12#\n\x06\x62roker\x18\x01 \x01(\x0e\x32\x13.protos.Broker.Name\x12#\n\x06symbol\x18\x02 \x01(\x0e\x32\x13.protos.Symbol.Name\x12)\n\tdirection\x18\x03 \x01(\x0e\x32\x16.protos.Direction.Name\x12\r\n\x05price\x18\x04 \x01(\x01\x12\x0e\n\x06volume\x18\x05 \x01(\x01\x12-\n\ttimestamp\x18\x06 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\"/\n\x0f\x41\x64\x64OrderRequest\x12\x1c\n\x05order\x18\x01 \x01(\x0b\x32\r.protos.Order\"$\n\x10\x41\x64\x64OrderResponse\x12\x10\n\x08order_id\x18\x01 \x01(\t\"#\n\x0fGetOrderRequest\x12\x10\n\x08order_id\x18\x01 \x01(\t\"0\n\x10GetOrderResponse\x12\x1c\n\x05order\x18\x01 \x01(\x0b\x32\r.protos.Order\"\x1b\n\x19GetCurrentSessionsRequest\"0\n\x1aGetCurrentSessionsResponse\x12\x12\n\nsession_id\x18\x01 \x03(\t\"8\n\x12OpenSessionRequest\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\")\n\x13OpenSessionResponse\x12\x12\n\nsession_id\x18\x01 \x01(\t\"\xdb\x01\n\x13OpenPositionRequest\x12\x12\n\nsession_id\x18\x01 \x01(\t\x12)\n\tdirection\x18\x02 \x01(\x0e\x32\x16.protos.Direction.Name\x12#\n\x06symbol\x18\x03 \x01(\x0e\x32\x13.protos.Symbol.Name\x12\r\n\x05price\x18\x04 \x01(\x01\x12\x0f\n\x07voliume\x18\x05 \x01(\x01\x12\x0f\n\x07user_id\x18\x06 \x01(\t\x12#\n\x06\x62roker\x18\x07 \x01(\x0e\x32\x13.protos.Broker.Name\x12\n\n\x02id\x18\x08 \x01(\t\"\"\n\x14OpenPositionResponse\x12\n\n\x02id\x18\x01 \x01(\t\"\xdb\x01\n\x14\x43losePositionRequest\x12\x12\n\nsession_id\x18\x01 \x01(\t\x12#\n\x06\x62roker\x18\x02 \x01(\x0e\x32\x13.protos.Broker.Name\x12#\n\x06symbol\x18\x03 \x01(\x0e\x32\x13.protos.Symbol.Name\x12\n\n\x02id\x18\x04 \x01(\t\x12\r\n\x05price\x18\x05 \x01(\x01\x12\x0f\n\x07user_id\x18\x06 \x01(\t\x12)\n\tdirection\x18\x07 \x01(\x0e\x32\x16.protos.Direction.Name\x12\x0e\n\x06volume\x18\x08 \x01(\x01\"d\n\x15\x43losePositionResponse\x12\x32\n\x0e\x65xecution_time\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x17\n\x0f\x65xecution_price\x18\x02 \x01(\x03\"R\n\x1cGetBrokerPriceHistoryRequest\x12\x12\n\nsession_id\x18\x01 \x01(\t\x12\x1e\n\x06symbol\x18\x02 \x01(\x0b\x32\x0e.protos.Symbol\"J\n\x1dGetBrokerPriceHistoryResponse\x12)\n\x0c\x63\x61ndlesticks\x18\x01 \x03(\x0b\x32\x13.protos.Candlestick\"Y\n\x1eSubscribeToPriceChangesRequest\x12\x12\n\nsession_id\x18\x01 \x01(\t\x12#\n\x06symbol\x18\x02 \x01(\x0e\x32\x13.protos.Symbol.Name\"!\n\x1fSubscribeToPriceChangesResponse\"M\n\x15RegisterBrokerRequest\x12#\n\x06\x62roker\x18\x01 \x01(\x0e\x32\x13.protos.Broker.Name\x12\x0f\n\x07\x61\x64\x64ress\x18\x02 \x01(\t\"\x18\n\x16RegisterBrokerResponse\"\xb2\x01\n\x0eXTBTradeStatus\x12-\n\ttimestamp\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x12\n\nsession_id\x18\x02 \x01(\t\x12\r\n\x05order\x18\x03 \x01(\x03\x12\x16\n\x0e\x63ustom_comment\x18\x04 \x01(\t\x12\x0f\n\x07message\x18\x05 \x01(\t\x12\r\n\x05price\x18\x06 \x01(\x01\x12\x16\n\x0erequest_status\x18\x07 \x01(\t\"B\n\x18\x41\x64\x64XTBTradeStatusRequest\x12&\n\x06status\x18\x01 \x01(\x0b\x32\x16.protos.XTBTradeStatus\"\x1b\n\x19\x41\x64\x64XTBTradeStatusResponse\"\xe0\x04\n\x08XTBTrade\x12-\n\ttimestamp\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x12\n\nsession_id\x18\x02 \x01(\t\x12\r\n\x05order\x18\x03 \x01(\x03\x12\x13\n\x0b\x63lose_price\x18\x04 \x01(\x01\x12.\n\nclose_time\x18\x05 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x0e\n\x06\x63losed\x18\x06 \x01(\x08\x12\x0b\n\x03\x63md\x18\x07 \x01(\t\x12\x0f\n\x07\x63omment\x18\x08 \x01(\t\x12\x12\n\ncommission\x18\t \x01(\x01\x12\x16\n\x0e\x63ustom_comment\x18\n \x01(\t\x12\x0e\n\x06\x64igits\x18\x0b \x01(\x03\x12.\n\nexpiration\x18\x0c \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x13\n\x0bmargin_rate\x18\r \x01(\x01\x12\x0e\n\x06offset\x18\x0e \x01(\x03\x12\x12\n\nopen_price\x18\x0f \x01(\x01\x12-\n\topen_time\x18\x10 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x0e\n\x06order2\x18\x11 \x01(\x03\x12\x10\n\x08position\x18\x12 \x01(\x03\x12\x0e\n\x06profit\x18\x13 \x01(\x01\x12\x11\n\tstop_loss\x18\x14 \x01(\x01\x12\r\n\x05state\x18\x15 \x01(\t\x12\x0f\n\x07storage\x18\x16 \x01(\x01\x12#\n\x06symbol\x18\x17 \x01(\x0e\x32\x13.protos.Symbol.Name\x12\x13\n\x0btake_profit\x18\x18 \x01(\x01\x12\x0c\n\x04type\x18\x19 \x01(\t\x12\x0e\n\x06volume\x18\x1a \x01(\x01\"5\n\x12\x41\x64\x64XTBTradeRequest\x12\x1f\n\x05trade\x18\x01 \x01(\x0b\x32\x10.protos.XTBTrade\"\x15\n\x13\x41\x64\x64XTBTradeResponse2\xcd\x07\n\x0b\x44\x61taService\x12O\n\x0e\x43reateStrategy\x12\x1d.protos.CreateStrategyRequest\x1a\x1e.protos.CreateStrategyResponse\x12O\n\x0eUpdateStrategy\x12\x1d.protos.UpdateStrategyRequest\x1a\x1e.protos.UpdateStrategyResponse\x12O\n\x0e\x44\x65leteStrategy\x12\x1d.protos.DeleteStrategyRequest\x1a\x1e.protos.DeleteStrategyResponse\x12O\n\x0eListStrategies\x12\x1d.protos.ListStrategiesRequest\x1a\x1e.protos.ListStrategiesResponse\x12R\n\x0fGetPriceHistory\x12\x1e.protos.GetPriceHistoryRequest\x1a\x1f.protos.GetPriceHistoryResponse\x12:\n\x07\x41\x64\x64Tick\x12\x16.protos.AddTickRequest\x1a\x17.protos.AddTickResponse\x12\x43\n\nCreateUser\x12\x19.protos.CreateUserRequest\x1a\x1a.protos.CreateUserResponse\x12\x43\n\nUpdateUser\x12\x19.protos.UpdateUserRequest\x1a\x1a.protos.UpdateUserResponse\x12@\n\tListUsers\x12\x18.protos.ListUsersRequest\x1a\x19.protos.ListUsersResponse\x12=\n\x08\x41\x64\x64Order\x12\x17.protos.AddOrderRequest\x1a\x18.protos.AddOrderResponse\x12=\n\x08GetOrder\x12\x17.protos.GetOrderRequest\x1a\x18.protos.GetOrderResponse\x12\x46\n\x0b\x41\x64\x64XTBTrade\x12\x1a.protos.AddXTBTradeRequest\x1a\x1b.protos.AddXTBTradeResponse\x12X\n\x11\x41\x64\x64XTBTradeStatus\x12 .protos.AddXTBTradeStatusRequest\x1a!.protos.AddXTBTradeStatusResponse2b\n\x11StrategyEvaluator\x12M\n\x08\x45valuate\x12\x1f.protos.EvaulateStrategyRequest\x1a .protos.EvaluateStrategyResponse2\xf0\x04\n\rBrokerService\x12[\n\x12GetCurrentSessions\x12!.protos.GetCurrentSessionsRequest\x1a\".protos.GetCurrentSessionsResponse\x12\x46\n\x0bOpenSession\x12\x1a.protos.OpenSessionRequest\x1a\x1b.protos.OpenSessionResponse\x12I\n\x0cOpenPosition\x12\x1b.protos.OpenPositionRequest\x1a\x1c.protos.OpenPositionResponse\x12L\n\rClosePosition\x12\x1c.protos.ClosePositionRequest\x1a\x1d.protos.ClosePositionResponse\x12\x64\n\x15GetBrokerPriceHistory\x12$.protos.GetBrokerPriceHistoryRequest\x1a%.protos.GetBrokerPriceHistoryResponse\x12j\n\x17SubscribeToPriceChanges\x12&.protos.SubscribeToPriceChangesRequest\x1a\'.protos.SubscribeToPriceChangesResponse\x12O\n\x0eRegisterBroker\x12\x1d.protos.RegisterBrokerRequest\x1a\x1e.protos.RegisterBrokerResponse2\xa7\x01\n\x0cOrderService\x12I\n\x0cOpenPosition\x12\x1b.protos.OpenPositionRequest\x1a\x1c.protos.OpenPositionResponse\x12L\n\rClosePosition\x12\x1c.protos.ClosePositionRequest\x1a\x1d.protos.ClosePositionResponseB\x1fZ\x1dgithub.com/ducc/kw\xc9\x92nt/protosb\x06proto3'
   ,
   dependencies=[google_dot_protobuf_dot_timestamp__pb2.DESCRIPTOR,])
 
@@ -2328,50 +2328,50 @@ _LISTUSERSRESPONSE = _descriptor.Descriptor(
 )
 
 
-_ADDORDERREQUEST = _descriptor.Descriptor(
-  name='AddOrderRequest',
-  full_name='protos.AddOrderRequest',
+_ORDER = _descriptor.Descriptor(
+  name='Order',
+  full_name='protos.Order',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='broker', full_name='protos.AddOrderRequest.broker', index=0,
+      name='broker', full_name='protos.Order.broker', index=0,
       number=1, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='symbol', full_name='protos.AddOrderRequest.symbol', index=1,
+      name='symbol', full_name='protos.Order.symbol', index=1,
       number=2, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='direction', full_name='protos.AddOrderRequest.direction', index=2,
+      name='direction', full_name='protos.Order.direction', index=2,
       number=3, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='price', full_name='protos.AddOrderRequest.price', index=3,
+      name='price', full_name='protos.Order.price', index=3,
       number=4, type=1, cpp_type=5, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='volume', full_name='protos.AddOrderRequest.volume', index=4,
+      name='volume', full_name='protos.Order.volume', index=4,
       number=5, type=1, cpp_type=5, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='timestamp', full_name='protos.AddOrderRequest.timestamp', index=5,
+      name='timestamp', full_name='protos.Order.timestamp', index=5,
       number=6, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -2390,7 +2390,38 @@ _ADDORDERREQUEST = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=5699,
-  serialized_end=5911,
+  serialized_end=5901,
+)
+
+
+_ADDORDERREQUEST = _descriptor.Descriptor(
+  name='AddOrderRequest',
+  full_name='protos.AddOrderRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='order', full_name='protos.AddOrderRequest.order', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=5903,
+  serialized_end=5950,
 )
 
 
@@ -2420,8 +2451,70 @@ _ADDORDERRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5913,
-  serialized_end=5949,
+  serialized_start=5952,
+  serialized_end=5988,
+)
+
+
+_GETORDERREQUEST = _descriptor.Descriptor(
+  name='GetOrderRequest',
+  full_name='protos.GetOrderRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='order_id', full_name='protos.GetOrderRequest.order_id', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=5990,
+  serialized_end=6025,
+)
+
+
+_GETORDERRESPONSE = _descriptor.Descriptor(
+  name='GetOrderResponse',
+  full_name='protos.GetOrderResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='order', full_name='protos.GetOrderResponse.order', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=6027,
+  serialized_end=6075,
 )
 
 
@@ -2444,8 +2537,8 @@ _GETCURRENTSESSIONSREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5951,
-  serialized_end=5978,
+  serialized_start=6077,
+  serialized_end=6104,
 )
 
 
@@ -2475,8 +2568,8 @@ _GETCURRENTSESSIONSRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5980,
-  serialized_end=6028,
+  serialized_start=6106,
+  serialized_end=6154,
 )
 
 
@@ -2513,8 +2606,8 @@ _OPENSESSIONREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6030,
-  serialized_end=6086,
+  serialized_start=6156,
+  serialized_end=6212,
 )
 
 
@@ -2544,8 +2637,8 @@ _OPENSESSIONRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6088,
-  serialized_end=6129,
+  serialized_start=6214,
+  serialized_end=6255,
 )
 
 
@@ -2624,8 +2717,8 @@ _OPENPOSITIONREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6132,
-  serialized_end=6351,
+  serialized_start=6258,
+  serialized_end=6477,
 )
 
 
@@ -2655,8 +2748,8 @@ _OPENPOSITIONRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6353,
-  serialized_end=6387,
+  serialized_start=6479,
+  serialized_end=6513,
 )
 
 
@@ -2735,8 +2828,8 @@ _CLOSEPOSITIONREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6390,
-  serialized_end=6609,
+  serialized_start=6516,
+  serialized_end=6735,
 )
 
 
@@ -2773,8 +2866,8 @@ _CLOSEPOSITIONRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6611,
-  serialized_end=6711,
+  serialized_start=6737,
+  serialized_end=6837,
 )
 
 
@@ -2811,8 +2904,8 @@ _GETBROKERPRICEHISTORYREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6713,
-  serialized_end=6795,
+  serialized_start=6839,
+  serialized_end=6921,
 )
 
 
@@ -2842,8 +2935,8 @@ _GETBROKERPRICEHISTORYRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6797,
-  serialized_end=6871,
+  serialized_start=6923,
+  serialized_end=6997,
 )
 
 
@@ -2880,8 +2973,8 @@ _SUBSCRIBETOPRICECHANGESREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6873,
-  serialized_end=6962,
+  serialized_start=6999,
+  serialized_end=7088,
 )
 
 
@@ -2904,8 +2997,8 @@ _SUBSCRIBETOPRICECHANGESRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6964,
-  serialized_end=6997,
+  serialized_start=7090,
+  serialized_end=7123,
 )
 
 
@@ -2942,8 +3035,8 @@ _REGISTERBROKERREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6999,
-  serialized_end=7076,
+  serialized_start=7125,
+  serialized_end=7202,
 )
 
 
@@ -2966,8 +3059,8 @@ _REGISTERBROKERRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7078,
-  serialized_end=7102,
+  serialized_start=7204,
+  serialized_end=7228,
 )
 
 
@@ -3039,8 +3132,8 @@ _XTBTRADESTATUS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7105,
-  serialized_end=7283,
+  serialized_start=7231,
+  serialized_end=7409,
 )
 
 
@@ -3070,8 +3163,8 @@ _ADDXTBTRADESTATUSREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7285,
-  serialized_end=7351,
+  serialized_start=7411,
+  serialized_end=7477,
 )
 
 
@@ -3094,8 +3187,8 @@ _ADDXTBTRADESTATUSRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7353,
-  serialized_end=7380,
+  serialized_start=7479,
+  serialized_end=7506,
 )
 
 
@@ -3300,8 +3393,8 @@ _XTBTRADE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7383,
-  serialized_end=7991,
+  serialized_start=7509,
+  serialized_end=8117,
 )
 
 
@@ -3331,8 +3424,8 @@ _ADDXTBTRADEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7993,
-  serialized_end=8046,
+  serialized_start=8119,
+  serialized_end=8172,
 )
 
 
@@ -3355,8 +3448,8 @@ _ADDXTBTRADERESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=8048,
-  serialized_end=8069,
+  serialized_start=8174,
+  serialized_end=8195,
 )
 
 _SESSIONINFO.fields_by_name['broker'].enum_type = _BROKER_NAME
@@ -3474,10 +3567,12 @@ _USER.fields_by_name['broker_connections'].message_type = _USER_BROKERCONNECTION
 _CREATEUSERREQUEST.fields_by_name['user'].message_type = _USER
 _UPDATEUSERREQUEST.fields_by_name['user'].message_type = _USER
 _LISTUSERSRESPONSE.fields_by_name['users'].message_type = _USER
-_ADDORDERREQUEST.fields_by_name['broker'].enum_type = _BROKER_NAME
-_ADDORDERREQUEST.fields_by_name['symbol'].enum_type = _SYMBOL_NAME
-_ADDORDERREQUEST.fields_by_name['direction'].enum_type = _DIRECTION_NAME
-_ADDORDERREQUEST.fields_by_name['timestamp'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
+_ORDER.fields_by_name['broker'].enum_type = _BROKER_NAME
+_ORDER.fields_by_name['symbol'].enum_type = _SYMBOL_NAME
+_ORDER.fields_by_name['direction'].enum_type = _DIRECTION_NAME
+_ORDER.fields_by_name['timestamp'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
+_ADDORDERREQUEST.fields_by_name['order'].message_type = _ORDER
+_GETORDERRESPONSE.fields_by_name['order'].message_type = _ORDER
 _OPENPOSITIONREQUEST.fields_by_name['direction'].enum_type = _DIRECTION_NAME
 _OPENPOSITIONREQUEST.fields_by_name['symbol'].enum_type = _SYMBOL_NAME
 _OPENPOSITIONREQUEST.fields_by_name['broker'].enum_type = _BROKER_NAME
@@ -3532,8 +3627,11 @@ DESCRIPTOR.message_types_by_name['UpdateUserRequest'] = _UPDATEUSERREQUEST
 DESCRIPTOR.message_types_by_name['UpdateUserResponse'] = _UPDATEUSERRESPONSE
 DESCRIPTOR.message_types_by_name['ListUsersRequest'] = _LISTUSERSREQUEST
 DESCRIPTOR.message_types_by_name['ListUsersResponse'] = _LISTUSERSRESPONSE
+DESCRIPTOR.message_types_by_name['Order'] = _ORDER
 DESCRIPTOR.message_types_by_name['AddOrderRequest'] = _ADDORDERREQUEST
 DESCRIPTOR.message_types_by_name['AddOrderResponse'] = _ADDORDERRESPONSE
+DESCRIPTOR.message_types_by_name['GetOrderRequest'] = _GETORDERREQUEST
+DESCRIPTOR.message_types_by_name['GetOrderResponse'] = _GETORDERRESPONSE
 DESCRIPTOR.message_types_by_name['GetCurrentSessionsRequest'] = _GETCURRENTSESSIONSREQUEST
 DESCRIPTOR.message_types_by_name['GetCurrentSessionsResponse'] = _GETCURRENTSESSIONSRESPONSE
 DESCRIPTOR.message_types_by_name['OpenSessionRequest'] = _OPENSESSIONREQUEST
@@ -3905,6 +4003,13 @@ ListUsersResponse = _reflection.GeneratedProtocolMessageType('ListUsersResponse'
   })
 _sym_db.RegisterMessage(ListUsersResponse)
 
+Order = _reflection.GeneratedProtocolMessageType('Order', (_message.Message,), {
+  'DESCRIPTOR' : _ORDER,
+  '__module__' : 'protos_pb2'
+  # @@protoc_insertion_point(class_scope:protos.Order)
+  })
+_sym_db.RegisterMessage(Order)
+
 AddOrderRequest = _reflection.GeneratedProtocolMessageType('AddOrderRequest', (_message.Message,), {
   'DESCRIPTOR' : _ADDORDERREQUEST,
   '__module__' : 'protos_pb2'
@@ -3918,6 +4023,20 @@ AddOrderResponse = _reflection.GeneratedProtocolMessageType('AddOrderResponse', 
   # @@protoc_insertion_point(class_scope:protos.AddOrderResponse)
   })
 _sym_db.RegisterMessage(AddOrderResponse)
+
+GetOrderRequest = _reflection.GeneratedProtocolMessageType('GetOrderRequest', (_message.Message,), {
+  'DESCRIPTOR' : _GETORDERREQUEST,
+  '__module__' : 'protos_pb2'
+  # @@protoc_insertion_point(class_scope:protos.GetOrderRequest)
+  })
+_sym_db.RegisterMessage(GetOrderRequest)
+
+GetOrderResponse = _reflection.GeneratedProtocolMessageType('GetOrderResponse', (_message.Message,), {
+  'DESCRIPTOR' : _GETORDERRESPONSE,
+  '__module__' : 'protos_pb2'
+  # @@protoc_insertion_point(class_scope:protos.GetOrderResponse)
+  })
+_sym_db.RegisterMessage(GetOrderResponse)
 
 GetCurrentSessionsRequest = _reflection.GeneratedProtocolMessageType('GetCurrentSessionsRequest', (_message.Message,), {
   'DESCRIPTOR' : _GETCURRENTSESSIONSREQUEST,
@@ -4068,8 +4187,8 @@ _DATASERVICE = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=8072,
-  serialized_end=8982,
+  serialized_start=8198,
+  serialized_end=9171,
   methods=[
   _descriptor.MethodDescriptor(
     name='CreateStrategy',
@@ -4162,9 +4281,18 @@ _DATASERVICE = _descriptor.ServiceDescriptor(
     serialized_options=None,
   ),
   _descriptor.MethodDescriptor(
+    name='GetOrder',
+    full_name='protos.DataService.GetOrder',
+    index=10,
+    containing_service=None,
+    input_type=_GETORDERREQUEST,
+    output_type=_GETORDERRESPONSE,
+    serialized_options=None,
+  ),
+  _descriptor.MethodDescriptor(
     name='AddXTBTrade',
     full_name='protos.DataService.AddXTBTrade',
-    index=10,
+    index=11,
     containing_service=None,
     input_type=_ADDXTBTRADEREQUEST,
     output_type=_ADDXTBTRADERESPONSE,
@@ -4173,7 +4301,7 @@ _DATASERVICE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='AddXTBTradeStatus',
     full_name='protos.DataService.AddXTBTradeStatus',
-    index=11,
+    index=12,
     containing_service=None,
     input_type=_ADDXTBTRADESTATUSREQUEST,
     output_type=_ADDXTBTRADESTATUSRESPONSE,
@@ -4191,8 +4319,8 @@ _STRATEGYEVALUATOR = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=1,
   serialized_options=None,
-  serialized_start=8984,
-  serialized_end=9082,
+  serialized_start=9173,
+  serialized_end=9271,
   methods=[
   _descriptor.MethodDescriptor(
     name='Evaluate',
@@ -4215,8 +4343,8 @@ _BROKERSERVICE = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=2,
   serialized_options=None,
-  serialized_start=9085,
-  serialized_end=9709,
+  serialized_start=9274,
+  serialized_end=9898,
   methods=[
   _descriptor.MethodDescriptor(
     name='GetCurrentSessions',
@@ -4293,8 +4421,8 @@ _ORDERSERVICE = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=3,
   serialized_options=None,
-  serialized_start=9712,
-  serialized_end=9879,
+  serialized_start=9901,
+  serialized_end=10068,
   methods=[
   _descriptor.MethodDescriptor(
     name='OpenPosition',

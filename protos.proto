@@ -258,6 +258,7 @@ service DataService {
     rpc ListUsers(ListUsersRequest) returns (ListUsersResponse);
 
     rpc AddOrder(AddOrderRequest) returns (AddOrderResponse);
+    rpc GetOrder(GetOrderRequest) returns (GetOrderResponse);
 
     rpc AddXTBTrade(AddXTBTradeRequest) returns (AddXTBTradeResponse);
     rpc AddXTBTradeStatus(AddXTBTradeStatusRequest) returns (AddXTBTradeStatusResponse);
@@ -396,7 +397,7 @@ message ListUsersResponse {
     repeated User users = 1;
 }
 
-message AddOrderRequest {
+message Order {
     Broker.Name broker = 1;
     Symbol.Name symbol = 2;
     Direction.Name direction = 3;
@@ -404,8 +405,19 @@ message AddOrderRequest {
     double volume = 5;
     google.protobuf.Timestamp timestamp = 6;
 }
+
+message AddOrderRequest {
+    Order order = 1;
+}
 message AddOrderResponse {
     string order_id = 1;
+}
+
+message GetOrderRequest {
+    string order_id = 1;
+}
+message GetOrderResponse {
+    Order order = 1;
 }
 
 service BrokerService {

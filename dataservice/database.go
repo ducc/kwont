@@ -390,6 +390,30 @@ func (d *database) InsertOrder(ctx context.Context, broker, symbol, direction st
 	return id, nil
 }
 
+func (d *database) SelectOrder(ctx context.Context, orderID string) (*protos.Order, error) {
+	const stmt = `SELECT broker, symbol, direction, price, volume, timestamp FROM orders WHERE order_id = $1;`
+	row := d.db.QueryRowContext(ctx, stmt, orderID)
+
+	var brokerName, symbolName, directionName string
+	var timestamp time.Time
+	order := &protos.Order{}
+
+	err := row.Scan(&brokerName, &symbolName, &directionName, &order.Price, &order.Volume, &timestamp)
+	if err != nil {
+		return nil, err
+	}
+
+	order.Broker = protos.Broker_Name(protos.Broker_Name_value[brokerName])
+	order.Symbol = protos.Symbol_Name(protos.Symbol_Name_value[symbolName])
+	order.Direction = protos.Direction_Name(protos.Direction_Name_value[directionName])
+	order.Timestamp, err = ptypes.TimestampProto(timestamp)
+	if err != nil {
+		return nil, err
+	}
+
+	return order, nil
+}
+
 func (d *database) InsertXTBTrade(ctx context.Context, timestamp time.Time, sessionID string, order int64, closePrice float64, closeTime time.Time, closed bool, cmd, comment string, commission float64, customComment string, digits int64, expiration time.Time, marginRate float64, offset int64, openPrice float64, openTime time.Time, order2, position int64, profit, stopLoss float64, state string, storage float64, symbol string, takeProfit float64, tradeType string, volume float64) error {
 	const stmt = `
 INSERT INTO xtb_trades (session_id, "order", timestamp, close_price, close_time, closed, cmd, 

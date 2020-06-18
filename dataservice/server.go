@@ -2,9 +2,12 @@ package dataservice
 
 import (
 	"context"
+	"database/sql"
 	"github.com/ducc/kwɒnt/protos"
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 type server struct {
@@ -202,17 +205,26 @@ func (s *server) ListUsers(ctx context.Context, req *protos.ListUsersRequest) (*
 }
 
 func (s *server) AddOrder(ctx context.Context, req *protos.AddOrderRequest) (*protos.AddOrderResponse, error) {
-	ts, err := ptypes.Timestamp(req.Timestamp)
+	ts, err := ptypes.Timestamp(req.Order.Timestamp)
 	if err != nil {
 		return nil, err
 	}
 
-	orderID, err := s.db.InsertOrder(ctx, req.Broker.String(), req.Symbol.String(), req.Direction.String(), req.Price, req.Volume, ts)
+	orderID, err := s.db.InsertOrder(ctx, req.Order.Broker.String(), req.Order.Symbol.String(), req.Order.Direction.String(), req.Order.Price, req.Order.Volume, ts)
 	if err != nil {
 		return nil, err
 	}
 
 	return &protos.AddOrderResponse{OrderId: orderID}, nil
+}
+
+func (s *server) GetOrder(ctx context.Context, req *protos.GetOrderRequest) (*protos.GetOrderResponse, error) {
+	order, err := s.db.SelectOrder(ctx, req.OrderId)
+	if err == sql.ErrNoRows {
+		return nil, status.Error(codes.NotFound, "order does not exist")
+	}
+
+	return &protos.GetOrderResponse{Order: order}, nil
 }
 
 func (s *server) AddXTBTrade(ctx context.Context, req *protos.AddXTBTradeRequest) (*protos.AddXTBTradeResponse, error) {

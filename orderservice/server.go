@@ -30,12 +30,14 @@ func (s *server) OpenPosition(ctx context.Context, req *protos.OpenPositionReque
 	}
 
 	dsResponse, err := s.data.AddOrder(ctx, &protos.AddOrderRequest{
-		Broker:    req.Broker,
-		Symbol:    req.Symbol,
-		Direction: req.Direction,
-		Price:     req.Price,
-		Volume:    req.Voliume,
-		Timestamp: ts,
+		Order: &protos.Order{
+			Broker:    req.Broker,
+			Symbol:    req.Symbol,
+			Direction: req.Direction,
+			Price:     req.Price,
+			Volume:    req.Voliume,
+			Timestamp: ts,
+		},
 	})
 	if err != nil {
 		return nil, err
