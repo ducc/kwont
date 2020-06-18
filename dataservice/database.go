@@ -391,7 +391,7 @@ func (d *database) InsertOrder(ctx context.Context, broker, symbol, direction st
 }
 
 func (d *database) SelectOrder(ctx context.Context, orderID string) (*protos.Order, error) {
-	const stmt = `SELECT broker, symbol, direction, price, volume, timestamp FROM orders WHERE order_id = $1;`
+	const stmt = `SELECT broker, symbol, direction, price, volume, timestamp FROM orders WHERE order_id = $1::UUID;`
 	row := d.db.QueryRowContext(ctx, stmt, orderID)
 
 	var brokerName, symbolName, directionName string
@@ -453,7 +453,7 @@ func (d *database) SelectXTBTrades(ctx context.Context, orderID string, sessionI
                          expiration, margin_rate, "offset", open_price, open_time, order_2, position, profit, stop_loss,
                          state, storage, symbol, take_profit, type, volume
                   FROM xtb_trades
-                  WHERE custom_comment = $1 AND session_id = $2 
+                  WHERE custom_comment = $1 AND session_id = $2::UUID 
 				  ORDER BY timestamp asc`
 
 	rows, err := d.db.QueryContext(ctx, stmt, orderID, sessionID)
