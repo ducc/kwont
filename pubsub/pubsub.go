@@ -74,9 +74,9 @@ func (q *Queue) Subscribe() (<-chan *Message, error) {
 
 func (q *Queue) Publish(body []byte) error {
 	return q.channel.Publish(
-		"",           // exchange
-		q.queue.Name, // routing key
-		false,        // mandatory
+		"",
+		q.queue.Name,
+		false,
 		false,
 		amqp.Publishing{
 			DeliveryMode: amqp.Persistent,
