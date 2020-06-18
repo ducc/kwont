@@ -4,20 +4,18 @@ import (
 	"context"
 	"flag"
 	"github.com/ducc/kwɒnt/dataservice"
+	"github.com/ducc/kwɒnt/pubsub"
 	"github.com/ducc/kwɒnt/tick_writer"
 	"github.com/sirupsen/logrus"
-	"github.com/streadway/amqp"
 )
 
 var (
-	level       string
-	amqpAddress string
-	topic       string
+	level string
+	topic string
 )
 
 func init() {
 	flag.StringVar(&level, "level", "debug", "")
-	flag.StringVar(&amqpAddress, "amqp-address", "", "amqp server connection address")
 	flag.StringVar(&topic, "topic", "ticks", "")
 }
 
@@ -36,49 +34,24 @@ func main() {
 		logrus.WithError(err).Fatal("creating dataservice client")
 	}
 
-	amqpConn, err := amqp.Dial(amqpAddress)
+	psClient, err := pubsub.New()
 	if err != nil {
-		logrus.WithError(err).Fatal("connecting to amqp server")
+		logrus.WithError(err).Fatal("creating pubsub client")
 	}
 	defer func() {
-		if err := amqpConn.Close(); err != nil {
-			logrus.WithError(err).Error("closing amqp conn")
+		if err := psClient.Close(); err != nil {
+			logrus.WithError(err).Error("closing pubsub client")
 		}
 	}()
 
-	amqpChan, err := amqpConn.Channel()
+	psQueue, err := psClient.Queue(topic)
 	if err != nil {
-		logrus.WithError(err).Fatal("creating amqp channel")
-	}
-	defer func() {
-		if err := amqpChan.Close(); err != nil {
-			logrus.WithError(err).Error("closing amqp chan")
-		}
-	}()
-
-	q, err := amqpChan.QueueDeclare(
-		topic,
-		true,
-		false,
-		false,
-		false,
-		nil,
-	)
-	if err != nil {
-		logrus.WithError(err).Fatal("declaring amqp queue")
+		logrus.WithError(err).Fatal("creating pubsub queue")
 	}
 
-	msgs, err := amqpChan.Consume(
-		q.Name,
-		"",
-		false,
-		false,
-		false,
-		false,
-		nil,
-	)
+	msgs, err := psQueue.Subscribe()
 	if err != nil {
-		logrus.WithError(err).Fatal("declaring amqp consumer")
+		logrus.WithError(err).Fatal("subscribing to pubsub queue")
 	}
 
 	tick_writer.Run(ctx, ds, msgs)
