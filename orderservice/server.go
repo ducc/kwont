@@ -107,8 +107,14 @@ func (s *server) ClosePosition(ctx context.Context, req *protos.ClosePositionReq
 		return nil, err
 	}
 
+	sessionID, err := s.getUserSessionID(ctx, req.UserId, req.Broker)
+	if err != nil {
+		return nil, err
+	}
+
 	res, err := s.data.GetXTBTrades(ctx, &protos.GetXTBTradesRequest{
-		OrderId: req.Id,
+		OrderId:   req.Id,
+		SessionId: sessionID,
 	})
 	if err != nil {
 		return nil, err
@@ -127,11 +133,6 @@ func (s *server) ClosePosition(ctx context.Context, req *protos.ClosePositionReq
 
 	if trade == nil {
 		return nil, status.Error(codes.NotFound, "no trade with open type and modified state")
-	}
-
-	sessionID, err := s.getUserSessionID(ctx, req.UserId, req.Broker)
-	if err != nil {
-		return nil, err
 	}
 
 	logrus.Debugf("closing order %d", trade.Order)
