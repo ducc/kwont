@@ -476,8 +476,8 @@ func (d *database) SelectXTBTrades(ctx context.Context, orderID string, sessionI
 		)
 
 		err := rows.Scan(&trade.Order, &timestamp, &trade.ClosePrice, &closeTime, &trade.Closed, &trade.Cmd, &trade.Comment,
-			&trade.Commission, &trade.Digits, &expiration, &trade.MarginRate, &trade.Offset, &trade.OpenPrice, openTime,
-			&trade.Order2, &trade.Position, &trade.Profit, &trade.StopLoss, &trade.State, &trade.Storage, symbol,
+			&trade.Commission, &trade.Digits, &expiration, &trade.MarginRate, &trade.Offset, &trade.OpenPrice, &openTime,
+			&trade.Order2, &trade.Position, &trade.Profit, &trade.StopLoss, &trade.State, &trade.Storage, &symbol,
 			&trade.TakeProfit, &trade.Type, &trade.Volume)
 		if err != nil {
 			return nil, err
